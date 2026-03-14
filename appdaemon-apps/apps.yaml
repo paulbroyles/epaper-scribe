@@ -1,0 +1,15 @@
+hello_world:
+  module: hello
+  class: HelloWorld
+
+display_supervisor:
+  module: display_supervisor
+  class: DisplaySupervisor
+
+now_playing:
+  module: now_playing
+  class: NowPlaying
+
+saints_day:
+  module: saints_day
+  class: SaintsDay

@@ -1,0 +1,165 @@
+# templates.yaml
+- trigger:
+    - platform: state
+      entity_id:
+        - input_text.now_playing_source_entity
+        - media_player.kitchen_apple_tv
+    - platform: state
+      entity_id: media_player.kitchen_apple_tv
+      attribute: entity_picture
+  sensor:
+    # --- Raw fields ---
+
+    - name: "Now Playing State"
+      unique_id: now_playing_state
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {% set raw_state = states(entity) %}
+        {% set title = state_attr(entity, 'media_title') | default('', true) %}
+        {% if raw_state == 'playing' %}
+          playing
+        {% elif raw_state == 'paused' %}
+          paused
+        {% elif title != '' and raw_state in ('off', 'standby', 'idle') %}
+          playing
+        {% else %}
+          {{ raw_state }}
+        {% endif %}
+
+    - name: "Now Playing Content Type"
+      unique_id: now_playing_content_type
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'media_content_type') | default('', true) }}
+
+    - name: "Now Playing App"
+      unique_id: now_playing_app
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'app_name') | default('', true) }}
+
+    - name: "Now Playing Track Title"
+      unique_id: now_playing_track_title
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'media_title') | default('', true) }}
+
+    - name: "Now Playing Artist"
+      unique_id: now_playing_artist
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'media_artist') | default('', true) }}
+
+    - name: "Now Playing Album"
+      unique_id: now_playing_album
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'media_album_name') | default('', true) }}
+
+    - name: "Now Playing Album Artist"
+      unique_id: now_playing_album_artist
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'media_album_artist') | default('', true) }}
+
+    - name: "Now Playing Series Title"
+      unique_id: now_playing_series_title
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'media_series_title') | default('', true) }}
+
+    - name: "Now Playing Season"
+      unique_id: now_playing_season
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'media_season') | default('', true) }}
+
+    - name: "Now Playing Episode"
+      unique_id: now_playing_episode
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'media_episode') | default('', true) }}
+
+    - name: "Now Playing Duration"
+      unique_id: now_playing_duration
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'media_duration') | default(0, true) }}
+      unit_of_measurement: "s"
+
+    - name: "Now Playing Position"
+      unique_id: now_playing_position
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'media_position') | default(0, true) }}
+      unit_of_measurement: "s"
+
+    - name: "Now Playing Volume"
+      unique_id: now_playing_volume
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'volume_level') | default(0, true) | float * 100 | round(0) }}
+      unit_of_measurement: "%"
+
+    - name: "Now Playing Artwork URL"
+      unique_id: now_playing_artwork_url
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'entity_picture') | default('', true) }}
+
+    - name: "Now Playing Artwork Full URL"
+      unique_id: now_playing_artwork_full_url
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {% set path = state_attr(entity, 'entity_picture') | default('', true) %}
+        {% if path != '' %}
+          {{ 'http://homeassistant.local:8123' + path }}
+        {% else %}
+          {{ '' }}
+        {% endif %}
+
+    # --- Semantic fields ---
+
+    - name: "Now Playing Creator"
+      unique_id: now_playing_creator
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {% set content_type = state_attr(entity, 'media_content_type') | default('') %}
+        {% if content_type == 'tvshow' %}
+          {{ state_attr(entity, 'media_series_title') | default('', true) }}
+        {% elif content_type == 'music' %}
+          {{ state_attr(entity, 'media_album_artist')
+             | default(state_attr(entity, 'media_artist'), true)
+             | default('', true) }}
+        {% elif content_type == 'podcast' %}
+          {{ state_attr(entity, 'media_album_name') | default('', true) }}
+        {% elif content_type == 'movie' %}
+          {{ state_attr(entity, 'media_artist') | default('', true) }}
+        {% else %}
+          {{ state_attr(entity, 'media_artist') | default('', true) }}
+        {% endif %}
+
+    - name: "Now Playing Title"
+      unique_id: now_playing_title
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {{ state_attr(entity, 'media_title') | default('', true) }}
+
+    - name: "Now Playing Container"
+      unique_id: now_playing_container
+      state: >
+        {% set entity = states('input_text.now_playing_source_entity') %}
+        {% set content_type = state_attr(entity, 'media_content_type') | default('') %}
+        {% if content_type == 'tvshow' %}
+          {{ state_attr(entity, 'media_series_title') | default('', true) }}
+        {% elif content_type == 'music' %}
+          {{ state_attr(entity, 'media_album_name') | default('', true) }}
+        {% elif content_type == 'podcast' %}
+          {{ state_attr(entity, 'media_artist')
+             | default(state_attr(entity, 'media_album_name'), true)
+             | default('', true) }}
+        {% elif content_type == 'movie' %}
+          {{ '' }}
+        {% else %}
+          {{ state_attr(entity, 'media_album_name') | default('', true) }}
+        {% endif %}

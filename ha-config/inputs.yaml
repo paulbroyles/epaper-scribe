@@ -1,0 +1,8 @@
+# inputs.yaml
+# Controls which media player entity the now-playing display reads from.
+# Change the initial value here to point at a different device.
+# After changing, reload Input Helpers in Developer Tools > YAML.
+now_playing_source_entity:
+  name: "Now Playing Source Entity"
+  initial: "media_player.kitchen_apple_tv"
+  mode: text
