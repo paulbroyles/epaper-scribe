@@ -1,0 +1,34 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Select Content Provider",
+        "data": {
+          "provider_type": "Provider Type"
+        }
+      },
+      "provider": {
+        "title": "Configure Provider",
+        "data": {
+          "media_player_entity": "Media Player Entity",
+          "palette": "Color Palette",
+          "default_size": "Default Image Size (e.g. 128x128)",
+          "calendar_type": "Calendar Type"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Reconfigure Provider",
+        "data": {
+          "media_player_entity": "Media Player Entity",
+          "palette": "Color Palette",
+          "default_size": "Default Image Size (e.g. 128x128)",
+          "calendar_type": "Calendar Type"
+        }
+      }
+    }
+  }
+}

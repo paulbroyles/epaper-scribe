@@ -1,0 +1,65 @@
+render_now_playing:
+  name: Render Now Playing
+  description: >
+    Fetches album artwork from a media player via HA's internal API, dithers
+    it to the configured palette, writes a static PNG to /config/www/epaper_scribe/,
+    and updates the image entity and sensor metadata. Returns a metadata dict
+    (creator, title, container, state, content_type) that automations can use
+    directly in drawcustom payloads via response_variable.
+  fields:
+    entry_id:
+      name: Entry ID
+      description: >
+        Target a specific config entry. Required only if multiple Now Playing
+        entries exist. Find the entry_id in Settings → Devices & Services.
+      example: "abc123def456abc123def456"
+      selector:
+        text:
+    media_player_entity:
+      name: Media Player Entity
+      description: Override the media player configured for this entry.
+      selector:
+        entity:
+          domain: media_player
+    size:
+      name: Image Size
+      description: >
+        Override the default image size. Format: WIDTHxHEIGHT (e.g. 128x128).
+        The filename written to /local/ will include the height
+        (now_playing_artwork_128.png).
+      example: "128x128"
+      selector:
+        text:
+
+render_saints_day:
+  name: Render Saints Day
+  description: >
+    Fetches today's liturgical calendar data (Anglican or Catholic), looks up a
+    Wikipedia portrait if a saint is commemorated, dithers the image, writes a
+    static PNG to /config/www/epaper_scribe/, and updates the image entity and
+    sensor metadata. Returns a metadata dict (saint_name, saint_role, season,
+    week, description, has_saint) for use in drawcustom payloads.
+    Results are cached per-day; use force_refresh to bypass the cache.
+  fields:
+    entry_id:
+      name: Entry ID
+      description: >
+        Target a specific config entry. Required only if multiple Liturgical
+        Calendar entries exist.
+      example: "abc123def456abc123def456"
+      selector:
+        text:
+    force_refresh:
+      name: Force Refresh
+      description: >
+        Bypass the same-day cache and fetch fresh calendar and Wikipedia data.
+      default: false
+      selector:
+        boolean:
+    size:
+      name: Image Size
+      description: >
+        Override the default image size. Format: WIDTHxHEIGHT (e.g. 64x64).
+      example: "64x64"
+      selector:
+        text:

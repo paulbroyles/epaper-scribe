@@ -1,0 +1,295 @@
+blueprint:
+  name: "Now Playing with Calendar Fallback (296×128 BWR)"
+  description: >
+    Drives a 296×128 black/white/red e-ink display.
+
+    - When the media player starts playing: renders dithered album art (128×128)
+      on the left, with creator/title/container text on the right.
+    - When paused for longer than the timeout, or idle/off: renders the
+      liturgical calendar — saint portrait or season icon, name, role, and
+      a one-sentence Wikipedia description.
+    - Midnight refresh: updates the calendar display for the new date.
+
+    Requires the E-Paper Scribe integration with at least one "Now Playing"
+    and one "Liturgical Calendar" config entry.
+  domain: automation
+  input:
+    media_player_entity:
+      name: Media Player
+      description: The media player to monitor.
+      selector:
+        entity:
+          domain: media_player
+    epaper_device:
+      name: E-Paper Display Device
+      description: The OpenEPaperLink display device to drive.
+      selector:
+        device:
+    paused_timeout:
+      name: Paused Timeout
+      description: >
+        Seconds to wait after the media player pauses before switching to the
+        calendar view.
+      default: 120
+      selector:
+        number:
+          min: 10
+          max: 600
+          unit_of_measurement: seconds
+          mode: slider
+    now_playing_entry_id:
+      name: Now Playing Entry ID
+      description: >
+        The entry_id of the Now Playing config entry. Leave blank if you only
+        have one. Find it in Settings → Devices & Services → E-Paper Scribe →
+        (entry) → entry_id in the URL.
+      default: ""
+      selector:
+        text:
+    saints_day_entry_id:
+      name: Saints Day Entry ID
+      description: >
+        The entry_id of the Liturgical Calendar config entry. Leave blank if
+        you only have one.
+      default: ""
+      selector:
+        text:
+
+variables:
+  np_entry: !input now_playing_entry_id
+  sd_entry: !input saints_day_entry_id
+
+trigger:
+  - id: playing
+    platform: state
+    entity_id: !input media_player_entity
+    to: "playing"
+
+  - id: paused_timeout
+    platform: state
+    entity_id: !input media_player_entity
+    to: "paused"
+    for:
+      seconds: !input paused_timeout
+
+  - id: idle_or_off
+    platform: state
+    entity_id: !input media_player_entity
+    to:
+      - "idle"
+      - "off"
+      - "unavailable"
+
+  - id: midnight
+    platform: time
+    at: "00:05:00"
+
+action:
+  - choose:
+
+      # --- Now Playing ---
+      - conditions:
+          - condition: trigger
+            id: playing
+        sequence:
+          - service: epaper_scribe.render_now_playing
+            data: "{{ {'entry_id': np_entry} if np_entry else {} }}"
+            response_variable: np_result
+          - service: open_epaper_link.drawcustom
+            target:
+              device_id: !input epaper_device
+            data:
+              background: white
+              rotate: 0
+              dither: 0
+              payload:
+                - type: dlimg
+                  url: "/local/epaper_scribe/now_playing_artwork_128.png"
+                  x: 0
+                  y: 0
+                  xsize: 128
+                  ysize: 128
+                  resize_method: stretch
+                - type: line
+                  x_start: 128
+                  y_start: 0
+                  x_end: 128
+                  y_end: 128
+                  fill: black
+                  width: 1
+                - type: rectangle
+                  x_start: 129
+                  y_start: 0
+                  x_end: 295
+                  y_end: 38
+                  fill: red
+                  outline: red
+                - type: text
+                  value: "{{ np_result.creator | default('') }}"
+                  x: 135
+                  y: 11
+                  size: 16
+                  font: ppb.ttf
+                  color: white
+                  max_width: 153
+                  truncate: true
+                - type: text
+                  value: "{{ np_result.title | default('') }}"
+                  x: 135
+                  y: 46
+                  size: 18
+                  font: ppb.ttf
+                  color: black
+                  max_width: 153
+                  spacing: 2
+                - type: text
+                  value: "{{ np_result.container | default('') }}"
+                  x: 135
+                  y: 90
+                  size: 13
+                  font: rbm.ttf
+                  color: black
+                  max_width: 153
+                  spacing: 2
+
+      # --- Calendar / Saints Day ---
+      - conditions:
+          - condition: trigger
+            id:
+              - paused_timeout
+              - idle_or_off
+              - midnight
+        sequence:
+          - service: epaper_scribe.render_saints_day
+            data: "{{ {'entry_id': sd_entry} if sd_entry else {} }}"
+            response_variable: sd_result
+
+          - choose:
+
+              # Has a saint — show portrait, name, role, description
+              - conditions:
+                  - condition: template
+                    value_template: "{{ sd_result.has_saint }}"
+                sequence:
+                  - service: open_epaper_link.drawcustom
+                    target:
+                      device_id: !input epaper_device
+                    data:
+                      background: white
+                      rotate: 0
+                      dither: 0
+                      payload:
+                        - type: rectangle
+                          x_start: 0
+                          y_start: 0
+                          x_end: 295
+                          y_end: 28
+                          fill: red
+                          outline: red
+                        - type: text
+                          value: >-
+                            {{ sd_result.week if sd_result.week
+                               else sd_result.season }}
+                          x: 6
+                          y: 6
+                          size: 13
+                          font: rbm.ttf
+                          color: white
+                          max_width: 283
+                          truncate: true
+                        - type: dlimg
+                          url: "/local/epaper_scribe/saints_day_artwork_64.png"
+                          x: 0
+                          y: 28
+                          xsize: 64
+                          ysize: 64
+                          resize_method: cover
+                        - type: line
+                          x_start: 64
+                          y_start: 28
+                          x_end: 64
+                          y_end: 128
+                          fill: black
+                          width: 1
+                        - type: text
+                          value: "{{ sd_result.saint_name | default('') }}"
+                          x: 70
+                          y: 32
+                          size: 16
+                          font: ppb.ttf
+                          color: black
+                          max_width: 218
+                          truncate: true
+                        - type: text
+                          value: "{{ sd_result.saint_role | default('') }}"
+                          x: 70
+                          y: 54
+                          size: 13
+                          font: rbm.ttf
+                          color: black
+                          max_width: 218
+                          truncate: true
+                        - type: line
+                          x_start: 70
+                          y_start: 72
+                          x_end: 290
+                          y_end: 72
+                          fill: black
+                          width: 1
+                        - type: text
+                          value: "{{ sd_result.description | default('') }}"
+                          x: 70
+                          y: 78
+                          size: 11
+                          font: rbm.ttf
+                          color: black
+                          max_width: 218
+                          spacing: 2
+
+            # No saint — show season header and description
+            default:
+              - service: open_epaper_link.drawcustom
+                target:
+                  device_id: !input epaper_device
+                data:
+                  background: white
+                  rotate: 0
+                  dither: 0
+                  payload:
+                    - type: rectangle
+                      x_start: 0
+                      y_start: 0
+                      x_end: 295
+                      y_end: 28
+                      fill: black
+                      outline: black
+                    - type: text
+                      value: >-
+                        {{ sd_result.week if sd_result.week
+                           else sd_result.season }}
+                      x: 6
+                      y: 6
+                      size: 13
+                      font: rbm.ttf
+                      color: white
+                      max_width: 283
+                      truncate: true
+                    - type: text
+                      value: "{{ now().strftime('%-d %B') }}"
+                      x: 70
+                      y: 34
+                      size: 28
+                      font: ppb.ttf
+                      color: black
+                      max_width: 218
+                    - type: text
+                      value: "{{ now().strftime('%A') }}"
+                      x: 70
+                      y: 70
+                      size: 18
+                      font: rbm.ttf
+                      color: black
+                      max_width: 218
+
+mode: queued
+max: 5

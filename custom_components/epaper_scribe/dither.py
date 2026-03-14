@@ -1,0 +1,59 @@
+"""Shared Pillow dithering utility for e-paper displays.
+
+Pipeline: resize to target size first, then dither. This order is critical —
+dithering at the final pixel dimensions produces much better results than
+dithering large and downscaling, because Floyd-Steinberg error diffusion
+creates spatial patterns that get destroyed by resampling.
+"""
+from __future__ import annotations
+
+from io import BytesIO
+
+from PIL import Image
+
+from .const import PALETTES, PALETTE_BWR
+
+
+def _dither_sync(image_bytes: bytes, size: tuple[int, int], palette_name: str) -> bytes:
+    """Synchronous dithering — run in executor to avoid blocking the event loop."""
+    palette_colors = PALETTES.get(palette_name, PALETTES[PALETTE_BWR])
+
+    img = Image.open(BytesIO(image_bytes)).convert("RGB")
+    img = img.resize(size, Image.LANCZOS)
+
+    # Pad palette to 256 colors (768 bytes required by Pillow)
+    n_colors = len(palette_colors) // 3
+    padded = palette_colors + [0, 0, 0] * (256 - n_colors)
+
+    palette_img = Image.new("P", (1, 1))
+    palette_img.putpalette(padded)
+
+    dithered = img.quantize(palette=palette_img, dither=Image.Dither.FLOYDSTEINBERG)
+    result = dithered.convert("RGB")
+
+    buf = BytesIO()
+    result.save(buf, format="PNG")
+    return buf.getvalue()
+
+
+async def async_dither(
+    hass,
+    image_bytes: bytes,
+    size: tuple[int, int],
+    palette_name: str = PALETTE_BWR,
+) -> bytes:
+    """Resize then dither an image. Returns PNG bytes. Non-blocking."""
+    return await hass.async_add_executor_job(
+        _dither_sync, image_bytes, size, palette_name
+    )
+
+
+def make_placeholder(
+    size: tuple[int, int],
+    color: tuple[int, int, int] = (128, 128, 128),
+) -> bytes:
+    """Generate a solid-color placeholder as PNG bytes."""
+    img = Image.new("RGB", size, color)
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
