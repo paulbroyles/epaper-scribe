@@ -1,99 +1,69 @@
 blueprint:
-  name: "Now Playing with Calendar Fallback (296×128 BWR)"
+  name: "E-Paper Display Control (296×128 BWR)"
   description: >
-    Drives a 296×128 black/white/red e-ink display.
+    Manually send a specific content mode to a 296×128 black/white/red
+    e-ink display. Choose the mode each time you run the script — from a
+    dashboard button, Developer Tools, or another automation.
 
-    - When the media player starts playing: renders dithered album art (128×128)
-      on the left, with creator/title/container text on the right.
-    - When paused for longer than the timeout, or idle/off: renders the
-      liturgical calendar — saint portrait or season icon, name, role, and
-      a one-sentence Wikipedia description.
-    - Midnight refresh: updates the calendar display for the new date.
+    Pairs with the "Now Playing with Calendar Fallback" automation blueprint,
+    which handles reactive triggering. Use this script for manual overrides.
 
-    Requires the E-Paper Scribe integration with at least one "Now Playing"
-    and one "Liturgical Calendar" config entry.
-
-    For manual display control (choosing a mode on demand), use the companion
-    "E-Paper Display Control" script blueprint instead.
-  domain: automation
+    Requires the E-Paper Scribe integration with the appropriate config
+    entries set up.
+  domain: script
   input:
-    media_player_entity:
-      name: Media Player
-      description: The media player to monitor.
-      selector:
-        entity:
-          domain: media_player
     epaper_device:
       name: E-Paper Display Device
       description: The OpenEPaperLink display device to drive.
       selector:
         device:
-    paused_timeout:
-      name: Paused Timeout
-      description: >
-        Seconds to wait after the media player pauses before switching to the
-        calendar view.
-      default: 120
-      selector:
-        number:
-          min: 10
-          max: 600
-          unit_of_measurement: seconds
-          mode: slider
     now_playing_entry_id:
       name: Now Playing Entry ID
       description: >
-        The entry_id of the Now Playing config entry. Leave blank if you only
-        have one. Find it in Settings → Devices & Services → E-Paper Scribe →
-        (entry) → entry_id in the URL.
+        Leave blank if you only have one Now Playing entry.
       default: ""
       selector:
         text:
     saints_day_entry_id:
       name: Saints Day Entry ID
       description: >
-        The entry_id of the Liturgical Calendar config entry. Leave blank if
-        you only have one.
+        Leave blank if you only have one Liturgical Calendar entry.
+      default: ""
+      selector:
+        text:
+    word_of_day_entry_id:
+      name: Word of the Day Entry ID
+      description: >
+        Leave blank if you only have one Word of the Day entry.
       default: ""
       selector:
         text:
 
+fields:
+  mode:
+    name: Display Mode
+    description: Which content to show on the display.
+    required: true
+    selector:
+      select:
+        options:
+          - label: "Now Playing"
+            value: "now_playing"
+          - label: "Liturgical Calendar"
+            value: "calendar"
+          - label: "Word of the Day"
+            value: "word_of_day"
+
 variables:
   np_entry: !input now_playing_entry_id
   sd_entry: !input saints_day_entry_id
+  wod_entry: !input word_of_day_entry_id
 
-trigger:
-  - id: playing
-    platform: state
-    entity_id: !input media_player_entity
-    to: "playing"
-
-  - id: paused_timeout
-    platform: state
-    entity_id: !input media_player_entity
-    to: "paused"
-    for:
-      seconds: !input paused_timeout
-
-  - id: idle_or_off
-    platform: state
-    entity_id: !input media_player_entity
-    to:
-      - "idle"
-      - "off"
-      - "unavailable"
-
-  - id: midnight
-    platform: time
-    at: "00:05:00"
-
-action:
+sequence:
   - choose:
 
       # --- Now Playing ---
-      - conditions:
-          - condition: trigger
-            id: playing
+      - conditions: "{{ mode == 'now_playing' }}"
         sequence:
           - service: epaper_scribe.render_now_playing
             data: "{{ {'entry_id': np_entry} if np_entry else {} }}"
@@ -155,21 +125,13 @@ action:
                   max_width: 153
                   spacing: 2
 
-      # --- Calendar / Saints Day ---
-      - conditions:
-          - condition: trigger
-            id:
-              - paused_timeout
-              - idle_or_off
-              - midnight
+      # --- Liturgical Calendar ---
+      - conditions: "{{ mode == 'calendar' }}"
         sequence:
           - service: epaper_scribe.render_saints_day
             data: "{{ {'entry_id': sd_entry} if sd_entry else {} }}"
             response_variable: sd_result
-
           - choose:
-
-              # Has a saint — show portrait, name, role, description
               - conditions:
                   - condition: template
                     value_template: "{{ sd_result.has_saint }}"
@@ -248,8 +210,6 @@ action:
                           color: black
                           max_width: 218
                           spacing: 2
-
-            # No saint — show season header and description
             default:
               - service: open_epaper_link.drawcustom
                 target:
@@ -296,8 +256,65 @@ action:
                       max_width: 218
                       truncate: true
 
-    # --- Default: no action on manual run (use the Display Control script instead) ---
-    default: []
+      # --- Word of the Day ---
+      - conditions: "{{ mode == 'word_of_day' }}"
+        sequence:
+          - service: epaper_scribe.render_word_of_day
+            data: "{{ {'entry_id': wod_entry} if wod_entry else {} }}"
+            response_variable: wod_result
+          - service: open_epaper_link.drawcustom
+            target:
+              device_id: !input epaper_device
+            data:
+              background: white
+              rotate: 0
+              dither: 0
+              payload:
+                - type: rectangle
+                  x_start: 0
+                  y_start: 0
+                  x_end: 295
+                  y_end: 28
+                  fill: black
+                  outline: black
+                - type: text
+                  value: "{{ wod_result.word | default('') | upper }}"
+                  x: 8
+                  y: 6
+                  size: 16
+                  font: ppb.ttf
+                  color: white
+                  max_width: 200
+                  truncate: true
+                - type: text
+                  value: "{{ wod_result.part_of_speech | default('') }}"
+                  x: 215
+                  y: 10
+                  size: 11
+                  font: rbm.ttf
+                  color: white
+                  max_width: 75
+                  truncate: true
+                - type: text
+                  value: "{{ wod_result.definition | default('') }}"
+                  x: 8
+                  y: 36
+                  size: 13
+                  font: rbm.ttf
+                  color: black
+                  max_width: 280
+                  spacing: 3
+                - type: text
+                  value: >-
+                    {{ ('"' + wod_result.example + '"')
+                       if wod_result.example | default('') else '' }}
+                  x: 8
+                  y: 96
+                  size: 11
+                  font: rbm.ttf
+                  color: red
+                  max_width: 280
+                  truncate: true
 
-mode: queued
-max: 5
+mode: parallel
+max: 3
