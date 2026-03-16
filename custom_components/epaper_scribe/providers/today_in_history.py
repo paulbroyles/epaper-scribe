@@ -79,25 +79,27 @@ class TodayInHistoryProvider(ContentProvider):
             _LOGGER.debug("Using cached today-in-history for %s", today)
             return self._cached_data
 
+        filename = f"today_in_history_{size[1]}.png"
+
+        # Write placeholder immediately so the file always exists even if
+        # the image fetch or dither fails later.
+        await _write_static_file(self.hass, filename, make_placeholder(size, (200, 195, 185)))
+
         event_year, event_text, page_title, image_url = await self._fetch_event(today)
 
-        image_bytes: bytes | None = None
+        dithered: bytes | None = None
         if image_url:
             image_bytes = await self._fetch_image(image_url)
+            if image_bytes:
+                try:
+                    dithered = await async_dither(self.hass, image_bytes, size, palette)
+                except Exception as exc:
+                    _LOGGER.warning("Failed to dither today-in-history image: %s", exc)
 
-        dithered: bytes | None = None
-        if image_bytes:
-            try:
-                dithered = await async_dither(self.hass, image_bytes, size, palette)
-            except Exception as exc:
-                _LOGGER.warning("Failed to dither today-in-history image: %s", exc)
-
-        if not dithered:
-            dithered = make_placeholder(size, (200, 195, 185))
-            image_url = ""  # signal to caller that no real image was rendered
-
-        filename = f"today_in_history_{size[1]}.png"
-        await _write_static_file(self.hass, filename, dithered)
+        if dithered:
+            await _write_static_file(self.hass, filename, dithered)
+        else:
+            image_url = ""  # no real image rendered; placeholder already on disk
 
         self._image_bytes = dithered
         self._image_last_updated = datetime.now()
