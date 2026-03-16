@@ -22,5 +22,6 @@ PALETTES: dict[str, list[int]] = {
 PROVIDER_NOW_PLAYING = "now_playing"
 PROVIDER_SAINTS_DAY = "saints_day"
 PROVIDER_WORD_OF_DAY = "word_of_day"
+PROVIDER_TODAY_IN_HISTORY = "today_in_history"
 
 WWW_PATH = "/config/www/epaper_scribe"

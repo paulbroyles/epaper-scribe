@@ -38,6 +38,13 @@ blueprint:
       default: ""
       selector:
         text:
+    today_in_history_entry_id:
+      name: Today in History Entry ID
+      description: >
+        Leave blank if you only have one Today in History entry.
+      default: ""
+      selector:
+        text:
 
 fields:
   mode:
@@ -53,11 +60,14 @@ fields:
             value: "calendar"
           - label: "Word of the Day"
             value: "word_of_day"
+          - label: "Today in History"
+            value: "today_in_history"
 
 variables:
   np_entry: !input now_playing_entry_id
   sd_entry: !input saints_day_entry_id
   wod_entry: !input word_of_day_entry_id
+  tih_entry: !input today_in_history_entry_id
 
 sequence:
   - choose:
@@ -315,6 +325,116 @@ sequence:
                   color: red
                   max_width: 280
                   truncate: true
+
+      # --- Today in History ---
+      - conditions: "{{ mode == 'today_in_history' }}"
+        sequence:
+          - service: epaper_scribe.render_today_in_history
+            data: "{{ {'entry_id': tih_entry} if tih_entry else {} }}"
+            response_variable: tih_result
+          - choose:
+              # Has an image — portrait left, text right
+              - conditions:
+                  - condition: template
+                    value_template: >-
+                      {{ tih_result.page_title | default('') != '' }}
+                sequence:
+                  - service: open_epaper_link.drawcustom
+                    target:
+                      device_id: !input epaper_device
+                    data:
+                      background: white
+                      rotate: 0
+                      dither: 0
+                      payload:
+                        - type: rectangle
+                          x_start: 0
+                          y_start: 0
+                          x_end: 295
+                          y_end: 28
+                          fill: black
+                          outline: black
+                        - type: text
+                          value: "ON THIS DAY"
+                          x: 8
+                          y: 6
+                          size: 13
+                          font: rbm.ttf
+                          color: white
+                          max_width: 170
+                        - type: text
+                          value: "{{ tih_result.year | default('') }}"
+                          x: 230
+                          y: 6
+                          size: 13
+                          font: ppb.ttf
+                          color: white
+                          max_width: 60
+                        - type: dlimg
+                          url: "/local/epaper_scribe/today_in_history_128.png"
+                          x: 0
+                          y: 28
+                          xsize: 64
+                          ysize: 100
+                          resize_method: cover
+                        - type: line
+                          x_start: 64
+                          y_start: 28
+                          x_end: 64
+                          y_end: 128
+                          fill: black
+                          width: 1
+                        - type: text
+                          value: "{{ tih_result.event | default('') }}"
+                          x: 70
+                          y: 32
+                          size: 12
+                          font: rbm.ttf
+                          color: black
+                          max_width: 218
+                          spacing: 3
+            # No image — full-width text
+            default:
+              - service: open_epaper_link.drawcustom
+                target:
+                  device_id: !input epaper_device
+                data:
+                  background: white
+                  rotate: 0
+                  dither: 0
+                  payload:
+                    - type: rectangle
+                      x_start: 0
+                      y_start: 0
+                      x_end: 295
+                      y_end: 28
+                      fill: black
+                      outline: black
+                    - type: text
+                      value: "ON THIS DAY"
+                      x: 8
+                      y: 6
+                      size: 13
+                      font: rbm.ttf
+                      color: white
+                      max_width: 170
+                    - type: text
+                      value: "{{ tih_result.year | default('') }}"
+                      x: 230
+                      y: 6
+                      size: 13
+                      font: ppb.ttf
+                      color: white
+                      max_width: 60
+                    - type: text
+                      value: "{{ tih_result.event | default('') }}"
+                      x: 8
+                      y: 34
+                      size: 13
+                      font: rbm.ttf
+                      color: black
+                      max_width: 280
+                      spacing: 3
 
 mode: parallel
 max: 3

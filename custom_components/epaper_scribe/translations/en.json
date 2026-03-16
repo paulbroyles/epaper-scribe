@@ -4,7 +4,9 @@
       "user": {
         "menu_options": {
           "now_playing": "Now Playing",
-          "saints_day": "Liturgical Calendar"
+          "saints_day": "Liturgical Calendar",
+          "word_of_day": "Word of the Day",
+          "today_in_history": "Today in History"
         }
       },
       "now_playing": {
@@ -27,6 +29,13 @@
         "title": "Configure Word of the Day",
         "data": {
           "api_key": "Wordnik API Key",
+          "palette": "Color Palette",
+          "default_size": "Default Image Size (e.g. 296x128)"
+        }
+      },
+      "today_in_history": {
+        "title": "Configure Today in History",
+        "data": {
           "palette": "Color Palette",
           "default_size": "Default Image Size (e.g. 296x128)"
         }

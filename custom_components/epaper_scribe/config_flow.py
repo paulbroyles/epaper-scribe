@@ -26,16 +26,19 @@ from .const import (
     PALETTE_BWR,
     PROVIDER_NOW_PLAYING,
     PROVIDER_SAINTS_DAY,
+    PROVIDER_TODAY_IN_HISTORY,
     PROVIDER_WORD_OF_DAY,
 )
 from .providers.now_playing import NowPlayingProvider
 from .providers.saints_day import SaintsDayProvider
+from .providers.today_in_history import TodayInHistoryProvider
 from .providers.word_of_day import WordOfDayProvider
 
 PROVIDER_REGISTRY = {
     PROVIDER_NOW_PLAYING: NowPlayingProvider,
     PROVIDER_SAINTS_DAY: SaintsDayProvider,
     PROVIDER_WORD_OF_DAY: WordOfDayProvider,
+    PROVIDER_TODAY_IN_HISTORY: TodayInHistoryProvider,
 }
 
 _PALETTE_OPTIONS = ["bw", "bwr", "bwry"]
@@ -56,6 +59,7 @@ class EpaperScribeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 PROVIDER_NOW_PLAYING: "Now Playing",
                 PROVIDER_SAINTS_DAY: "Liturgical Calendar",
                 PROVIDER_WORD_OF_DAY: "Word of the Day",
+                PROVIDER_TODAY_IN_HISTORY: "Today in History",
             },
         )
 
@@ -134,6 +138,27 @@ class EpaperScribeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }),
         )
 
+    async def async_step_today_in_history(
+        self, user_input: dict | None = None
+    ) -> config_entries.ConfigFlowResult:
+        if user_input is not None:
+            return self.async_create_entry(
+                title="Today in History",
+                data={CONF_PROVIDER_TYPE: PROVIDER_TODAY_IN_HISTORY, **user_input},
+            )
+        return self.async_show_form(
+            step_id="today_in_history",
+            data_schema=vol.Schema({
+                vol.Optional(CONF_PALETTE, default=PALETTE_BWR): SelectSelector(
+                    SelectSelectorConfig(
+                        options=_PALETTE_OPTIONS,
+                        mode=SelectSelectorMode.DROPDOWN,
+                    )
+                ),
+                vol.Optional(CONF_DEFAULT_SIZE, default="296x128"): TextSelector(),
+            }),
+        )
+
     @staticmethod
     @callback
     def async_get_options_flow(
@@ -199,6 +224,20 @@ class EpaperScribeOptionsFlow(config_entries.OptionsFlow):
                     CONF_API_KEY,
                     default=current.get(CONF_API_KEY, ""),
                 ): TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD)),
+                vol.Optional(
+                    CONF_PALETTE,
+                    default=current.get(CONF_PALETTE, PALETTE_BWR),
+                ): SelectSelector(SelectSelectorConfig(
+                    options=_PALETTE_OPTIONS,
+                    mode=SelectSelectorMode.DROPDOWN,
+                )),
+                vol.Optional(
+                    CONF_DEFAULT_SIZE,
+                    default=current.get(CONF_DEFAULT_SIZE, "296x128"),
+                ): TextSelector(),
+            })
+        elif provider_type == PROVIDER_TODAY_IN_HISTORY:
+            schema = vol.Schema({
                 vol.Optional(
                     CONF_PALETTE,
                     default=current.get(CONF_PALETTE, PALETTE_BWR),

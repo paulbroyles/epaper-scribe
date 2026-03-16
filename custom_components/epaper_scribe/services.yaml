@@ -61,6 +61,29 @@ render_word_of_day:
       selector:
         text:
 
+render_today_in_history:
+  name: Render Today in History
+  description: >
+    Fetches a historical event for today's date from the Wikipedia "On This
+    Day" feed, dithers a related image, writes a static PNG to
+    /config/www/epaper_scribe/, and updates sensor metadata. Returns a dict
+    (year, event, page_title) for use in drawcustom payloads via
+    response_variable. Results are cached per-day; use force_refresh to
+    bypass the cache.
+  fields:
+    entry_id:
+      name: Entry ID
+      description: Target a specific entry (required if multiple Today in History entries exist).
+      example: "abc123def456abc123def456"
+      selector:
+        text:
+    force_refresh:
+      name: Force Refresh
+      description: Bypass the same-day cache and fetch fresh data.
+      default: false
+      selector:
+        boolean:
+
 render_saints_day:
   name: Render Saints Day
   description: >
