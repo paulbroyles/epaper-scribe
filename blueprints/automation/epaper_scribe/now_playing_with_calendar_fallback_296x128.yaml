@@ -1,17 +1,17 @@
 blueprint:
-  name: "Now Playing with Calendar Fallback (296×128 BWR)"
+  name: "Now Playing with Fallback Mode (296×128 BWR)"
   description: >
     Drives a 296×128 black/white/red e-ink display.
 
     - When the media player starts playing: renders dithered album art (128×128)
       on the left, with creator/title/container text on the right.
     - When paused for longer than the timeout, or idle/off: renders the
-      liturgical calendar — saint portrait or season icon, name, role, and
-      a one-sentence Wikipedia description.
-    - Midnight refresh: updates the calendar display for the new date.
+      configured fallback mode (Liturgical Calendar, Word of the Day, or
+      Today in History).
+    - Midnight refresh: updates the fallback display for the new date.
 
     Requires the E-Paper Scribe integration with at least one "Now Playing"
-    and one "Liturgical Calendar" config entry.
+    entry and one entry matching your chosen fallback mode.
 
     For manual display control (choosing a mode on demand), use the companion
     "E-Paper Display Control" script blueprint instead.
@@ -32,7 +32,7 @@ blueprint:
       name: Paused Timeout
       description: >
         Seconds to wait after the media player pauses before switching to the
-        calendar view.
+        fallback view.
       default: 120
       selector:
         number:
@@ -40,20 +40,47 @@ blueprint:
           max: 600
           unit_of_measurement: seconds
           mode: slider
+    fallback_mode:
+      name: Fallback Mode
+      description: >
+        What to show when the media player is paused, idle, or off.
+      default: calendar
+      selector:
+        select:
+          options:
+            - label: "Liturgical Calendar"
+              value: "calendar"
+            - label: "Word of the Day"
+              value: "word_of_day"
+            - label: "Today in History"
+              value: "today_in_history"
     now_playing_entry_id:
       name: Now Playing Entry ID
       description: >
-        The entry_id of the Now Playing config entry. Leave blank if you only
-        have one. Find it in Settings → Devices & Services → E-Paper Scribe →
-        (entry) → entry_id in the URL.
+        Leave blank if you only have one Now Playing entry. Find it in
+        Settings → Devices & Services → E-Paper Scribe → (entry) → entry_id
+        in the URL.
       default: ""
       selector:
         text:
     saints_day_entry_id:
       name: Saints Day Entry ID
       description: >
-        The entry_id of the Liturgical Calendar config entry. Leave blank if
-        you only have one.
+        Leave blank if you only have one Liturgical Calendar entry.
+      default: ""
+      selector:
+        text:
+    word_of_day_entry_id:
+      name: Word of the Day Entry ID
+      description: >
+        Leave blank if you only have one Word of the Day entry.
+      default: ""
+      selector:
+        text:
+    today_in_history_entry_id:
+      name: Today in History Entry ID
+      description: >
+        Leave blank if you only have one Today in History entry.
       default: ""
       selector:
         text:
@@ -61,6 +88,9 @@ blueprint:
 variables:
   np_entry: !input now_playing_entry_id
   sd_entry: !input saints_day_entry_id
+  wod_entry: !input word_of_day_entry_id
+  tih_entry: !input today_in_history_entry_id
+  fallback_mode: !input fallback_mode
 
 trigger:
   - id: playing
@@ -155,7 +185,7 @@ action:
                   max_width: 153
                   spacing: 2
 
-      # --- Calendar / Saints Day ---
+      # --- Fallback (paused timeout / idle / off / midnight) ---
       - conditions:
           - condition: trigger
             id:
@@ -163,17 +193,145 @@ action:
               - idle_or_off
               - midnight
         sequence:
-          - service: epaper_scribe.render_saints_day
-            data: "{{ {'entry_id': sd_entry} if sd_entry else {} }}"
-            response_variable: sd_result
-
           - choose:
 
-              # Has a saint — show portrait, name, role, description
-              - conditions:
-                  - condition: template
-                    value_template: "{{ sd_result.has_saint }}"
+              # ---- Liturgical Calendar ----
+              - conditions: "{{ fallback_mode == 'calendar' }}"
                 sequence:
+                  - service: epaper_scribe.render_saints_day
+                    data: "{{ {'entry_id': sd_entry} if sd_entry else {} }}"
+                    response_variable: sd_result
+                  - choose:
+                      - conditions:
+                          - condition: template
+                            value_template: "{{ sd_result.has_saint }}"
+                        sequence:
+                          - service: open_epaper_link.drawcustom
+                            target:
+                              device_id: !input epaper_device
+                            data:
+                              background: white
+                              rotate: 0
+                              dither: 0
+                              payload:
+                                - type: rectangle
+                                  x_start: 0
+                                  y_start: 0
+                                  x_end: 295
+                                  y_end: 28
+                                  fill: red
+                                  outline: red
+                                - type: text
+                                  value: >-
+                                    {{ sd_result.week if sd_result.week
+                                       else sd_result.season }}
+                                  x: 6
+                                  y: 6
+                                  size: 13
+                                  font: rbm.ttf
+                                  color: white
+                                  max_width: 283
+                                  truncate: true
+                                - type: dlimg
+                                  url: "/local/epaper_scribe/saints_day_artwork_64.png"
+                                  x: 0
+                                  y: 28
+                                  xsize: 64
+                                  ysize: 64
+                                  resize_method: cover
+                                - type: line
+                                  x_start: 64
+                                  y_start: 28
+                                  x_end: 64
+                                  y_end: 128
+                                  fill: black
+                                  width: 1
+                                - type: text
+                                  value: "{{ sd_result.saint_name | default('') }}"
+                                  x: 70
+                                  y: 32
+                                  size: 16
+                                  font: ppb.ttf
+                                  color: black
+                                  max_width: 218
+                                  truncate: true
+                                - type: text
+                                  value: "{{ sd_result.saint_role | default('') }}"
+                                  x: 70
+                                  y: 54
+                                  size: 13
+                                  font: rbm.ttf
+                                  color: black
+                                  max_width: 218
+                                  truncate: true
+                                - type: line
+                                  x_start: 70
+                                  y_start: 72
+                                  x_end: 290
+                                  y_end: 72
+                                  fill: black
+                                  width: 1
+                                - type: text
+                                  value: "{{ sd_result.description | default('') }}"
+                                  x: 70
+                                  y: 78
+                                  size: 11
+                                  font: rbm.ttf
+                                  color: black
+                                  max_width: 218
+                                  spacing: 2
+                    default:
+                      - service: open_epaper_link.drawcustom
+                        target:
+                          device_id: !input epaper_device
+                        data:
+                          background: white
+                          rotate: 0
+                          dither: 0
+                          payload:
+                            - type: rectangle
+                              x_start: 0
+                              y_start: 0
+                              x_end: 295
+                              y_end: 28
+                              fill: black
+                              outline: black
+                            - type: text
+                              value: >-
+                                {{ sd_result.week if sd_result.week
+                                   else sd_result.season }}
+                              x: 6
+                              y: 6
+                              size: 13
+                              font: rbm.ttf
+                              color: white
+                              max_width: 283
+                              truncate: true
+                            - type: text
+                              value: "{{ sd_result.season_description | default('') }}"
+                              x: 70
+                              y: 34
+                              size: 14
+                              font: rbm.ttf
+                              color: black
+                              max_width: 218
+                              spacing: 3
+                            - type: text
+                              value: "{{ now().strftime('%A, %-d %B') }}"
+                              x: 70
+                              y: 112
+                              size: 11
+                              font: rbm.ttf
+                              color: black
+                              max_width: 218
+                              truncate: true
+
+              # ---- Word of the Day ----
+              - conditions: "{{ fallback_mode == 'word_of_day' }}"
+                sequence:
+                  - service: epaper_scribe.render_word_of_day
+                    data: "{{ {'entry_id': wod_entry} if wod_entry else {} }}"
+                    response_variable: wod_result
                   - service: open_epaper_link.drawcustom
                     target:
                       device_id: !input epaper_device
@@ -187,114 +345,153 @@ action:
                           y_start: 0
                           x_end: 295
                           y_end: 28
-                          fill: red
-                          outline: red
-                        - type: text
-                          value: >-
-                            {{ sd_result.week if sd_result.week
-                               else sd_result.season }}
-                          x: 6
-                          y: 6
-                          size: 13
-                          font: rbm.ttf
-                          color: white
-                          max_width: 283
-                          truncate: true
-                        - type: dlimg
-                          url: "/local/epaper_scribe/saints_day_artwork_64.png"
-                          x: 0
-                          y: 28
-                          xsize: 64
-                          ysize: 64
-                          resize_method: cover
-                        - type: line
-                          x_start: 64
-                          y_start: 28
-                          x_end: 64
-                          y_end: 128
                           fill: black
-                          width: 1
+                          outline: black
                         - type: text
-                          value: "{{ sd_result.saint_name | default('') }}"
-                          x: 70
-                          y: 32
+                          value: "{{ wod_result.word | default('') | upper }}"
+                          x: 8
+                          y: 6
                           size: 16
                           font: ppb.ttf
-                          color: black
-                          max_width: 218
+                          color: white
+                          max_width: 200
                           truncate: true
                         - type: text
-                          value: "{{ sd_result.saint_role | default('') }}"
-                          x: 70
-                          y: 54
+                          value: "{{ wod_result.part_of_speech | default('') }}"
+                          x: 215
+                          y: 10
+                          size: 11
+                          font: rbm.ttf
+                          color: white
+                          max_width: 75
+                          truncate: true
+                        - type: text
+                          value: "{{ wod_result.definition | default('') }}"
+                          x: 8
+                          y: 36
                           size: 13
                           font: rbm.ttf
                           color: black
-                          max_width: 218
-                          truncate: true
-                        - type: line
-                          x_start: 70
-                          y_start: 72
-                          x_end: 290
-                          y_end: 72
-                          fill: black
-                          width: 1
+                          max_width: 280
+                          spacing: 3
                         - type: text
-                          value: "{{ sd_result.description | default('') }}"
-                          x: 70
-                          y: 78
+                          value: >-
+                            {{ ('"' + wod_result.example + '"')
+                               if wod_result.example | default('') else '' }}
+                          x: 8
+                          y: 96
                           size: 11
                           font: rbm.ttf
-                          color: black
-                          max_width: 218
-                          spacing: 2
+                          color: red
+                          max_width: 280
+                          truncate: true
 
-            # No saint — show season header and description
-            default:
-              - service: open_epaper_link.drawcustom
-                target:
-                  device_id: !input epaper_device
-                data:
-                  background: white
-                  rotate: 0
-                  dither: 0
-                  payload:
-                    - type: rectangle
-                      x_start: 0
-                      y_start: 0
-                      x_end: 295
-                      y_end: 28
-                      fill: black
-                      outline: black
-                    - type: text
-                      value: >-
-                        {{ sd_result.week if sd_result.week
-                           else sd_result.season }}
-                      x: 6
-                      y: 6
-                      size: 13
-                      font: rbm.ttf
-                      color: white
-                      max_width: 283
-                      truncate: true
-                    - type: text
-                      value: "{{ sd_result.season_description | default('') }}"
-                      x: 70
-                      y: 34
-                      size: 14
-                      font: rbm.ttf
-                      color: black
-                      max_width: 218
-                      spacing: 3
-                    - type: text
-                      value: "{{ now().strftime('%A, %-d %B') }}"
-                      x: 70
-                      y: 112
-                      size: 11
-                      font: rbm.ttf
-                      color: black
-                      max_width: 218
-                      truncate: true
+              # ---- Today in History ----
+              - conditions: "{{ fallback_mode == 'today_in_history' }}"
+                sequence:
+                  - service: epaper_scribe.render_today_in_history
+                    data: "{{ {'entry_id': tih_entry} if tih_entry else {} }}"
+                    response_variable: tih_result
+                  - choose:
+                      - conditions:
+                          - condition: template
+                            value_template: "{{ tih_result.page_title | default('') != '' }}"
+                        sequence:
+                          - service: open_epaper_link.drawcustom
+                            target:
+                              device_id: !input epaper_device
+                            data:
+                              background: white
+                              rotate: 0
+                              dither: 0
+                              payload:
+                                - type: rectangle
+                                  x_start: 0
+                                  y_start: 0
+                                  x_end: 295
+                                  y_end: 28
+                                  fill: black
+                                  outline: black
+                                - type: text
+                                  value: "ON THIS DAY"
+                                  x: 8
+                                  y: 6
+                                  size: 13
+                                  font: rbm.ttf
+                                  color: white
+                                  max_width: 170
+                                - type: text
+                                  value: "{{ tih_result.year | default('') }}"
+                                  x: 230
+                                  y: 6
+                                  size: 13
+                                  font: ppb.ttf
+                                  color: white
+                                  max_width: 60
+                                - type: dlimg
+                                  url: "/local/epaper_scribe/today_in_history_128.png"
+                                  x: 0
+                                  y: 28
+                                  xsize: 64
+                                  ysize: 100
+                                  resize_method: cover
+                                - type: line
+                                  x_start: 64
+                                  y_start: 28
+                                  x_end: 64
+                                  y_end: 128
+                                  fill: black
+                                  width: 1
+                                - type: text
+                                  value: "{{ tih_result.event | default('') }}"
+                                  x: 70
+                                  y: 32
+                                  size: 12
+                                  font: rbm.ttf
+                                  color: black
+                                  max_width: 218
+                                  spacing: 3
+                    default:
+                      - service: open_epaper_link.drawcustom
+                        target:
+                          device_id: !input epaper_device
+                        data:
+                          background: white
+                          rotate: 0
+                          dither: 0
+                          payload:
+                            - type: rectangle
+                              x_start: 0
+                              y_start: 0
+                              x_end: 295
+                              y_end: 28
+                              fill: black
+                              outline: black
+                            - type: text
+                              value: "ON THIS DAY"
+                              x: 8
+                              y: 6
+                              size: 13
+                              font: rbm.ttf
+                              color: white
+                              max_width: 170
+                            - type: text
+                              value: "{{ tih_result.year | default('') }}"
+                              x: 230
+                              y: 6
+                              size: 13
+                              font: ppb.ttf
+                              color: white
+                              max_width: 60
+                            - type: text
+                              value: "{{ tih_result.event | default('') }}"
+                              x: 8
+                              y: 34
+                              size: 13
+                              font: rbm.ttf
+                              color: black
+                              max_width: 280
+                              spacing: 3
 
     # --- Default: no action on manual run (use the Display Control script instead) ---
     default: []
