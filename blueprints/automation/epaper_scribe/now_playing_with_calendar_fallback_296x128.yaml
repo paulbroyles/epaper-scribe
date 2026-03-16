@@ -381,7 +381,7 @@ action:
                       max_width: 218
                       spacing: 2
 
-        # No saint — show season header and date
+        # No saint — show season header and description
         default:
           - service: open_epaper_link.drawcustom
             target:
@@ -410,21 +410,23 @@ action:
                   max_width: 283
                   truncate: true
                 - type: text
-                  value: "{{ now().strftime('%-d %B') }}"
+                  value: "{{ sd_result.season_description | default('') }}"
                   x: 70
                   y: 34
-                  size: 28
-                  font: ppb.ttf
-                  color: black
-                  max_width: 218
-                - type: text
-                  value: "{{ now().strftime('%A') }}"
-                  x: 70
-                  y: 70
-                  size: 18
+                  size: 14
                   font: rbm.ttf
                   color: black
                   max_width: 218
+                  spacing: 3
+                - type: text
+                  value: "{{ now().strftime('%A, %-d %B') }}"
+                  x: 70
+                  y: 112
+                  size: 11
+                  font: rbm.ttf
+                  color: black
+                  max_width: 218
+                  truncate: true
 
 mode: queued
 max: 5
