@@ -46,7 +46,10 @@ class EpaperScribeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> config_entries.ConfigFlowResult:
         return self.async_show_menu(
             step_id="user",
-            menu_options=[PROVIDER_NOW_PLAYING, PROVIDER_SAINTS_DAY],
+            menu_options={
+                PROVIDER_NOW_PLAYING: "Now Playing",
+                PROVIDER_SAINTS_DAY: "Liturgical Calendar",
+            },
         )
 
     async def async_step_now_playing(

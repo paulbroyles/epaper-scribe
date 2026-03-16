@@ -34,12 +34,22 @@ ORDINALS: dict[str, str] = {
     "9": "Ninth", "10": "Tenth", "11": "Eleventh", "12": "Twelfth",
 }
 
+SEASON_DESCRIPTIONS: dict[str, str] = {
+    "Lent": "A season of fasting, prayer, and almsgiving in preparation for Easter.",
+    "Advent": "A season of hopeful waiting and preparation for the coming of Christ.",
+    "Christmas": "A season celebrating the birth of Jesus Christ.",
+    "Easter": "A season of joy celebrating the resurrection of Jesus Christ.",
+    "Epiphany": "A season celebrating the manifestation of Christ to the world.",
+    "Ordinary": "Ordinary Time: the season of the Church's daily life and growth.",
+}
+
 SENSORS = [
     SensorDescription("saint_name", "Saint Name", "mdi:account-star"),
     SensorDescription("saint_role", "Saint Role", "mdi:account-badge"),
     SensorDescription("season", "Season", "mdi:calendar-star"),
     SensorDescription("week", "Week", "mdi:calendar-week"),
     SensorDescription("description", "Description", "mdi:text"),
+    SensorDescription("season_description", "Season Description", "mdi:text-box"),
     SensorDescription("has_saint", "Has Saint", "mdi:check-circle"),
 ]
 
@@ -121,6 +131,7 @@ class SaintsDayProvider(ContentProvider):
             "season": season or "",
             "week": _format_week(week) if week else "",
             "description": description,
+            "season_description": _get_season_description(season),
             "has_saint": has_saint,
         }
         self._sensor_data = data
@@ -240,6 +251,16 @@ def _parse_saint_title(title: str) -> tuple[str, str]:
             break
 
     return name, role
+
+
+def _get_season_description(season: str | None) -> str:
+    """Return a short description for the current liturgical season."""
+    if not season:
+        return SEASON_DESCRIPTIONS["Ordinary"]
+    for key in SEASON_DESCRIPTIONS:
+        if key.lower() in season.lower():
+            return SEASON_DESCRIPTIONS[key]
+    return SEASON_DESCRIPTIONS["Ordinary"]
 
 
 def _format_week(week: str) -> str:
