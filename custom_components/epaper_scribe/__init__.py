@@ -34,6 +34,13 @@ PROVIDER_REGISTRY = {
 }
 
 
+async def async_setup(hass: HomeAssistant, config: dict) -> bool:
+    """Register services at domain load, before any config entries exist."""
+    hass.data.setdefault(DOMAIN, {})
+    _register_services(hass)
+    return True
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up a provider config entry."""
     hass.data.setdefault(DOMAIN, {})
@@ -55,9 +62,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     }
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
-    # Register services once per domain (idempotent)
-    _register_services(hass)
 
     return True
 
