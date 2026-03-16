@@ -2,18 +2,25 @@
   "config": {
     "step": {
       "user": {
-        "title": "Select Content Provider",
-        "data": {
-          "provider_type": "Provider Type"
+        "menu_options": {
+          "now_playing": "Now Playing",
+          "saints_day": "Liturgical Calendar"
         }
       },
-      "provider": {
-        "title": "Configure Provider",
+      "now_playing": {
+        "title": "Configure Now Playing",
         "data": {
           "media_player_entity": "Media Player Entity",
           "palette": "Color Palette",
-          "default_size": "Default Image Size (e.g. 128x128)",
-          "calendar_type": "Calendar Type"
+          "default_size": "Default Image Size (e.g. 128x128)"
+        }
+      },
+      "saints_day": {
+        "title": "Configure Liturgical Calendar",
+        "data": {
+          "calendar_type": "Calendar Type",
+          "palette": "Color Palette",
+          "default_size": "Default Image Size (e.g. 64x64)"
         }
       }
     }
@@ -24,9 +31,9 @@
         "title": "Reconfigure Provider",
         "data": {
           "media_player_entity": "Media Player Entity",
+          "calendar_type": "Calendar Type",
           "palette": "Color Palette",
-          "default_size": "Default Image Size (e.g. 128x128)",
-          "calendar_type": "Calendar Type"
+          "default_size": "Default Image Size"
         }
       }
     }

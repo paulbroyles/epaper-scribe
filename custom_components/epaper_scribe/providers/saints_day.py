@@ -12,6 +12,7 @@ import voluptuous as vol
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from ..const import (
+    CONF_CALENDAR_TYPE,
     CONF_DEFAULT_SIZE,
     CONF_PALETTE,
     PALETTE_BWR,
@@ -22,7 +23,6 @@ from . import ContentProvider, SensorDescription
 
 _LOGGER = logging.getLogger(__name__)
 
-CONF_CALENDAR_TYPE = "calendar_type"
 CALENDAR_ANGLICAN = "anglican"
 CALENDAR_CATHOLIC = "catholic"
 

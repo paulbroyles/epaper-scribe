@@ -4,10 +4,23 @@ from __future__ import annotations
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
+from homeassistant.helpers.selector import (
+    EntitySelector,
+    EntitySelectorConfig,
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+    TextSelector,
+)
 
 from .const import (
+    CONF_CALENDAR_TYPE,
+    CONF_DEFAULT_SIZE,
+    CONF_MEDIA_PLAYER_ENTITY,
+    CONF_PALETTE,
     CONF_PROVIDER_TYPE,
     DOMAIN,
+    PALETTE_BWR,
     PROVIDER_NOW_PLAYING,
     PROVIDER_SAINTS_DAY,
 )
@@ -19,57 +32,73 @@ PROVIDER_REGISTRY = {
     PROVIDER_SAINTS_DAY: SaintsDayProvider,
 }
 
-PROVIDER_LABELS = {
-    PROVIDER_NOW_PLAYING: "Now Playing",
-    PROVIDER_SAINTS_DAY: "Liturgical Calendar",
-}
+_PALETTE_OPTIONS = ["bw", "bwr", "bwry"]
+_CALENDAR_OPTIONS = ["anglican", "catholic"]
 
 
 class EpaperScribeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Two-step config flow: select provider type → provider-specific config."""
+    """Config flow: menu → provider-specific form."""
 
     VERSION = 1
-
-    def __init__(self) -> None:
-        self._provider_type: str | None = None
 
     async def async_step_user(
         self, user_input: dict | None = None
     ) -> config_entries.ConfigFlowResult:
-        """Step 1: select provider type."""
-        if user_input is not None:
-            self._provider_type = user_input[CONF_PROVIDER_TYPE]
-            return await self.async_step_provider()
-
-        return self.async_show_form(
+        return self.async_show_menu(
             step_id="user",
-            data_schema=vol.Schema(
-                {vol.Required(CONF_PROVIDER_TYPE): vol.In(PROVIDER_LABELS)}
-            ),
+            menu_options=[PROVIDER_NOW_PLAYING, PROVIDER_SAINTS_DAY],
         )
 
-    async def async_step_provider(
+    async def async_step_now_playing(
         self, user_input: dict | None = None
     ) -> config_entries.ConfigFlowResult:
-        """Step 2: provider-specific configuration."""
-        provider_class = PROVIDER_REGISTRY[self._provider_type]
-        # ALLOW_EXTRA so HA doesn't reject provider_type if it carries over
-        # from step 1 during form validation.
-        schema = vol.Schema(provider_class.get_config_schema(), extra=vol.ALLOW_EXTRA)
-
         if user_input is not None:
-            # Strip any keys not belonging to this provider before storing.
-            provider_keys = {
-                k.schema if hasattr(k, "schema") else k
-                for k in provider_class.get_config_schema()
-            }
-            provider_input = {k: v for k, v in user_input.items() if k in provider_keys}
-            data = {CONF_PROVIDER_TYPE: self._provider_type, **provider_input}
             return self.async_create_entry(
-                title=PROVIDER_LABELS[self._provider_type], data=data
+                title="Now Playing",
+                data={CONF_PROVIDER_TYPE: PROVIDER_NOW_PLAYING, **user_input},
             )
+        return self.async_show_form(
+            step_id="now_playing",
+            data_schema=vol.Schema({
+                vol.Required(CONF_MEDIA_PLAYER_ENTITY): EntitySelector(
+                    EntitySelectorConfig(domain="media_player")
+                ),
+                vol.Optional(CONF_PALETTE, default=PALETTE_BWR): SelectSelector(
+                    SelectSelectorConfig(
+                        options=_PALETTE_OPTIONS,
+                        mode=SelectSelectorMode.DROPDOWN,
+                    )
+                ),
+                vol.Optional(CONF_DEFAULT_SIZE, default="128x128"): TextSelector(),
+            }),
+        )
 
-        return self.async_show_form(step_id="provider", data_schema=schema)
+    async def async_step_saints_day(
+        self, user_input: dict | None = None
+    ) -> config_entries.ConfigFlowResult:
+        if user_input is not None:
+            return self.async_create_entry(
+                title="Liturgical Calendar",
+                data={CONF_PROVIDER_TYPE: PROVIDER_SAINTS_DAY, **user_input},
+            )
+        return self.async_show_form(
+            step_id="saints_day",
+            data_schema=vol.Schema({
+                vol.Optional(CONF_CALENDAR_TYPE, default="anglican"): SelectSelector(
+                    SelectSelectorConfig(
+                        options=_CALENDAR_OPTIONS,
+                        mode=SelectSelectorMode.DROPDOWN,
+                    )
+                ),
+                vol.Optional(CONF_PALETTE, default=PALETTE_BWR): SelectSelector(
+                    SelectSelectorConfig(
+                        options=_PALETTE_OPTIONS,
+                        mode=SelectSelectorMode.DROPDOWN,
+                    )
+                ),
+                vol.Optional(CONF_DEFAULT_SIZE, default="64x64"): TextSelector(),
+            }),
+        )
 
     @staticmethod
     @callback
@@ -80,7 +109,7 @@ class EpaperScribeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class EpaperScribeOptionsFlow(config_entries.OptionsFlow):
-    """Options flow for reconfiguring a provider without removing and re-adding it."""
+    """Options flow for reconfiguring a provider without removing and re-adding."""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         self._config_entry = config_entry
@@ -89,31 +118,51 @@ class EpaperScribeOptionsFlow(config_entries.OptionsFlow):
         self, user_input: dict | None = None
     ) -> config_entries.ConfigFlowResult:
         provider_type = self._config_entry.data.get(CONF_PROVIDER_TYPE)
-        provider_class = PROVIDER_REGISTRY.get(provider_type)
-        if provider_class is None:
-            return self.async_abort(reason="unknown_provider")
-
-        raw_schema = provider_class.get_config_schema()
         current = {**self._config_entry.data, **self._config_entry.options}
 
-        # Rebuild schema with current values as defaults
-        filled: dict = {}
-        for key, validator in raw_schema.items():
-            key_str = key.schema if hasattr(key, "schema") else str(key)
-            default = current.get(key_str)
-            if default is not None:
-                filled[vol.Optional(key_str, default=default)] = validator
-            else:
-                filled[key] = validator
-
-        schema = vol.Schema(filled, extra=vol.ALLOW_EXTRA)
+        if provider_type == PROVIDER_NOW_PLAYING:
+            schema = vol.Schema({
+                vol.Required(
+                    CONF_MEDIA_PLAYER_ENTITY,
+                    default=current.get(CONF_MEDIA_PLAYER_ENTITY, ""),
+                ): EntitySelector(EntitySelectorConfig(domain="media_player")),
+                vol.Optional(
+                    CONF_PALETTE,
+                    default=current.get(CONF_PALETTE, PALETTE_BWR),
+                ): SelectSelector(SelectSelectorConfig(
+                    options=_PALETTE_OPTIONS,
+                    mode=SelectSelectorMode.DROPDOWN,
+                )),
+                vol.Optional(
+                    CONF_DEFAULT_SIZE,
+                    default=current.get(CONF_DEFAULT_SIZE, "128x128"),
+                ): TextSelector(),
+            })
+        elif provider_type == PROVIDER_SAINTS_DAY:
+            schema = vol.Schema({
+                vol.Optional(
+                    CONF_CALENDAR_TYPE,
+                    default=current.get(CONF_CALENDAR_TYPE, "anglican"),
+                ): SelectSelector(SelectSelectorConfig(
+                    options=_CALENDAR_OPTIONS,
+                    mode=SelectSelectorMode.DROPDOWN,
+                )),
+                vol.Optional(
+                    CONF_PALETTE,
+                    default=current.get(CONF_PALETTE, PALETTE_BWR),
+                ): SelectSelector(SelectSelectorConfig(
+                    options=_PALETTE_OPTIONS,
+                    mode=SelectSelectorMode.DROPDOWN,
+                )),
+                vol.Optional(
+                    CONF_DEFAULT_SIZE,
+                    default=current.get(CONF_DEFAULT_SIZE, "64x64"),
+                ): TextSelector(),
+            })
+        else:
+            return self.async_abort(reason="unknown_provider")
 
         if user_input is not None:
-            provider_keys = {
-                k.schema if hasattr(k, "schema") else k
-                for k in raw_schema
-            }
-            provider_input = {k: v for k, v in user_input.items() if k in provider_keys}
-            return self.async_create_entry(title="", data=provider_input)
+            return self.async_create_entry(title="", data=user_input)
 
         return self.async_show_form(step_id="init", data_schema=schema)
