@@ -53,10 +53,18 @@ class EpaperScribeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> config_entries.ConfigFlowResult:
         """Step 2: provider-specific configuration."""
         provider_class = PROVIDER_REGISTRY[self._provider_type]
-        schema = vol.Schema(provider_class.get_config_schema())
+        # ALLOW_EXTRA so HA doesn't reject provider_type if it carries over
+        # from step 1 during form validation.
+        schema = vol.Schema(provider_class.get_config_schema(), extra=vol.ALLOW_EXTRA)
 
         if user_input is not None:
-            data = {CONF_PROVIDER_TYPE: self._provider_type, **user_input}
+            # Strip any keys not belonging to this provider before storing.
+            provider_keys = {
+                k.schema if hasattr(k, "schema") else k
+                for k in provider_class.get_config_schema()
+            }
+            provider_input = {k: v for k, v in user_input.items() if k in provider_keys}
+            data = {CONF_PROVIDER_TYPE: self._provider_type, **provider_input}
             return self.async_create_entry(
                 title=PROVIDER_LABELS[self._provider_type], data=data
             )
@@ -98,9 +106,14 @@ class EpaperScribeOptionsFlow(config_entries.OptionsFlow):
             else:
                 filled[key] = validator
 
-        schema = vol.Schema(filled)
+        schema = vol.Schema(filled, extra=vol.ALLOW_EXTRA)
 
         if user_input is not None:
-            return self.async_create_entry(title="", data=user_input)
+            provider_keys = {
+                k.schema if hasattr(k, "schema") else k
+                for k in raw_schema
+            }
+            provider_input = {k: v for k, v in user_input.items() if k in provider_keys}
+            return self.async_create_entry(title="", data=provider_input)
 
         return self.async_show_form(step_id="init", data_schema=schema)
