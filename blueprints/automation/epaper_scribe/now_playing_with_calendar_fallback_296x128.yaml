@@ -395,7 +395,7 @@ action:
                   - choose:
                       - conditions:
                           - condition: template
-                            value_template: "{{ tih_result.page_title | default('') != '' }}"
+                            value_template: "{{ tih_result.has_image | default(false) }}"
                         sequence:
                           - service: open_epaper_link.drawcustom
                             target:

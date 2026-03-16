@@ -35,6 +35,7 @@ SENSORS = [
     SensorDescription("year", "Year", "mdi:calendar-clock"),
     SensorDescription("event", "Event", "mdi:text"),
     SensorDescription("page_title", "Article", "mdi:wikipedia"),
+    SensorDescription("has_image", "Has Image", "mdi:image"),
 ]
 
 
@@ -84,10 +85,16 @@ class TodayInHistoryProvider(ContentProvider):
         if image_url:
             image_bytes = await self._fetch_image(image_url)
 
+        dithered: bytes | None = None
         if image_bytes:
-            dithered = await async_dither(self.hass, image_bytes, size, palette)
-        else:
+            try:
+                dithered = await async_dither(self.hass, image_bytes, size, palette)
+            except Exception as exc:
+                _LOGGER.warning("Failed to dither today-in-history image: %s", exc)
+
+        if not dithered:
             dithered = make_placeholder(size, (200, 195, 185))
+            image_url = ""  # signal to caller that no real image was rendered
 
         filename = f"today_in_history_{size[1]}.png"
         await _write_static_file(self.hass, filename, dithered)
@@ -99,6 +106,7 @@ class TodayInHistoryProvider(ContentProvider):
             "year": str(event_year) if event_year else "",
             "event": event_text,
             "page_title": page_title,
+            "has_image": bool(image_url),
         }
         self._sensor_data = data
         self._cached_date = today
