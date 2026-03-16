@@ -22,6 +22,14 @@
           "palette": "Color Palette",
           "default_size": "Default Image Size (e.g. 64x64)"
         }
+      },
+      "word_of_day": {
+        "title": "Configure Word of the Day",
+        "data": {
+          "api_key": "Wordnik API Key",
+          "palette": "Color Palette",
+          "default_size": "Default Image Size (e.g. 296x128)"
+        }
       }
     }
   },
@@ -30,6 +38,7 @@
       "init": {
         "title": "Reconfigure Provider",
         "data": {
+          "api_key": "Wordnik API Key",
           "media_player_entity": "Media Player Entity",
           "calendar_type": "Calendar Type",
           "palette": "Color Palette",

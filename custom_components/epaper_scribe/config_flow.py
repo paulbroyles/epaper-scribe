@@ -11,9 +11,12 @@ from homeassistant.helpers.selector import (
     SelectSelectorConfig,
     SelectSelectorMode,
     TextSelector,
+    TextSelectorConfig,
+    TextSelectorType,
 )
 
 from .const import (
+    CONF_API_KEY,
     CONF_CALENDAR_TYPE,
     CONF_DEFAULT_SIZE,
     CONF_MEDIA_PLAYER_ENTITY,
@@ -23,13 +26,16 @@ from .const import (
     PALETTE_BWR,
     PROVIDER_NOW_PLAYING,
     PROVIDER_SAINTS_DAY,
+    PROVIDER_WORD_OF_DAY,
 )
 from .providers.now_playing import NowPlayingProvider
 from .providers.saints_day import SaintsDayProvider
+from .providers.word_of_day import WordOfDayProvider
 
 PROVIDER_REGISTRY = {
     PROVIDER_NOW_PLAYING: NowPlayingProvider,
     PROVIDER_SAINTS_DAY: SaintsDayProvider,
+    PROVIDER_WORD_OF_DAY: WordOfDayProvider,
 }
 
 _PALETTE_OPTIONS = ["bw", "bwr", "bwry"]
@@ -49,6 +55,7 @@ class EpaperScribeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             menu_options={
                 PROVIDER_NOW_PLAYING: "Now Playing",
                 PROVIDER_SAINTS_DAY: "Liturgical Calendar",
+                PROVIDER_WORD_OF_DAY: "Word of the Day",
             },
         )
 
@@ -100,6 +107,30 @@ class EpaperScribeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     )
                 ),
                 vol.Optional(CONF_DEFAULT_SIZE, default="64x64"): TextSelector(),
+            }),
+        )
+
+    async def async_step_word_of_day(
+        self, user_input: dict | None = None
+    ) -> config_entries.ConfigFlowResult:
+        if user_input is not None:
+            return self.async_create_entry(
+                title="Word of the Day",
+                data={CONF_PROVIDER_TYPE: PROVIDER_WORD_OF_DAY, **user_input},
+            )
+        return self.async_show_form(
+            step_id="word_of_day",
+            data_schema=vol.Schema({
+                vol.Required(CONF_API_KEY): TextSelector(
+                    TextSelectorConfig(type=TextSelectorType.PASSWORD)
+                ),
+                vol.Optional(CONF_PALETTE, default=PALETTE_BWR): SelectSelector(
+                    SelectSelectorConfig(
+                        options=_PALETTE_OPTIONS,
+                        mode=SelectSelectorMode.DROPDOWN,
+                    )
+                ),
+                vol.Optional(CONF_DEFAULT_SIZE, default="296x128"): TextSelector(),
             }),
         )
 
@@ -160,6 +191,24 @@ class EpaperScribeOptionsFlow(config_entries.OptionsFlow):
                 vol.Optional(
                     CONF_DEFAULT_SIZE,
                     default=current.get(CONF_DEFAULT_SIZE, "64x64"),
+                ): TextSelector(),
+            })
+        elif provider_type == PROVIDER_WORD_OF_DAY:
+            schema = vol.Schema({
+                vol.Required(
+                    CONF_API_KEY,
+                    default=current.get(CONF_API_KEY, ""),
+                ): TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD)),
+                vol.Optional(
+                    CONF_PALETTE,
+                    default=current.get(CONF_PALETTE, PALETTE_BWR),
+                ): SelectSelector(SelectSelectorConfig(
+                    options=_PALETTE_OPTIONS,
+                    mode=SelectSelectorMode.DROPDOWN,
+                )),
+                vol.Optional(
+                    CONF_DEFAULT_SIZE,
+                    default=current.get(CONF_DEFAULT_SIZE, "296x128"),
                 ): TextSelector(),
             })
         else:

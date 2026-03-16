@@ -7,6 +7,7 @@ CONF_MEDIA_PLAYER_ENTITY = "media_player_entity"
 CONF_PALETTE = "palette"
 CONF_DEFAULT_SIZE = "default_size"
 CONF_CALENDAR_TYPE = "calendar_type"
+CONF_API_KEY = "api_key"
 
 PALETTE_BW = "bw"
 PALETTE_BWR = "bwr"
@@ -20,5 +21,6 @@ PALETTES: dict[str, list[int]] = {
 
 PROVIDER_NOW_PLAYING = "now_playing"
 PROVIDER_SAINTS_DAY = "saints_day"
+PROVIDER_WORD_OF_DAY = "word_of_day"
 
 WWW_PATH = "/config/www/epaper_scribe"

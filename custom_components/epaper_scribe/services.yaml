@@ -31,6 +31,36 @@ render_now_playing:
       selector:
         text:
 
+render_word_of_day:
+  name: Render Word of the Day
+  description: >
+    Fetches the Wordnik Word of the Day, writes a static placeholder PNG to
+    /config/www/epaper_scribe/, and updates sensor metadata. Returns a dict
+    (word, part_of_speech, definition, example, note) for use in drawcustom
+    payloads via response_variable. Results are cached per-day; use
+    force_refresh or supply a word override to bypass the cache.
+  fields:
+    entry_id:
+      name: Entry ID
+      description: Target a specific entry (required if multiple Word of the Day entries exist).
+      example: "abc123def456abc123def456"
+      selector:
+        text:
+    force_refresh:
+      name: Force Refresh
+      description: Bypass the same-day cache and fetch fresh data.
+      default: false
+      selector:
+        boolean:
+    word:
+      name: Word Override
+      description: >
+        Look up a specific word instead of today's scheduled word.
+        Result is not cached.
+      example: "ephemeral"
+      selector:
+        text:
+
 render_saints_day:
   name: Render Saints Day
   description: >
