@@ -6,6 +6,7 @@ from datetime import datetime
 from homeassistant.components.image import ImageEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
@@ -24,9 +25,14 @@ async def async_setup_entry(
 
 
 class EpaperScribeImageEntity(ImageEntity):
-    """Image entity showing the most recently dithered artwork for dashboard previews."""
+    """Image entity showing the most recently dithered artwork.
+
+    Marked DIAGNOSTIC so it doesn't auto-appear as a dashboard card.
+    Users can add it to a dashboard manually when they want a preview.
+    """
 
     _attr_has_entity_name = True
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry, provider) -> None:
         super().__init__(hass)
