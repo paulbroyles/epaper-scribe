@@ -82,7 +82,7 @@ def _register_services(hass: HomeAssistant) -> None:
     if hass.services.has_service(DOMAIN, "render_now_playing"):
         return
 
-    async def handle_render_now_playing(call: ServiceCall) -> dict[str, Any] | None:
+    async def handle_render_now_playing(call: ServiceCall) -> dict[str, Any]:
         entry_id = call.data.get("entry_id")
         kwargs = {k: v for k, v in call.data.items() if k != "entry_id"}
 
@@ -96,9 +96,9 @@ def _register_services(hass: HomeAssistant) -> None:
             return result
 
         _LOGGER.warning("render_now_playing: no matching Now Playing entry found")
-        return None
+        return {}
 
-    async def handle_render_saints_day(call: ServiceCall) -> dict[str, Any] | None:
+    async def handle_render_saints_day(call: ServiceCall) -> dict[str, Any]:
         entry_id = call.data.get("entry_id")
         kwargs = {k: v for k, v in call.data.items() if k != "entry_id"}
 
@@ -112,9 +112,9 @@ def _register_services(hass: HomeAssistant) -> None:
             return result
 
         _LOGGER.warning("render_saints_day: no matching Liturgical Calendar entry found")
-        return None
+        return {}
 
-    async def handle_render_word_of_day(call: ServiceCall) -> dict[str, Any] | None:
+    async def handle_render_word_of_day(call: ServiceCall) -> dict[str, Any]:
         entry_id = call.data.get("entry_id")
         kwargs = {k: v for k, v in call.data.items() if k != "entry_id"}
 
@@ -128,9 +128,9 @@ def _register_services(hass: HomeAssistant) -> None:
             return result
 
         _LOGGER.warning("render_word_of_day: no matching Word of the Day entry found")
-        return None
+        return {}
 
-    async def handle_render_today_in_history(call: ServiceCall) -> dict[str, Any] | None:
+    async def handle_render_today_in_history(call: ServiceCall) -> dict[str, Any]:
         entry_id = call.data.get("entry_id")
         kwargs = {k: v for k, v in call.data.items() if k != "entry_id"}
 
@@ -144,7 +144,7 @@ def _register_services(hass: HomeAssistant) -> None:
             return result
 
         _LOGGER.warning("render_today_in_history: no matching Today in History entry found")
-        return None
+        return {}
 
     hass.services.async_register(
         DOMAIN,
