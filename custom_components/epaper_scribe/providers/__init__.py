@@ -35,6 +35,13 @@ class ContentProvider(ABC):
         self._image_last_updated: datetime | None = None
         self._sensor_data: dict[str, Any] = {}
 
+    async def async_initialize(self) -> None:
+        """Write placeholder files on startup so static URLs always resolve.
+
+        Called once from async_setup_entry before any service is invoked.
+        Override in each provider to write the appropriate placeholder(s).
+        """
+
     @abstractmethod
     async def async_render(self, **kwargs) -> dict:
         """Fetch data, dither image, update sensor data, return metadata dict."""

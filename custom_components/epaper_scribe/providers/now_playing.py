@@ -35,6 +35,10 @@ class NowPlayingProvider(ContentProvider):
     PROVIDER_NAME = "Now Playing"
     SENSORS = SENSORS
 
+    async def async_initialize(self) -> None:
+        size = _parse_size(self.config.get(CONF_DEFAULT_SIZE, "128x128"))
+        await async_render_to_file(self.hass, f"now_playing_artwork_{size[1]}.png", None, size)
+
     @staticmethod
     def get_config_schema() -> dict:
         return {

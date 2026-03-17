@@ -59,6 +59,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     config = {**entry.data, **entry.options}
     provider = provider_class(hass, config)
+    await provider.async_initialize()
 
     hass.data[DOMAIN][entry.entry_id] = {
         "provider": provider,

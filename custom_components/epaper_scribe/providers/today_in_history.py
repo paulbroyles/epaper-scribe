@@ -47,6 +47,10 @@ class TodayInHistoryProvider(ContentProvider):
         self._cached_date: date | None = None
         self._cached_data: dict[str, Any] | None = None
 
+    async def async_initialize(self) -> None:
+        size = _parse_size(self.config.get(CONF_DEFAULT_SIZE, "296x128"))
+        await async_render_to_file(self.hass, f"today_in_history_{size[1]}.png", None, size, placeholder_color=(200, 195, 185))
+
     @staticmethod
     def get_config_schema() -> dict:
         return {

@@ -62,6 +62,10 @@ class SaintsDayProvider(ContentProvider):
         self._cached_date: date | None = None
         self._cached_data: dict[str, Any] | None = None
 
+    async def async_initialize(self) -> None:
+        size = _parse_size(self.config.get(CONF_DEFAULT_SIZE, "64x64"))
+        await async_render_to_file(self.hass, f"saints_day_artwork_{size[1]}.png", None, size, placeholder_color=(180, 160, 140))
+
     @staticmethod
     def get_config_schema() -> dict:
         return {
