@@ -59,7 +59,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     config = {**entry.data, **entry.options}
     provider = provider_class(hass, config)
-    await provider.async_initialize()
+    try:
+        await provider.async_initialize()
+    except Exception as exc:
+        _LOGGER.error("Provider initialization failed for %s: %s", provider_type, exc)
 
     hass.data[DOMAIN][entry.entry_id] = {
         "provider": provider,

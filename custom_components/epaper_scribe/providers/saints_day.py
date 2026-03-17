@@ -64,6 +64,7 @@ class SaintsDayProvider(ContentProvider):
 
     async def async_initialize(self) -> None:
         size = _parse_size(self.config.get(CONF_DEFAULT_SIZE, "64x64"))
+        _LOGGER.info("Initializing saints_day placeholder (size=%s, www=%s)", size, self.hass.config.path("www", "epaper_scribe"))
         await async_render_to_file(self.hass, f"saints_day_artwork_{size[1]}.png", None, size, placeholder_color=(180, 160, 140))
 
     @staticmethod

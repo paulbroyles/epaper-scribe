@@ -82,13 +82,19 @@ async def async_render_to_file(
     """
     www_dir = hass.config.path("www", "epaper_scribe")
     path = os.path.join(www_dir, filename)
+    _LOGGER.debug("async_render_to_file: writing to %s", path)
 
     def _write(data: bytes) -> None:
         os.makedirs(www_dir, exist_ok=True)
         with open(path, "wb") as f:
             f.write(data)
+        _LOGGER.debug("async_render_to_file: wrote %d bytes to %s", len(data), path)
 
-    await hass.async_add_executor_job(_write, make_placeholder(size, placeholder_color))
+    try:
+        await hass.async_add_executor_job(_write, make_placeholder(size, placeholder_color))
+    except Exception as exc:
+        _LOGGER.error("async_render_to_file: failed to write placeholder to %s: %s", path, exc)
+        return False
 
     if not image_bytes:
         return False
