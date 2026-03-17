@@ -90,7 +90,7 @@ class TodayInHistoryProvider(ContentProvider):
         if not has_image:
             image_url = ""
 
-        self._image_bytes = dithered
+        self._image_bytes = image_bytes
         self._image_last_updated = datetime.now()
 
         data: dict[str, Any] = {

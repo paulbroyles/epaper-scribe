@@ -117,7 +117,7 @@ class SaintsDayProvider(ContentProvider):
             self.hass, filename, image_bytes, size, palette, (180, 160, 140)
         )
 
-        self._image_bytes = dithered
+        self._image_bytes = image_bytes
         self._image_last_updated = datetime.now()
 
         data: dict[str, Any] = {
