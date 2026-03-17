@@ -92,6 +92,7 @@ async def async_render_to_file(
 
     try:
         await hass.async_add_executor_job(_write, make_placeholder(size, placeholder_color))
+        _LOGGER.warning("async_render_to_file: placeholder written to %s", path)
     except Exception as exc:
         _LOGGER.error("async_render_to_file: failed to write placeholder to %s: %s", path, exc)
         return False
@@ -102,6 +103,7 @@ async def async_render_to_file(
     try:
         dithered = await async_dither(hass, image_bytes, size, palette)
         await hass.async_add_executor_job(_write, dithered)
+        _LOGGER.warning("async_render_to_file: dithered image written to %s", path)
         return True
     except Exception as exc:
         _LOGGER.warning("Failed to dither image for %s: %s", filename, exc)
