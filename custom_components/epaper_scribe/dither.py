@@ -13,7 +13,7 @@ from io import BytesIO
 
 from PIL import Image
 
-from .const import PALETTES, PALETTE_BWR, WWW_PATH
+from .const import PALETTES, PALETTE_BWR
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -71,7 +71,7 @@ async def async_render_to_file(
     palette: str = PALETTE_BWR,
     placeholder_color: tuple[int, int, int] = (128, 128, 128),
 ) -> bool:
-    """Write a dithered image to /config/www/epaper_scribe/<filename>.
+    """Write a dithered image to <config>/www/epaper_scribe/<filename>.
 
     Always writes a placeholder first so the file exists even if dithering
     fails. Then attempts to dither image_bytes and overwrites the placeholder
@@ -80,10 +80,11 @@ async def async_render_to_file(
     Returns True if a real dithered image was written, False if the
     placeholder was used (no image_bytes, or dithering raised an exception).
     """
-    path = os.path.join(WWW_PATH, filename)
+    www_dir = hass.config.path("www", "epaper_scribe")
+    path = os.path.join(www_dir, filename)
 
     def _write(data: bytes) -> None:
-        os.makedirs(WWW_PATH, exist_ok=True)
+        os.makedirs(www_dir, exist_ok=True)
         with open(path, "wb") as f:
             f.write(data)
 
