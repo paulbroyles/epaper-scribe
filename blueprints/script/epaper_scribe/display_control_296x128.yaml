@@ -87,7 +87,7 @@ sequence:
               dither: 0
               payload:
                 - type: dlimg
-                  url: "/local/epaper_scribe/now_playing_artwork_128.png"
+                  url: "/config/www/epaper_scribe/now_playing_artwork_128.png"
                   x: 0
                   y: 0
                   xsize: 128
@@ -173,7 +173,7 @@ sequence:
                           max_width: 283
                           truncate: true
                         - type: dlimg
-                          url: "/local/epaper_scribe/saints_day_artwork_64.png"
+                          url: "/config/www/epaper_scribe/saints_day_artwork_64.png"
                           x: 0
                           y: 28
                           xsize: 64
@@ -371,7 +371,7 @@ sequence:
                           color: white
                           max_width: 60
                         - type: dlimg
-                          url: "/local/epaper_scribe/today_in_history_128.png"
+                          url: "/config/www/epaper_scribe/today_in_history_128.png"
                           x: 0
                           y: 28
                           xsize: 64
