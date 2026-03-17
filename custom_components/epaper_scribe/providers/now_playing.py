@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import logging
-import os
 from datetime import datetime
 from typing import Any
 
@@ -16,9 +15,8 @@ from ..const import (
     CONF_MEDIA_PLAYER_ENTITY,
     CONF_PALETTE,
     PALETTE_BWR,
-    WWW_PATH,
 )
-from ..dither import async_dither, make_placeholder
+from ..dither import async_render_to_file
 from . import ContentProvider, SensorDescription
 
 _LOGGER = logging.getLogger(__name__)
@@ -91,18 +89,11 @@ class NowPlayingProvider(ContentProvider):
 
         title = attrs.get("media_title", "")
 
-        # Fetch artwork via HA's internal API — no HTTP request or token needed
         image_bytes = await _fetch_media_image(self.hass, entity_id)
-
-        if image_bytes:
-            dithered = await async_dither(self.hass, image_bytes, size, palette)
-        else:
-            dithered = make_placeholder(size)
-
         filename = f"now_playing_artwork_{size[1]}.png"
-        await _write_static_file(self.hass, filename, dithered)
+        await async_render_to_file(self.hass, filename, image_bytes, size, palette)
 
-        self._image_bytes = dithered
+        self._image_bytes = image_bytes
         self._image_last_updated = datetime.now()
         self._sensor_data = {
             "state": player_state,
@@ -153,15 +144,3 @@ def _parse_size(size_str: str) -> tuple[int, int]:
         return int(w), int(h)
     except (ValueError, AttributeError):
         return 128, 128
-
-
-async def _write_static_file(hass, filename: str, data: bytes) -> None:
-    """Write data to /config/www/epaper_scribe/<filename> in executor."""
-
-    def _write() -> None:
-        os.makedirs(WWW_PATH, exist_ok=True)
-        path = os.path.join(WWW_PATH, filename)
-        with open(path, "wb") as f:
-            f.write(data)
-
-    await hass.async_add_executor_job(_write)

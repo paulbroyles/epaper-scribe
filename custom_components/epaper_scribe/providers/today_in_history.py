@@ -7,7 +7,6 @@ each calendar year, deterministically. Results are cached per-day.
 from __future__ import annotations
 
 import logging
-import os
 from datetime import date, datetime
 from typing import Any
 
@@ -19,9 +18,8 @@ from ..const import (
     CONF_DEFAULT_SIZE,
     CONF_PALETTE,
     PALETTE_BWR,
-    WWW_PATH,
 )
-from ..dither import async_dither, make_placeholder
+from ..dither import async_render_to_file
 from . import ContentProvider, SensorDescription
 
 _LOGGER = logging.getLogger(__name__)
@@ -79,27 +77,18 @@ class TodayInHistoryProvider(ContentProvider):
             _LOGGER.debug("Using cached today-in-history for %s", today)
             return self._cached_data
 
-        filename = f"today_in_history_{size[1]}.png"
-
-        # Write placeholder immediately so the file always exists even if
-        # the image fetch or dither fails later.
-        await _write_static_file(self.hass, filename, make_placeholder(size, (200, 195, 185)))
-
         event_year, event_text, page_title, image_url = await self._fetch_event(today)
 
-        dithered: bytes | None = None
+        image_bytes: bytes | None = None
         if image_url:
             image_bytes = await self._fetch_image(image_url)
-            if image_bytes:
-                try:
-                    dithered = await async_dither(self.hass, image_bytes, size, palette)
-                except Exception as exc:
-                    _LOGGER.warning("Failed to dither today-in-history image: %s", exc)
 
-        if dithered:
-            await _write_static_file(self.hass, filename, dithered)
-        else:
-            image_url = ""  # no real image rendered; placeholder already on disk
+        filename = f"today_in_history_{size[1]}.png"
+        has_image = await async_render_to_file(
+            self.hass, filename, image_bytes, size, palette, (200, 195, 185)
+        )
+        if not has_image:
+            image_url = ""
 
         self._image_bytes = dithered
         self._image_last_updated = datetime.now()
@@ -108,7 +97,7 @@ class TodayInHistoryProvider(ContentProvider):
             "year": str(event_year) if event_year else "",
             "event": event_text,
             "page_title": page_title,
-            "has_image": bool(image_url),
+            "has_image": has_image,
         }
         self._sensor_data = data
         self._cached_date = today
@@ -188,11 +177,3 @@ def _parse_size(size_str: str) -> tuple[int, int]:
         return 296, 128
 
 
-async def _write_static_file(hass, filename: str, data: bytes) -> None:
-    def _write() -> None:
-        os.makedirs(WWW_PATH, exist_ok=True)
-        path = os.path.join(WWW_PATH, filename)
-        with open(path, "wb") as f:
-            f.write(data)
-
-    await hass.async_add_executor_job(_write)

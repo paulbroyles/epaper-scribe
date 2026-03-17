@@ -7,11 +7,15 @@ creates spatial patterns that get destroyed by resampling.
 """
 from __future__ import annotations
 
+import logging
+import os
 from io import BytesIO
 
 from PIL import Image
 
-from .const import PALETTES, PALETTE_BWR
+from .const import PALETTES, PALETTE_BWR, WWW_PATH
+
+_LOGGER = logging.getLogger(__name__)
 
 
 def _dither_sync(image_bytes: bytes, size: tuple[int, int], palette_name: str) -> bytes:
@@ -57,3 +61,41 @@ def make_placeholder(
     buf = BytesIO()
     img.save(buf, format="PNG")
     return buf.getvalue()
+
+
+async def async_render_to_file(
+    hass,
+    filename: str,
+    image_bytes: bytes | None,
+    size: tuple[int, int],
+    palette: str = PALETTE_BWR,
+    placeholder_color: tuple[int, int, int] = (128, 128, 128),
+) -> bool:
+    """Write a dithered image to /config/www/epaper_scribe/<filename>.
+
+    Always writes a placeholder first so the file exists even if dithering
+    fails. Then attempts to dither image_bytes and overwrites the placeholder
+    if successful.
+
+    Returns True if a real dithered image was written, False if the
+    placeholder was used (no image_bytes, or dithering raised an exception).
+    """
+    path = os.path.join(WWW_PATH, filename)
+
+    def _write(data: bytes) -> None:
+        os.makedirs(WWW_PATH, exist_ok=True)
+        with open(path, "wb") as f:
+            f.write(data)
+
+    await hass.async_add_executor_job(_write, make_placeholder(size, placeholder_color))
+
+    if not image_bytes:
+        return False
+
+    try:
+        dithered = await async_dither(hass, image_bytes, size, palette)
+        await hass.async_add_executor_job(_write, dithered)
+        return True
+    except Exception as exc:
+        _LOGGER.warning("Failed to dither image for %s: %s", filename, exc)
+        return False

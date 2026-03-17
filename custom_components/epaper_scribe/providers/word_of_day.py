@@ -9,7 +9,6 @@ to bypass the cache. A word override always bypasses the cache.
 from __future__ import annotations
 
 import logging
-import os
 from datetime import date, datetime
 from typing import Any
 
@@ -22,9 +21,8 @@ from ..const import (
     CONF_DEFAULT_SIZE,
     CONF_PALETTE,
     PALETTE_BWR,
-    WWW_PATH,
 )
-from ..dither import make_placeholder
+from ..dither import async_render_to_file
 from . import ContentProvider, SensorDescription
 
 _LOGGER = logging.getLogger(__name__)
@@ -89,11 +87,10 @@ class WordOfDayProvider(ContentProvider):
         else:
             result = await self._fetch_word_of_day(today, api_key)
 
-        dithered = make_placeholder(size, (245, 240, 230))
         filename = f"word_of_day_{size[1]}.png"
-        await _write_static_file(self.hass, filename, dithered)
+        await async_render_to_file(self.hass, filename, None, size, placeholder_color=(245, 240, 230))
 
-        self._image_bytes = dithered
+        self._image_bytes = None
         self._image_last_updated = datetime.now()
 
         data: dict[str, Any] = {
@@ -233,11 +230,3 @@ def _parse_size(size_str: str) -> tuple[int, int]:
         return 296, 128
 
 
-async def _write_static_file(hass, filename: str, data: bytes) -> None:
-    def _write() -> None:
-        os.makedirs(WWW_PATH, exist_ok=True)
-        path = os.path.join(WWW_PATH, filename)
-        with open(path, "wb") as f:
-            f.write(data)
-
-    await hass.async_add_executor_job(_write)
