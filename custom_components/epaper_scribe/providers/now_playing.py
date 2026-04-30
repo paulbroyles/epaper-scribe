@@ -135,17 +135,12 @@ async def _fetch_media_image(hass, entity_id: str) -> bytes | None:
 
         base_url = get_url(hass, allow_internal=True, allow_external=False)
         image_url = f"{base_url}{entity_picture}"
-        _LOGGER.warning("Fetching artwork from proxy: %s", image_url[:120])
 
         session = async_get_clientsession(hass)
         async with session.get(image_url) as resp:
-            _LOGGER.warning(
-                "Proxy response: HTTP %d, content-type: %s",
-                resp.status,
-                resp.headers.get("content-type"),
-            )
             if resp.status == 200:
                 return await resp.read()
+            _LOGGER.warning("Artwork proxy returned HTTP %d for %s", resp.status, entity_id)
             return None
     except Exception as exc:
         _LOGGER.warning("Failed to fetch media image for %s: %s", entity_id, exc)
