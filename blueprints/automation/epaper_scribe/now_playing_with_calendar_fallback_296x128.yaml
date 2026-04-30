@@ -98,6 +98,16 @@ trigger:
     entity_id: !input media_player_entity
     to: "playing"
 
+  - id: song_change
+    platform: state
+    entity_id: !input media_player_entity
+    attribute: media_title
+
+  - id: artwork_change
+    platform: state
+    entity_id: !input media_player_entity
+    attribute: entity_picture
+
   - id: paused_timeout
     platform: state
     entity_id: !input media_player_entity
@@ -123,7 +133,13 @@ action:
       # --- Now Playing ---
       - conditions:
           - condition: trigger
-            id: playing
+            id:
+              - playing
+              - song_change
+              - artwork_change
+          - condition: state
+            entity_id: !input media_player_entity
+            state: "playing"
         sequence:
           - service: epaper_scribe.render_now_playing
             data: "{{ {'entry_id': np_entry} if np_entry else {} }}"
