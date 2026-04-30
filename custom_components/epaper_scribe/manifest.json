@@ -1,7 +1,7 @@
 {
   "domain": "epaper_scribe",
   "name": "E-Paper Scribe",
-  "version": "1.8.8",
+  "version": "1.9.0",
   "codeowners": [],
   "config_flow": true,
   "dependencies": [],
@@ -10,6 +10,7 @@
   "iot_class": "local_push",
   "requirements": [
     "Pillow>=10.0.0",
+    "pillow-heif>=0.18.0",
     "liturgical-calendar>=0.1"
   ]
 }

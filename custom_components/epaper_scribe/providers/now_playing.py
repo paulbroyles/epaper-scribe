@@ -7,7 +7,6 @@ from typing import Any
 
 import voluptuous as vol
 
-from homeassistant.components.media_player import DOMAIN as MP_DOMAIN
 import homeassistant.helpers.config_validation as cv
 
 from ..const import (
@@ -114,28 +113,40 @@ class NowPlayingProvider(ContentProvider):
 
 
 async def _fetch_media_image(hass, entity_id: str) -> bytes | None:
-    """Fetch artwork bytes via HA's internal media_player API.
+    """Fetch artwork via HA's media_player proxy.
 
-    Uses async_get_media_image() on the entity object directly — no HTTP
-    request or long-lived access token required.
+    Uses the entity_picture URL from state attributes — it already contains
+    an auth token, so no long-lived access token is needed. The proxy calls
+    async_get_media_image() on the entity internally.
     """
     try:
-        from homeassistant.helpers.entity_component import DATA_INSTANCES
+        from homeassistant.helpers.aiohttp_client import async_get_clientsession
+        from homeassistant.helpers.network import get_url
 
-        entity_comp = hass.data.get(DATA_INSTANCES, {}).get(MP_DOMAIN)
-        if entity_comp is None:
-            _LOGGER.warning("Media player entity component not found in hass.data")
+        state = hass.states.get(entity_id)
+        if state is None:
+            _LOGGER.warning("Media player entity %s not found in state machine", entity_id)
             return None
 
-        player = entity_comp.get_entity(entity_id)
-        if player is None:
+        entity_picture = state.attributes.get("entity_picture")
+        if not entity_picture:
+            _LOGGER.warning("No entity_picture for %s", entity_id)
+            return None
+
+        base_url = get_url(hass, allow_internal=True, allow_external=False)
+        image_url = f"{base_url}{entity_picture}"
+        _LOGGER.warning("Fetching artwork from proxy: %s", image_url[:120])
+
+        session = async_get_clientsession(hass)
+        async with session.get(image_url) as resp:
             _LOGGER.warning(
-                "Media player entity %s not found in component", entity_id
+                "Proxy response: HTTP %d, content-type: %s",
+                resp.status,
+                resp.headers.get("content-type"),
             )
+            if resp.status == 200:
+                return await resp.read()
             return None
-
-        image_bytes, _content_type = await player.async_get_media_image()
-        return image_bytes
     except Exception as exc:
         _LOGGER.warning("Failed to fetch media image for %s: %s", entity_id, exc)
         return None
