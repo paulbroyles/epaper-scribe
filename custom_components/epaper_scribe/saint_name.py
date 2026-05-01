@@ -468,6 +468,7 @@ def render_saints_day_image(
     font_path: str | None = None,
     background: tuple[int, int, int] = (255, 255, 255),
     foreground: tuple[int, int, int] = (0, 0, 0),
+    calendar_source: str = "",
 ) -> bytes:
     """Compose a complete saints-day panel and return PNG bytes at *size*.
 
@@ -513,7 +514,7 @@ def render_saints_day_image(
     # ---- Name / header font: shrink to fit full panel width -----------------
     if has_saint:
         name_line = MEDIAL_DOT.join(seg.name for seg in parsed.segments)
-        name_pt = max(role_pt + 2, H // 4)
+        name_pt = max(role_pt + 2, H // 5)
         while name_pt > role_pt + 2:
             if int(probe_draw.textlength(name_line, font=_load(name_pt))) <= W - 2 * PAD:
                 break
@@ -616,6 +617,17 @@ def render_saints_day_image(
     # ---- Text column: description at scaled-up font -------------------------
     if description and text_w > 0 and avail_h > 0:
         _draw_wrapped(img, draw, description, text_x, text_y, text_w, avail_h, desc_font, foreground)
+
+    # ---- Calendar source tag (bottom-right corner, Anglican/Catholic only) --
+    if calendar_source in ("anglican", "catholic"):
+        tag_text = calendar_source.capitalize()
+        tag_pt = max(7, H // 14)
+        tag_font = _load(tag_pt)
+        tag_w = int(probe_draw.textlength(tag_text, font=tag_font))
+        _, _, _, tag_h = probe_draw.textbbox((0, 0), "Ag", font=tag_font)
+        tag_x = W - PAD - tag_w
+        tag_y = H - PAD - tag_h
+        _text(img, draw, (tag_x, tag_y), tag_text, tag_font, foreground)
 
     buf = BytesIO()
     img.save(buf, format="PNG")

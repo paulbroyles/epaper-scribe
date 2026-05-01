@@ -222,6 +222,7 @@ class SaintsDayProvider(ContentProvider):
 
         font_path = self.config.get(CONF_FONT_PATH)
         season_desc = _get_season_description(result.season)
+        cal_source = result.flag_source if result.flag else ""
         composed = await self.hass.async_add_executor_job(
             _compose_image,
             size,
@@ -231,6 +232,7 @@ class SaintsDayProvider(ContentProvider):
             description if saint_name else season_desc,
             image_bytes,
             font_path,
+            cal_source,
         )
 
         filename = f"saints_day_artwork_{size[1]}.png"
@@ -303,6 +305,7 @@ class SaintsDayProvider(ContentProvider):
             description if has_saint else season_desc,
             image_bytes,
             font_path,
+            "",  # Anglican-only mode: no source tag needed
         )
 
         filename = f"saints_day_artwork_{size[1]}.png"
@@ -669,6 +672,7 @@ def _compose_image(
     description: str,
     saint_image_bytes: bytes | None,
     font_path: str | None,
+    calendar_source: str = "",
 ) -> bytes:
     from ..saint_name import render_saints_day_image
     return render_saints_day_image(
@@ -679,6 +683,7 @@ def _compose_image(
         description=description,
         saint_image_bytes=saint_image_bytes,
         font_path=font_path,
+        calendar_source=calendar_source,
     )
 
 
@@ -688,11 +693,11 @@ def _compose_image(
 
 def _get_season_description(season: str | None) -> str:
     if not season:
-        return SEASON_DESCRIPTIONS["Ordinary"]
+        return ""
     for key in SEASON_DESCRIPTIONS:
         if key.lower() in season.lower():
             return SEASON_DESCRIPTIONS[key]
-    return SEASON_DESCRIPTIONS["Ordinary"]
+    return ""
 
 
 def _format_week(week: str) -> str:
