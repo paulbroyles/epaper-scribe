@@ -109,47 +109,6 @@ def _hash_select(d: date) -> int:
 
 
 # ---------------------------------------------------------------------------
-# Feast rank helpers for conflict resolution
-# ---------------------------------------------------------------------------
-
-def _anglican_rank(type_: str) -> int:
-    """Numerical precedence for an Anglican feast type.
-
-    9 = Principal Feast  (Christmas, Easter, …)
-    8 = Sunday
-    7 = Festival / Principal Holy Day  (major saints, Ash Wednesday, …)
-    6 = Lesser Festival
-    5 = Commemoration
-    4 = unknown / unlabelled
-    """
-    return {
-        "principal feast":    9,
-        "sunday":             8,
-        "principal holy day": 7,
-        "festival":           7,
-        "lesser festival":    6,
-        "commemoration":      5,
-    }.get(type_.lower().strip(), 4)
-
-
-def _catholic_rank(rank: str) -> int:
-    """Numerical precedence for a Catholic feast rank.
-
-    9 = Solemnity
-    7 = Feast
-    6 = Memorial (obligatory)
-    5 = Optional Memorial
-    4 = unknown
-    """
-    return {
-        "solemnity":   9,
-        "feast":       7,
-        "memorial":    6,
-        "opt_memorial": 5,
-    }.get(rank.lower().strip(), 4)
-
-
-# ---------------------------------------------------------------------------
 # Anglican day helpers
 # ---------------------------------------------------------------------------
 
@@ -444,23 +403,8 @@ def get_combined_result(
             anglican=ang_day,
         )
 
-    # Conflict — rank-aware; if tied, hash-based selection.  Always flagged.
-    ang_rank = _anglican_rank(ang_day.type_)
-    cat_rank = max(_catholic_rank(f.rank) for f in cat_feasts)
-    if ang_rank > cat_rank:
-        return _make("CONFLICT", "anglican", True, "anglican")
-    if cat_rank > ang_rank:
-        return CombinedResult(
-            category="CONFLICT",
-            display_name=cat_feasts[0].name,
-            source="catholic",
-            flag=True,
-            flag_source="catholic",
-            season=ang_season,
-            week=ang_week,
-            anglican=ang_day,
-        )
-    # Equal rank → stable hash pick
+    # Conflict — hash-based stable selection so the same feast day alternates
+    # between traditions across years, maximising the variety of saints seen.
     h = _hash_select(d)
     if h == 0:
         return _make("CONFLICT", "anglican", True, "anglican")
