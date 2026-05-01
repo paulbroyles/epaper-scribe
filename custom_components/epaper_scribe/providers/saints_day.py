@@ -44,12 +44,57 @@ ORDINALS: dict[str, str] = {
 }
 
 SEASON_DESCRIPTIONS: dict[str, str] = {
-    "Lent": "A season of fasting, prayer, and almsgiving in preparation for Easter.",
-    "Advent": "A season of hopeful waiting and preparation for the coming of Christ.",
-    "Christmas": "A season celebrating the birth of Jesus Christ.",
-    "Easter": "A season of joy celebrating the resurrection of Jesus Christ.",
-    "Epiphany": "A season celebrating the manifestation of Christ to the world.",
-    "Ordinary": "Ordinary Time: the season of the Church's daily life and growth.",
+    "Advent": (
+        "Advent opens the liturgical year with four weeks of watchful waiting. "
+        "The Church holds its lamp ready in the dark, preparing for the coming of Christ at Christmas "
+        "and looking forward in hope to his final return in glory."
+    ),
+    "Christmas": (
+        "Christmas is a twelve-day season celebrating the incarnation: the eternal Word made flesh. "
+        "God enters human history in Jesus of Nazareth, born of Mary, "
+        "light arriving in the world's darkness."
+    ),
+    "Epiphany": (
+        "Epiphany — from the Greek for 'manifestation' — celebrates the revealing of Christ to all nations. "
+        "The season stretches from the visit of the Magi through the weeks that unfold who Jesus is: "
+        "baptized in the Jordan, turning water to wine, transfigured on the mountain."
+    ),
+    "before Lent": (
+        "The Sundays before Lent are an ancient transitional season, known in older usage as the Gesima Sundays. "
+        "The Church begins to turn toward fasting and self-examination, "
+        "though the full Lenten fast has not yet begun."
+    ),
+    "Lent": (
+        "Lent is forty days of prayer, fasting, and almsgiving from Ash Wednesday to Holy Saturday. "
+        "In imitation of Jesus's forty days in the wilderness, "
+        "the Church undertakes a discipline of repentance and return to God."
+    ),
+    "Holy Week": (
+        "Holy Week encompasses the most solemn days of the year. "
+        "It begins with the palms and acclamations of Palm Sunday and moves through the Last Supper, "
+        "the crucifixion on Good Friday, and the long vigil of Holy Saturday."
+    ),
+    "Easter": (
+        "The Great Fifty Days of Easter are the chief festival of the Christian year. "
+        "The Church celebrates the resurrection of Jesus from the dead — death defeated, new life poured out. "
+        "Alleluia marks every prayer of this season of joy."
+    ),
+    "Pentecost": (
+        "Pentecost marks the descent of the Holy Spirit upon the apostles in Jerusalem, "
+        "fifty days after Easter. Wind and fire, the Spirit transforms a frightened gathering "
+        "into the Church of God. Many traditions call this day the birthday of the Church."
+    ),
+    "Trinity": (
+        "Trinity Sunday opens the longest season of the liturgical year, running through summer and autumn. "
+        "Ordinary Time is not unimportant — it is the season of daily faithfulness, "
+        "the Church living out in the world what it has celebrated at the font and table."
+    ),
+    "before Advent": (
+        "The weeks before Advent close the liturgical year with an eschatological focus. "
+        "All Saints, All Souls, and the feast of Christ the King mark this season. "
+        "The Church looks beyond the present toward the Kingdom that is coming — "
+        "the final restoration of all things."
+    ),
 }
 
 SENSORS = [

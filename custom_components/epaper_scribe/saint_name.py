@@ -255,8 +255,23 @@ def _draw_season_symbol(
     y: int,
     side: int,
     color: tuple[int, int, int],
+    background: tuple[int, int, int] = (255, 255, 255),
 ) -> None:
-    """Draw a simple liturgical season glyph centred in the square (x,y,side)."""
+    """Draw a distinct liturgical season glyph centred in the square (x,y,side).
+
+    Seasons handled:
+      Advent        — candle with triangular flame
+      Christmas     — manger (trapezoidal trough outline)
+      Epiphany      — eight-pointed star (two overlapping squares)
+      before Lent   — Celtic / sun cross (equal-arm cross inside a circle)
+      Lent          — tau cross (T-shape; no top arm)
+      Holy Week     — palm frond (diagonal stem + leaflet pairs)
+      Easter        — Latin cross with draped cloth over crossbar
+      Pentecost     — three tongues of fire
+      Trinity       — triquetra (three interlocked arcs)
+      before Advent — crown (three-tined)
+      fallback      — plain Latin cross
+    """
     import math
 
     s = season.lower() if season else ""
@@ -265,43 +280,178 @@ def _draw_season_symbol(
     pad = max(2, side // 6)
     r = side // 2 - pad
     arm_w = max(2, side // 8)
-
-    def _latin_cross() -> None:
-        # Vertical arm
-        draw.rectangle([cx - arm_w // 2, y + pad, cx + arm_w // 2, y + side - pad], fill=color)
-        # Horizontal arm, 2/5 down from top
-        hy = y + pad + (side - 2 * pad) * 2 // 5
-        draw.rectangle([x + pad, hy - arm_w // 2, x + side - pad, hy + arm_w // 2], fill=color)
+    lw = max(1, arm_w // 2)
 
     if "advent" in s:
-        # Candle with triangular flame
+        # ── Candle: rectangular body + triangular flame ──────────────────────
         bw = max(2, side // 5)
         draw.rectangle([cx - bw // 2, cy - r // 3, cx + bw // 2, cy + r], fill=color)
         draw.polygon(
             [(cx, cy - r - r // 3), (cx - bw // 2, cy - r // 3), (cx + bw // 2, cy - r // 3)],
             fill=color,
         )
-    elif "christmas" in s or "epiphany" in s:
-        # Five-pointed star
-        ri = r // 2
-        pts = [
-            (cx + (r if i % 2 == 0 else ri) * math.cos(math.radians(-90 + i * 36)),
-             cy + (r if i % 2 == 0 else ri) * math.sin(math.radians(-90 + i * 36)))
+
+    elif "christmas" in s:
+        # ── Christmas tree: two-tier triangle + small star at apex ───────────
+        star_r = max(3, r // 4)
+        apex_y  = cy - r                       # top of tree / centre of star
+        base_y  = cy + r                       # bottom of tree
+        tree_h  = base_y - (apex_y + star_r)  # height available for triangles
+        # Two tiers: upper narrower, lower full-width
+        tier2_y = apex_y + star_r + tree_h * 6 // 10   # bottom of upper tier
+        draw.polygon([
+            (cx, apex_y + star_r),
+            (cx - r * 7 // 10, tier2_y),
+            (cx + r * 7 // 10, tier2_y),
+        ], fill=color)
+        draw.polygon([
+            (cx, apex_y + star_r + tree_h // 4),
+            (cx - r, base_y),
+            (cx + r, base_y),
+        ], fill=color)
+        # Small 5-pointed star at apex
+        ri_s = star_r // 2
+        star_pts = [
+            (cx + (star_r if i % 2 == 0 else ri_s) * math.cos(math.radians(-90 + i * 36)),
+             apex_y + (star_r if i % 2 == 0 else ri_s) * math.sin(math.radians(-90 + i * 36)))
             for i in range(10)
         ]
+        draw.polygon(star_pts, fill=color)
+
+    elif "epiphany" in s:
+        # ── Eight-pointed star: two overlapping squares (Magi's star) ────────
+        ri = r * 5 // 12          # inner radius (corner indentation)
+        pts = []
+        for i in range(16):
+            angle = math.radians(-90 + i * 22.5)
+            radius = r if i % 2 == 0 else ri
+            pts.append((cx + radius * math.cos(angle), cy + radius * math.sin(angle)))
         draw.polygon(pts, fill=color)
+
+    elif "before lent" in s:
+        # ── Celtic cross: equal-arm cross with a ring at the centre ──────────
+        cross_r = r
+        ring_r  = r * 5 // 9
+        # Arms: equal length, centred on canvas
+        arm_cy = cy     # centre of cross (not 2/5 offset — this is a Greek cross)
+        draw.rectangle([cx - arm_w // 2, cy - cross_r, cx + arm_w // 2, cy + cross_r], fill=color)
+        draw.rectangle([cx - cross_r, arm_cy - arm_w // 2, cx + cross_r, arm_cy + arm_w // 2], fill=color)
+        # Ring overlay: background fill inside the circle outline erases the cross
+        # so the ring appears to "interrupt" the arms, Celtic-cross style
+        draw.ellipse([cx - ring_r, arm_cy - ring_r, cx + ring_r, arm_cy + ring_r],
+                     fill=background, outline=color, width=lw)
+        # Restore cross inside the ring (the four inner arm stubs)
+        inner = ring_r - lw
+        draw.rectangle([cx - arm_w // 2, arm_cy - inner, cx + arm_w // 2, arm_cy + inner], fill=color)
+        draw.rectangle([cx - inner, arm_cy - arm_w // 2, cx + inner, arm_cy + arm_w // 2], fill=color)
+
+    elif "lent" in s:
+        # ── Tau cross: T-shape (horizontal + lower vertical arm only) ────────
+        hy = y + pad + (side - 2 * pad) * 2 // 5   # crossbar y
+        draw.rectangle([cx - arm_w // 2, hy, cx + arm_w // 2, y + side - pad], fill=color)
+        draw.rectangle([x + pad, hy - arm_w // 2, x + side - pad, hy + arm_w // 2], fill=color)
+
+    elif "holy week" in s or "holy_week" in s:
+        # ── Palm frond: diagonal stem + opposing leaflet pairs ────────────────
+        sx0, sy0 = cx - r // 4, cy + r       # base (lower left)
+        sx1, sy1 = cx + r // 3, cy - r       # tip (upper right)
+        stem_w = max(2, arm_w // 2)
+        draw.line([(sx0, sy0), (sx1, sy1)], fill=color, width=stem_w)
+        stem_angle = math.atan2(sy1 - sy0, sx1 - sx0)
+        perp = stem_angle + math.pi / 2
+        n = 4
+        for i in range(n):
+            t = (i + 1.5) / (n + 1.5)           # progress along stem (tip end)
+            px = sx0 + t * (sx1 - sx0)
+            py = sy0 + t * (sy1 - sy0)
+            leaf_len = int(r * (0.5 - t * 0.15))
+            for sign in (1, -1):
+                ex = px + sign * leaf_len * math.cos(perp)
+                ey = py + sign * leaf_len * math.sin(perp)
+                draw.line([(int(px), int(py)), (int(ex), int(ey))], fill=color, width=stem_w)
+
     elif "easter" in s:
-        # Latin cross + sunrise arc beneath crossbar
-        _latin_cross()
-        hy = y + pad + (side - 2 * pad) * 2 // 5
-        lw = max(1, arm_w // 2)
-        draw.arc(
-            [cx - r // 2, hy + arm_w, cx + r // 2, cy + r],
-            start=200, end=340, fill=color, width=lw,
-        )
+        # ── Latin cross with draped cloth over the crossbar ───────────────────
+        hy = y + pad + (side - 2 * pad) * 2 // 5   # crossbar y
+        # Draw cross first
+        draw.rectangle([cx - arm_w // 2, y + pad, cx + arm_w // 2, y + side - pad], fill=color)
+        draw.rectangle([x + pad, hy - arm_w // 2, x + side - pad, hy + arm_w // 2], fill=color)
+        # Cloth: diagonal parallelogram (upper-right → lower-left) crossing crossbar
+        ca = math.radians(-45)
+        cdx, cdy = math.cos(ca), math.sin(ca)       # along-cloth unit vector
+        pdx, pdy = -math.sin(ca), math.cos(ca)      # perpendicular unit vector
+        half_len = r * 3 // 5
+        half_wid = int(arm_w * 1.2)
+        cloth_pts = [
+            (cx + cdx * half_len + pdx * half_wid, hy + cdy * half_len + pdy * half_wid),
+            (cx + cdx * half_len - pdx * half_wid, hy + cdy * half_len - pdy * half_wid),
+            (cx - cdx * half_len - pdx * half_wid, hy - cdy * half_len - pdy * half_wid),
+            (cx - cdx * half_len + pdx * half_wid, hy - cdy * half_len + pdy * half_wid),
+        ]
+        draw.polygon([(int(px), int(py)) for px, py in cloth_pts],
+                     fill=background, outline=color)
+
+    elif "pentecost" in s:
+        # ── Three tongues of fire ─────────────────────────────────────────────
+        n_flames = 3
+        fw = max(3, r * 2 // (n_flames * 2 + 1))   # flame half-width
+        spacing = fw * 2 + max(2, fw // 3)
+        base_y = cy + r // 3
+        for i in range(n_flames):
+            fx = cx + (i - 1) * spacing
+            tip_y = cy - r
+            fh = base_y - tip_y
+            # Teardrop: ellipse body + triangular tip
+            draw.ellipse([fx - fw, tip_y + fh // 3, fx + fw, base_y], fill=color)
+            draw.polygon([(fx, tip_y), (fx - fw, tip_y + fh // 3), (fx + fw, tip_y + fh // 3)],
+                         fill=color)
+
+    elif "trinity" in s:
+        # ── Triquetra: three 300° arcs at 120° rotations ─────────────────────
+        # Each circle passes through the other two circles' centres.
+        # d = distance of arc-centre from main centre; arc_r = arc circle radius.
+        d = r / (1 + math.sqrt(3))
+        arc_r = d * math.sqrt(3)
+        sq3h = math.sqrt(3) / 2
+        centres = [
+            (cx,               cy - d),           # top
+            (cx + d * sq3h,    cy + d / 2),        # lower-right
+            (cx - d * sq3h,    cy + d / 2),        # lower-left
+        ]
+        # (start, end) in Pillow's clockwise convention; each arc is 300°
+        arcs = [(120, 60), (240, 180), (0, 300)]
+        for (px, py), (start, end) in zip(centres, arcs):
+            bbox = [px - arc_r, py - arc_r, px + arc_r, py + arc_r]
+            draw.arc(bbox, start=start, end=end, fill=color, width=lw)
+
+    elif "before advent" in s:
+        # ── Crown: three-tined with solid body ────────────────────────────────
+        crown_bot = cy + r // 2
+        crown_mid = cy - r // 5      # top of solid body / base of tines
+        tine_h = r * 4 // 5
+        # Solid crown body
+        draw.rectangle([cx - r, crown_mid, cx + r, crown_bot], fill=color)
+        # Bottom band
+        draw.rectangle([cx - r, crown_bot - lw * 2, cx + r, crown_bot], fill=color)
+        # Three tines (centre tine tallest)
+        tine_positions = [
+            (cx - r * 2 // 3, tine_h * 3 // 4),  # left tine
+            (cx,               tine_h),             # centre tine (tallest)
+            (cx + r * 2 // 3, tine_h * 3 // 4),  # right tine
+        ]
+        tine_hw = r // 3    # half-width of each tine base
+        for tx, th in tine_positions:
+            draw.polygon([
+                (tx, crown_mid - th),
+                (tx - tine_hw, crown_mid),
+                (tx + tine_hw, crown_mid),
+            ], fill=color)
+
     else:
-        # Latin cross for Lent, Ordinary, Holy Week, and everything else
-        _latin_cross()
+        # ── Fallback: plain Latin cross ───────────────────────────────────────
+        draw.rectangle([cx - arm_w // 2, y + pad, cx + arm_w // 2, y + side - pad], fill=color)
+        hy = y + pad + (side - 2 * pad) * 2 // 5
+        draw.rectangle([x + pad, hy - arm_w // 2, x + side - pad, hy + arm_w // 2], fill=color)
 
 
 # ---------------------------------------------------------------------------
@@ -461,7 +611,7 @@ def render_saints_day_image(
     elif not has_saint:
         sym_side = min(portrait_side, slot_h)
         sym_y = portrait_y + (slot_h - sym_side) // 2
-        _draw_season_symbol(draw, season or "", 0, sym_y, sym_side, foreground)
+        _draw_season_symbol(draw, season or "", 0, sym_y, sym_side, foreground, background)
 
     # ---- Text column: description at scaled-up font -------------------------
     if description and text_w > 0 and avail_h > 0:
