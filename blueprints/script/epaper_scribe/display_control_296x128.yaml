@@ -140,131 +140,21 @@ sequence:
         sequence:
           - service: epaper_scribe.render_saints_day
             data: "{{ {'entry_id': sd_entry} if sd_entry else {} }}"
-            response_variable: sd_result
-          - choose:
-              - conditions:
-                  - condition: template
-                    value_template: "{{ sd_result.has_saint }}"
-                sequence:
-                  - service: open_epaper_link.drawcustom
-                    target:
-                      device_id: !input epaper_device
-                    data:
-                      background: white
-                      rotate: 0
-                      dither: 0
-                      payload:
-                        - type: rectangle
-                          x_start: 0
-                          y_start: 0
-                          x_end: 295
-                          y_end: 28
-                          fill: red
-                          outline: red
-                        - type: text
-                          value: >-
-                            {{ sd_result.week if sd_result.week
-                               else sd_result.season }}
-                          x: 6
-                          y: 6
-                          size: 13
-                          font: rbm.ttf
-                          color: white
-                          max_width: 283
-                          truncate: true
-                        - type: dlimg
-                          url: "/config/www/epaper_scribe/saints_day_artwork_64.png"
-                          x: 0
-                          y: 28
-                          xsize: 64
-                          ysize: 64
-                          resize_method: cover
-                        - type: line
-                          x_start: 64
-                          y_start: 28
-                          x_end: 64
-                          y_end: 128
-                          fill: black
-                          width: 1
-                        - type: text
-                          value: "{{ sd_result.saint_name | default('') }}"
-                          x: 70
-                          y: 32
-                          size: 16
-                          font: ppb.ttf
-                          color: black
-                          max_width: 218
-                          truncate: true
-                        - type: text
-                          value: "{{ sd_result.saint_role | default('') }}"
-                          x: 70
-                          y: 54
-                          size: 13
-                          font: rbm.ttf
-                          color: black
-                          max_width: 218
-                          truncate: true
-                        - type: line
-                          x_start: 70
-                          y_start: 72
-                          x_end: 290
-                          y_end: 72
-                          fill: black
-                          width: 1
-                        - type: text
-                          value: "{{ sd_result.description | default('') }}"
-                          x: 70
-                          y: 78
-                          size: 11
-                          font: rbm.ttf
-                          color: black
-                          max_width: 218
-                          spacing: 2
-            default:
-              - service: open_epaper_link.drawcustom
-                target:
-                  device_id: !input epaper_device
-                data:
-                  background: white
-                  rotate: 0
-                  dither: 0
-                  payload:
-                    - type: rectangle
-                      x_start: 0
-                      y_start: 0
-                      x_end: 295
-                      y_end: 28
-                      fill: black
-                      outline: black
-                    - type: text
-                      value: >-
-                        {{ sd_result.week if sd_result.week
-                           else sd_result.season }}
-                      x: 6
-                      y: 6
-                      size: 13
-                      font: rbm.ttf
-                      color: white
-                      max_width: 283
-                      truncate: true
-                    - type: text
-                      value: "{{ sd_result.season_description | default('') }}"
-                      x: 70
-                      y: 34
-                      size: 14
-                      font: rbm.ttf
-                      color: black
-                      max_width: 218
-                      spacing: 3
-                    - type: text
-                      value: "{{ now().strftime('%A, %-d %B') }}"
-                      x: 70
-                      y: 112
-                      size: 11
-                      font: rbm.ttf
-                      color: black
-                      max_width: 218
-                      truncate: true
+          - service: open_epaper_link.drawcustom
+            target:
+              device_id: !input epaper_device
+            data:
+              background: white
+              rotate: 0
+              dither: 0
+              payload:
+                - type: dlimg
+                  url: "/config/www/epaper_scribe/saints_day_artwork_128.png"
+                  x: 0
+                  y: 0
+                  xsize: 296
+                  ysize: 128
+                  resize_method: stretch
 
       # --- Word of the Day ---
       - conditions: "{{ mode == 'word_of_day' }}"

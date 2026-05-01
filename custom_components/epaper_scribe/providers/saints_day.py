@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 from datetime import date, datetime
 from typing import Any
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 
 import voluptuous as vol
 
@@ -312,7 +312,8 @@ class SaintsDayProvider(ContentProvider):
         """Fetch Wikipedia summary from a known /wiki/… URL."""
         if "/wiki/" not in wiki_url:
             return "", ""
-        page_title = wiki_url.split("/wiki/")[-1]
+        # unquote first so we don't double-encode (e.g. %27 → %2527)
+        page_title = unquote(wiki_url.split("/wiki/")[-1])
         return await self._fetch_wikipedia_one(page_title)
 
     async def _fetch_wikipedia(

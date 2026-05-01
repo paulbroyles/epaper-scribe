@@ -42,7 +42,7 @@ PROVIDER_REGISTRY = {
 }
 
 _PALETTE_OPTIONS = ["bw", "bwr", "bwry"]
-_CALENDAR_OPTIONS = ["anglican", "catholic"]
+_CALENDAR_OPTIONS = ["combined", "anglican", "catholic"]
 
 
 class EpaperScribeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
