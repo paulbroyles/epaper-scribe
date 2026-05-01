@@ -8,6 +8,7 @@ CONF_PALETTE = "palette"
 CONF_DEFAULT_SIZE = "default_size"
 CONF_CALENDAR_TYPE = "calendar_type"
 CONF_API_KEY = "api_key"
+CONF_FONT_PATH = "font_path"
 
 PALETTE_BW = "bw"
 PALETTE_BWR = "bwr"
