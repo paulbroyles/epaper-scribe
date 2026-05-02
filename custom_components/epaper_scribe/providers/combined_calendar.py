@@ -102,10 +102,56 @@ def _same_feast(a: str, b: str) -> bool:
 # Hash-based stable random selection (same date → same result each render)
 # ---------------------------------------------------------------------------
 
-def _hash_select(d: date) -> int:
-    """Return 0 or 1 deterministically from the date string."""
+def _hash_mod(d: date, n: int) -> int:
+    """Return a stable integer in [0, n) derived from the date string.
+
+    Using the full ISO date (including year) means the same month/day can
+    produce different results in different years, giving year-to-year variety
+    while remaining stable within a given year.
+    """
     digest = hashlib.md5(d.isoformat().encode()).hexdigest()
-    return int(digest, 16) % 2
+    return int(digest, 16) % n
+
+
+def _hash_select(d: date) -> int:
+    """Convenience wrapper: return 0 or 1 from the date string."""
+    return _hash_mod(d, 2)
+
+
+# ---------------------------------------------------------------------------
+# Catholic slash-segment expansion
+# ---------------------------------------------------------------------------
+
+def _expand_catholic_options(cat_feasts: list[CatholicFeast]) -> list[CatholicFeast]:
+    """Expand slash-delimited CatholicFeast names into individual options.
+
+    Romcal uses "/" to separate distinct optional commemorations that share a
+    calendar date but are NOT jointly celebrated — a priest would choose one
+    or none.  Each segment becomes its own CatholicFeast with the same rank
+    as the parent entry.
+
+    Example:
+      "Saint George, Martyr/Saint Adalbert, Bishop and Martyr" (OPT_MEMORIAL)
+      → CatholicFeast("Saint George, Martyr", "OPT_MEMORIAL")
+         CatholicFeast("Saint Adalbert, Bishop and Martyr", "OPT_MEMORIAL")
+    """
+    expanded: list[CatholicFeast] = []
+    for feast in cat_feasts:
+        if "/" in feast.name:
+            for seg in feast.name.split("/"):
+                seg = seg.strip()
+                if seg:
+                    expanded.append(CatholicFeast(name=seg, rank=feast.rank))
+        else:
+            expanded.append(feast)
+    return expanded
+
+
+def _hash_pick(d: date, options: list[CatholicFeast]) -> CatholicFeast:
+    """Hash-pick one option from *options* in a stable, year-varying way."""
+    if len(options) == 1:
+        return options[0]
+    return options[_hash_mod(d, len(options))]
 
 
 # ---------------------------------------------------------------------------
@@ -365,76 +411,59 @@ def get_combined_result(
     if not ang_real and not cat_real:
         return _make("NO_FEAST", "none", False, "")
 
-    # --- Anglican transferred feast loses to any Catholic feast ---
-    if ang_real and _is_transferred(ang_day) and cat_real:
+    # Expand slash-delimited Catholic entries into individual options.
+    # Romcal uses "/" for distinct optional commemorations on the same date
+    # that are NOT joint celebrations — each is an independent option.
+    cat_opts = _expand_catholic_options(cat_feasts)
+
+    def _cat_result(cat: str, name: str, flag: bool, flag_src: str) -> CombinedResult:
         return CombinedResult(
-            category="CAT_ONLY",
-            display_name=cat_feasts[0].name,
+            category=cat,
+            display_name=name,
             source="catholic",
-            flag=True,
-            flag_source="catholic",
+            flag=flag,
+            flag_source=flag_src,
             season=ang_season,
             week=ang_week,
             anglican=ang_day,
         )
+
+    # --- Anglican transferred feast loses to any Catholic feast ---
+    if ang_real and _is_transferred(ang_day) and cat_real:
+        return _cat_result("CAT_ONLY", _hash_pick(d, cat_opts).name, True, "catholic")
 
     # --- Anglican only ---
     if ang_real and not cat_real:
         return _make("ANG_ONLY", "anglican", True, "anglican")
 
-    # --- Catholic only ---
+    # --- Catholic only: hash-pick among expanded options ---
     if not ang_real and cat_real:
-        return CombinedResult(
-            category="CAT_ONLY",
-            display_name=cat_feasts[0].name,
-            source="catholic",
-            flag=True,
-            flag_source="catholic",
-            season=ang_season,
-            week=ang_week,
-            anglican=ang_day,
-        )
+        return _cat_result("CAT_ONLY", _hash_pick(d, cat_opts).name, True, "catholic")
 
     # --- Both real ---
 
-    # SHARED_RANDOM fixed dates
+    # SHARED_RANDOM fixed dates: same feast in both traditions; cycle name strings.
     if mmdd in _SHARED_RANDOM_MMDD:
-        h = _hash_select(d)
-        if h == 0:
+        if _hash_select(d) == 0:
             return _make("SHARED_RANDOM", "anglican", False, "")
-        return CombinedResult(
-            category="SHARED_RANDOM",
-            display_name=cat_feasts[0].name,
-            source="catholic",
-            flag=False,
-            flag_source="",
-            season=ang_season,
-            week=ang_week,
-            anglican=ang_day,
-        )
+        return _cat_result("SHARED_RANDOM", _hash_pick(d, cat_opts).name, False, "")
 
-    # Alias (same feast, different name string)
-    if any(_is_alias(ang_name_base, f.name) for f in cat_feasts):
-        h = _hash_select(d)
-        if h == 0:
+    # Alias: same feast, different name strings — cycle between traditions' wording.
+    # Check each expanded Catholic option so a slash-paired option can match.
+    alias_opt = next((o for o in cat_opts if _is_alias(ang_name_base, o.name)), None)
+    if alias_opt:
+        if _hash_select(d) == 0:
             return _make("ALIAS", "anglican", False, "")
-        return CombinedResult(
-            category="ALIAS",
-            display_name=cat_feasts[0].name,
-            source="catholic",
-            flag=False,
-            flag_source="",
-            season=ang_season,
-            week=ang_week,
-            anglican=ang_day,
-        )
+        return _cat_result("ALIAS", alias_opt.name, False, "")
 
-    # Same saint — prefer Catholic string
-    if any(_same_feast(ang_name_base, f.name) for f in cat_feasts):
-        matched = next(f for f in cat_feasts if _same_feast(ang_name_base, f.name))
+    # Shared saint: Anglican and a Catholic segment name the same person.
+    # Deduplicate — the shared saint always shows; other Catholic options are
+    # suppressed (they would need a separate date to get their turn).
+    shared_opt = next((o for o in cat_opts if _same_feast(ang_name_base, o.name)), None)
+    if shared_opt:
         return CombinedResult(
             category="SHARED",
-            display_name=matched.name,
+            display_name=shared_opt.name,
             source="catholic",
             flag=False,
             flag_source="",
@@ -444,21 +473,17 @@ def get_combined_result(
             anglican=ang_day,
         )
 
-    # Conflict — hash-based stable selection so the same feast day alternates
-    # between traditions across years, maximising the variety of saints seen.
-    h = _hash_select(d)
-    if h == 0:
-        return _make("CONFLICT", "anglican", True, "anglican")
-    return CombinedResult(
-        category="CONFLICT",
-        display_name=cat_feasts[0].name,
-        source="catholic",
-        flag=True,
-        flag_source="catholic",
-        season=ang_season,
-        week=ang_week,
-        anglican=ang_day,
+    # Conflict: all genuinely distinct options weighted equally.
+    # Anglican is option 0; Catholic segments follow in source order.
+    # hash mod N picks one, giving each saint an equal share of years.
+    conflict_opts: list[tuple[str, str]] = (
+        [("anglican", ang_name_base)]
+        + [("catholic", o.name) for o in cat_opts]
     )
+    chosen_src, chosen_name = conflict_opts[_hash_mod(d, len(conflict_opts))]
+    if chosen_src == "anglican":
+        return _make("CONFLICT", "anglican", True, "anglican")
+    return _cat_result("CONFLICT", chosen_name, True, "catholic")
 
 
 def _pick_display(src: str, ang_name: str, cat_feasts: list[CatholicFeast]) -> str:
