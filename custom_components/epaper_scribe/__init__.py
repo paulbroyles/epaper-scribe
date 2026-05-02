@@ -71,6 +71,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
+    # Reload the entry whenever the user saves new options, so the provider
+    # picks up the updated config (font paths, calendar type, size, etc.).
+    entry.async_on_unload(
+        entry.add_update_listener(
+            lambda hass, entry: hass.config_entries.async_reload(entry.entry_id)
+        )
+    )
+
     return True
 
 
