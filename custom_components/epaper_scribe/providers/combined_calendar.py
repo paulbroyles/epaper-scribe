@@ -229,6 +229,47 @@ def _precompute_flags(
         if _hash_select(date(year, 11, 17)) == 1:  # Catholic wins Nov 17
             flags.overrides["11-18"] = "ELIZABETH_CAT"
 
+    # --- Cyprian of Carthage rule (Anglican Sep 15 + Catholic Sep 16) ---
+    # Anglican: Cyprian alone on Sep 15.
+    # Catholic: Cornelius and Cyprian together on Sep 16.
+    # If Anglican wins Sep 15 (Cyprian shown), force Anglican on Sep 16 too so
+    # Cyprian does not appear on both consecutive days.
+    has_ang_cyprian_915 = "cyprian" in ang_name("09-15")
+    has_cat_cyprian_916 = any("cyprian" in n for n in cat_names("09-16"))
+    if has_ang_cyprian_915 and has_cat_cyprian_916:
+        if _hash_select(date(year, 9, 15)) == 0:  # Anglican wins Sep 15
+            flags.overrides["09-16"] = "CYPRIAN_ANG"
+
+    # --- Baptism of Christ rule (Anglican Jan 7 fixed, Catholic variable Sunday) ---
+    # The Catholic Baptism of the Lord falls on the Sunday after Epiphany (Jan 7–13).
+    # Anglican always places it on Jan 7 (fixed).
+    # Strategy:
+    #   • If the Catholic Baptism date has a competing Anglican saint, apply the
+    #     standard cross-date pattern: hash on Jan 7; if Anglican wins, force
+    #     Anglican on the Catholic Baptism date too.
+    #   • If the Catholic Baptism date is uncontested (no real Anglican feast),
+    #     the Baptism will naturally dominate that date; suppress the duplicate
+    #     Anglican Baptism on Jan 7 by forcing Catholic there instead.
+    has_ang_baptism_107 = "baptism" in ang_name("01-07")
+    cat_baptism_mmdd: str | None = None
+    for _dd in range(7, 14):
+        _mmdd = f"01-{_dd:02d}"
+        if any("baptism" in n for n in cat_names(_mmdd)):
+            cat_baptism_mmdd = _mmdd
+            break
+    if has_ang_baptism_107 and cat_baptism_mmdd and cat_baptism_mmdd != "01-07":
+        ang_on_cat_baptism = ang.get(f"{year}-{cat_baptism_mmdd}")
+        ang_real_on_cat_baptism = (
+            ang_on_cat_baptism is not None and _is_real_anglican(ang_on_cat_baptism)
+        )
+        if ang_real_on_cat_baptism:
+            # Contested Catholic Baptism date → hash on Jan 7
+            if _hash_select(date(year, 1, 7)) == 0:  # Anglican wins Jan 7
+                flags.overrides[cat_baptism_mmdd] = "BAPTISM_ANG"
+        else:
+            # Uncontested Catholic Baptism date → suppress Anglican Jan 7
+            flags.overrides["01-07"] = "BAPTISM_CAT"
+
     return flags
 
 
@@ -280,9 +321,9 @@ def get_combined_result(
             week=ang_week,
             anglican=ang_day,
         )
-    if override in ("AUGUSTINE_ANG", "PHILIPJAMES_ANG"):
+    if override in ("AUGUSTINE_ANG", "PHILIPJAMES_ANG", "CYPRIAN_ANG", "BAPTISM_ANG"):
         return _make("CROSS_DATE", "anglican", False, "")
-    if override == "ELIZABETH_CAT":
+    if override in ("ELIZABETH_CAT", "BAPTISM_CAT"):
         return CombinedResult(
             category="CROSS_DATE",
             display_name=cat_feasts[0].name if cat_feasts else "",
