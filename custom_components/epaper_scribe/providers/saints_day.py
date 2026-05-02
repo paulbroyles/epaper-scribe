@@ -222,7 +222,9 @@ class SaintsDayProvider(ContentProvider):
 
         font_path = self.config.get(CONF_FONT_PATH)
         season_desc = _get_season_description(result.season)
-        cal_source = result.flag_source if result.flag else ""
+        ang_type = result.anglican.type_ if result.anglican else ""
+        cat_feasts_today = await self.hass.async_add_executor_job(get_catholic_feasts, today)
+        calendar_tag = _compute_calendar_tag(result, cat_feasts_today, ang_type) if saint_name else ""
         composed = await self.hass.async_add_executor_job(
             _compose_image,
             size,
@@ -232,7 +234,7 @@ class SaintsDayProvider(ContentProvider):
             description if saint_name else season_desc,
             image_bytes,
             font_path,
-            cal_source,
+            calendar_tag,
         )
 
         filename = f"saints_day_artwork_{size[1]}.png"
@@ -276,8 +278,8 @@ class SaintsDayProvider(ContentProvider):
     async def _render_anglican(
         self, today: date, size: tuple[int, int], palette: str
     ) -> dict[str, Any]:
-        saint_name, saint_role, season, week, wiki_url = await self.hass.async_add_executor_job(
-            _fetch_saint_anglican, today
+        saint_name, saint_role, season, week, wiki_url, ang_type = (
+            await self.hass.async_add_executor_job(_fetch_saint_anglican, today)
         )
 
         has_saint = bool(saint_name)
@@ -296,6 +298,11 @@ class SaintsDayProvider(ContentProvider):
 
         font_path = self.config.get(CONF_FONT_PATH)
         season_desc = _get_season_description(season)
+        ang_key = (ang_type or "").lower().strip()
+        calendar_tag = (
+            f"Anglican {_ANG_TYPE_LABELS.get(ang_key, ang_type.title())}".strip()
+            if has_saint and ang_type else ""
+        )
         composed = await self.hass.async_add_executor_job(
             _compose_image,
             size,
@@ -305,7 +312,7 @@ class SaintsDayProvider(ContentProvider):
             description if has_saint else season_desc,
             image_bytes,
             font_path,
-            "",  # Anglican-only mode: no source tag needed
+            calendar_tag,
         )
 
         filename = f"saints_day_artwork_{size[1]}.png"
@@ -635,8 +642,13 @@ def _fetch_catholic_year(year: int) -> dict[str, list]:
     return result
 
 
-def _fetch_saint_anglican(today: date) -> tuple[str | None, str | None, str | None, str | None, str | None]:
-    """Fetch today's Anglican saint. Runs synchronously."""
+def _fetch_saint_anglican(
+    today: date,
+) -> tuple[str | None, str | None, str | None, str | None, str | None, str]:
+    """Fetch today's Anglican saint. Runs synchronously.
+
+    Returns (name, role, season, week, wiki_url, type_).
+    """
     try:
         from liturgical_calendar.liturgical import liturgical_calendar
         from ..saint_name import parse_saint_name
@@ -646,18 +658,19 @@ def _fetch_saint_anglican(today: date) -> tuple[str | None, str | None, str | No
         season: str = day.get("season", "")
         week: str = day.get("week", "")
         wiki_url: str = day.get("url", "")
+        type_: str = day.get("type", "")
 
         if not raw_name:
-            return None, None, season, week, wiki_url
+            return None, None, season, week, wiki_url, type_
 
         parsed = parse_saint_name(raw_name)
         name = " · ".join(s.name for s in parsed.segments) if parsed.segments else raw_name
         role = " · ".join(s.descriptor for s in parsed.segments if s.descriptor)
-        return name, role, season, week, wiki_url
+        return name, role, season, week, wiki_url, type_
 
     except Exception as exc:
         _LOGGER.warning("Anglican calendar lookup failed: %s", exc)
-        return None, None, None, None, None
+        return None, None, None, None, None, ""
 
 
 # ---------------------------------------------------------------------------
@@ -672,7 +685,7 @@ def _compose_image(
     description: str,
     saint_image_bytes: bytes | None,
     font_path: str | None,
-    calendar_source: str = "",
+    calendar_tag: str = "",
 ) -> bytes:
     from ..saint_name import render_saints_day_image
     return render_saints_day_image(
@@ -683,8 +696,97 @@ def _compose_image(
         description=description,
         saint_image_bytes=saint_image_bytes,
         font_path=font_path,
-        calendar_source=calendar_source,
+        calendar_tag=calendar_tag,
     )
+
+
+# ---------------------------------------------------------------------------
+# Calendar tag helpers
+# ---------------------------------------------------------------------------
+
+_ANG_TYPE_LABELS: dict[str, str] = {
+    "principal feast":    "Principal Feast",
+    "principal holy day": "Principal Holy Day",
+    "festival":           "Festival",
+    "lesser festival":    "Lesser Festival",
+    "commemoration":      "Commemoration",
+    "sunday":             "Sunday",
+}
+_CAT_RANK_LABELS: dict[str, str] = {
+    "solemnity":   "Solemnity",
+    "feast":       "Feast",
+    "memorial":    "Memorial",
+    "opt_memorial": "Opt. Memorial",
+}
+_ANG_RANK_NUM: dict[str, int] = {
+    "principal feast": 9, "sunday": 8, "principal holy day": 7,
+    "festival": 7, "lesser festival": 6, "commemoration": 5,
+}
+_CAT_RANK_NUM: dict[str, int] = {
+    "solemnity": 9, "feast": 7, "memorial": 6, "opt_memorial": 5,
+}
+
+
+def _compute_calendar_tag(
+    result: "CombinedResult",
+    cat_feasts: list,
+    ang_type: str,
+) -> str:
+    """Compute the bottom-right corner tag text for the display.
+
+    Flagged Anglican wins  → "Anglican Festival"
+    Flagged Catholic wins  → "Catholic Solemnity"
+    Shared / unflagged     → rank label only (no tradition word); Catholic
+                             preferred when ranks are equivalent.
+    No feast               → ""
+    """
+    if result.source == "none" or not result.display_name:
+        return ""
+
+    # Find the best Catholic rank for this date:
+    # For a flagged Catholic win, match the winning display_name to its rank.
+    # For shared / Anglican wins, use the highest-ranked Catholic option.
+    cat_rank_str = ""
+    if cat_feasts:
+        opts: list[tuple[str, str]] = []   # (name, rank)
+        for f in cat_feasts:
+            if "/" in f.name:
+                for seg in f.name.split("/"):
+                    seg = seg.strip()
+                    if seg:
+                        opts.append((seg, f.rank))
+            else:
+                opts.append((f.name, f.rank))
+
+        if result.flag and result.flag_source == "catholic":
+            # Match winning name to its specific rank
+            cat_rank_str = next(
+                (rank for name, rank in opts if name == result.display_name),
+                cat_feasts[0].rank,
+            )
+        elif opts:
+            # Shared or Anglican win: compare against highest Catholic rank
+            cat_rank_str = max(opts, key=lambda x: _CAT_RANK_NUM.get(x[1].lower(), 4))[1]
+
+    ang_key = ang_type.lower().strip()
+    cat_key = cat_rank_str.lower().strip()
+
+    if result.flag:
+        if result.flag_source == "anglican":
+            label = _ANG_TYPE_LABELS.get(ang_key, ang_type.title())
+            return f"Anglican {label}".strip()
+        if result.flag_source == "catholic":
+            label = _CAT_RANK_LABELS.get(cat_key, cat_rank_str.title())
+            return f"Catholic {label}".strip()
+        return ""
+
+    # Shared / unflagged: show rank of higher tradition; prefer Catholic if equal
+    a_num = _ANG_RANK_NUM.get(ang_key, 4)
+    c_num = _CAT_RANK_NUM.get(cat_key, 4)
+    if c_num >= a_num and cat_rank_str:
+        return _CAT_RANK_LABELS.get(cat_key, cat_rank_str.title())
+    ang_label = _ANG_TYPE_LABELS.get(ang_key, "")
+    return ang_label
 
 
 # ---------------------------------------------------------------------------
