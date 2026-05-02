@@ -456,14 +456,45 @@ def get_combined_result(
             return _make("ALIAS", "anglican", False, "")
         return _cat_result("ALIAS", alias_opt.name, False, "")
 
-    # Shared saint: Anglican and a Catholic segment name the same person.
-    # Deduplicate — the shared saint always shows; other Catholic options are
-    # suppressed (they would need a separate date to get their turn).
-    shared_opt = next((o for o in cat_opts if _same_feast(ang_name_base, o.name)), None)
-    if shared_opt:
+    # Build a deduplicated options pool for N-way equal-weight selection.
+    #
+    # Deduplication rule: if any Catholic segment names the same saint as
+    # Anglican, merge Anglican + that segment into ONE shared slot (prevents
+    # double-counting the same person).  Every other Catholic segment, and
+    # Anglican itself when no match is found, are independent slots.
+    # hash mod N then picks one slot, giving every distinct saint an equal
+    # share of years.
+    #
+    # Example — Apr 23 (Anglican: George; Catholic: George / Adalbert):
+    #   pool = [("shared", "Saint George, Martyr"),
+    #           ("catholic", "Saint Adalbert, Bishop and Martyr")]
+    #   → coin flip between George and Adalbert.
+    #
+    # Example — plain conflict (Anglican: X; Catholic: Y):
+    #   pool = [("anglican", X), ("catholic", Y)]
+    #   → coin flip, same as before.
+    pool: list[tuple[str, str]] = []   # (source, display_name)
+    ang_consumed = False
+    for opt in cat_opts:
+        if _same_feast(ang_name_base, opt.name):
+            if not ang_consumed:
+                pool.append(("shared", opt.name))   # Anglican + this segment = one slot
+                ang_consumed = True
+            # else: skip — Anglican already merged; further duplicates suppressed
+        else:
+            pool.append(("catholic", opt.name))
+    if not ang_consumed:
+        pool.insert(0, ("anglican", ang_name_base))
+
+    chosen_src, chosen_name = pool[_hash_mod(d, len(pool))]
+
+    if chosen_src == "anglican":
+        return _make("CONFLICT", "anglican", True, "anglican")
+    if chosen_src == "shared":
+        # Same saint in both traditions; show unflagged with Catholic segment name.
         return CombinedResult(
             category="SHARED",
-            display_name=shared_opt.name,
+            display_name=chosen_name,
             source="catholic",
             flag=False,
             flag_source="",
@@ -472,17 +503,7 @@ def get_combined_result(
             wiki_url=ang_day.wiki_url,
             anglican=ang_day,
         )
-
-    # Conflict: all genuinely distinct options weighted equally.
-    # Anglican is option 0; Catholic segments follow in source order.
-    # hash mod N picks one, giving each saint an equal share of years.
-    conflict_opts: list[tuple[str, str]] = (
-        [("anglican", ang_name_base)]
-        + [("catholic", o.name) for o in cat_opts]
-    )
-    chosen_src, chosen_name = conflict_opts[_hash_mod(d, len(conflict_opts))]
-    if chosen_src == "anglican":
-        return _make("CONFLICT", "anglican", True, "anglican")
+    # chosen_src == "catholic": a distinct Catholic-only option won
     return _cat_result("CONFLICT", chosen_name, True, "catholic")
 
 
