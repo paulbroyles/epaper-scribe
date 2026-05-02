@@ -22,7 +22,9 @@
         "data": {
           "calendar_type": "Calendar Type",
           "palette": "Color Palette",
-          "default_size": "Default Image Size (e.g. 64x64)"
+          "default_size": "Default Image Size (e.g. 64x64)",
+          "name_font_path": "Name Header Font Path (optional, e.g. /config/fonts/CrimsonText-Bold.ttf)",
+          "font_path": "Body Text Font Path (optional, leave blank for built-in font)"
         }
       },
       "word_of_day": {
@@ -51,7 +53,9 @@
           "media_player_entity": "Media Player Entity",
           "calendar_type": "Calendar Type",
           "palette": "Color Palette",
-          "default_size": "Default Image Size"
+          "default_size": "Default Image Size",
+          "name_font_path": "Name Header Font Path (optional)",
+          "font_path": "Body Text Font Path (optional)"
         }
       }
     }
