@@ -14,6 +14,7 @@ from ..const import (
     CONF_CALENDAR_TYPE,
     CONF_DEFAULT_SIZE,
     CONF_FONT_PATH,
+    CONF_NAME_FONT_PATH,
     CONF_PALETTE,
     PALETTE_BWR,
 )
@@ -221,6 +222,7 @@ class SaintsDayProvider(ContentProvider):
                 image_bytes = await self._fetch_image(image_url)
 
         font_path = self.config.get(CONF_FONT_PATH)
+        name_font_path = self.config.get(CONF_NAME_FONT_PATH)
         season_desc = _get_season_description(result.season)
         ang_type = result.anglican.type_ if result.anglican else ""
         cat_feasts_today = await self.hass.async_add_executor_job(get_catholic_feasts, today)
@@ -234,6 +236,7 @@ class SaintsDayProvider(ContentProvider):
             description if saint_name else season_desc,
             image_bytes,
             font_path,
+            name_font_path,
             calendar_tag,
         )
 
@@ -297,6 +300,7 @@ class SaintsDayProvider(ContentProvider):
                 image_bytes = await self._fetch_image(image_url)
 
         font_path = self.config.get(CONF_FONT_PATH)
+        name_font_path = self.config.get(CONF_NAME_FONT_PATH)
         season_desc = _get_season_description(season)
         ang_key = (ang_type or "").lower().strip()
         calendar_tag = (
@@ -312,6 +316,7 @@ class SaintsDayProvider(ContentProvider):
             description if has_saint else season_desc,
             image_bytes,
             font_path,
+            name_font_path,
             calendar_tag,
         )
 
@@ -685,6 +690,7 @@ def _compose_image(
     description: str,
     saint_image_bytes: bytes | None,
     font_path: str | None,
+    name_font_path: str | None,
     calendar_tag: str = "",
 ) -> bytes:
     from ..saint_name import render_saints_day_image
@@ -696,6 +702,7 @@ def _compose_image(
         description=description,
         saint_image_bytes=saint_image_bytes,
         font_path=font_path,
+        name_font_path=name_font_path,
         calendar_tag=calendar_tag,
     )
 

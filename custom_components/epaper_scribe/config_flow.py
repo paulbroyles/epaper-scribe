@@ -19,7 +19,9 @@ from .const import (
     CONF_API_KEY,
     CONF_CALENDAR_TYPE,
     CONF_DEFAULT_SIZE,
+    CONF_FONT_PATH,
     CONF_MEDIA_PLAYER_ENTITY,
+    CONF_NAME_FONT_PATH,
     CONF_PALETTE,
     CONF_PROVIDER_TYPE,
     DOMAIN,
@@ -111,6 +113,8 @@ class EpaperScribeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     )
                 ),
                 vol.Optional(CONF_DEFAULT_SIZE, default="64x64"): TextSelector(),
+                vol.Optional(CONF_NAME_FONT_PATH, default=""): TextSelector(),
+                vol.Optional(CONF_FONT_PATH, default=""): TextSelector(),
             }),
         )
 
@@ -216,6 +220,14 @@ class EpaperScribeOptionsFlow(config_entries.OptionsFlow):
                 vol.Optional(
                     CONF_DEFAULT_SIZE,
                     default=current.get(CONF_DEFAULT_SIZE, "64x64"),
+                ): TextSelector(),
+                vol.Optional(
+                    CONF_NAME_FONT_PATH,
+                    default=current.get(CONF_NAME_FONT_PATH, ""),
+                ): TextSelector(),
+                vol.Optional(
+                    CONF_FONT_PATH,
+                    default=current.get(CONF_FONT_PATH, ""),
                 ): TextSelector(),
             })
         elif provider_type == PROVIDER_WORD_OF_DAY:

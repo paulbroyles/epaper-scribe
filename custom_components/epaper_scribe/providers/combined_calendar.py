@@ -340,6 +340,9 @@ def get_combined_result(
     ang_week = ang_day.week
 
     def _make(cat: str, src: str, flag: bool, flag_src: str) -> CombinedResult:
+        # Only carry the Anglican wiki_url when Anglican actually wins; for
+        # Catholic wins the provider should search by the saint's display name.
+        wiki_url = ang_day.wiki_url if src == "anglican" else ""
         return CombinedResult(
             category=cat,
             display_name=_pick_display(src, ang_name_base, cat_feasts),
@@ -348,7 +351,7 @@ def get_combined_result(
             flag_source=flag_src,
             season=ang_season,
             week=ang_week,
-            wiki_url=ang_day.wiki_url,
+            wiki_url=wiki_url,
             anglican=ang_day,
         )
 

@@ -33,7 +33,34 @@ if TYPE_CHECKING:
     from PIL.ImageDraw import ImageDraw
     from PIL.ImageFont import FreeTypeFont
 
-MEDIAL_DOT = " · "
+def _name_separators(n: int) -> list[str]:
+    """Return separator strings between *n* name segments.
+
+    n=1 → []
+    n=2 → [" and "]
+    n=3 → [", ", ", and "]
+    n≥4 → [", ", …, ", ", ", and "]
+    """
+    if n <= 1:
+        return []
+    if n == 2:
+        return [" and "]
+    return [", "] * (n - 2) + [", and "]
+
+
+def _join_names(segments: "list[NameSegment]") -> str:
+    """Join segment names with grammatical 'and' / Oxford comma."""
+    names = [seg.name for seg in segments]
+    n = len(names)
+    if n == 0:
+        return ""
+    if n == 1:
+        return names[0]
+    seps = _name_separators(n)
+    result = names[0]
+    for i, sep in enumerate(seps):
+        result += sep + names[i + 1]
+    return result
 
 # Words that, when they appear as the first token after a comma, mean the
 # comma is a name/descriptor separator rather than a list separator.
@@ -178,15 +205,16 @@ def _draw_name_line(
     segments = parsed.segments
     if not segments:
         return
-    dot_w = int(draw.textlength(MEDIAL_DOT, font=name_font))
+    seps = _name_separators(len(segments))
+    sep_widths = [int(draw.textlength(s, font=name_font)) for s in seps]
     name_widths = [int(draw.textlength(seg.name, font=name_font)) for seg in segments]
     cur = x
     for i, seg in enumerate(segments):
         _text(img, draw, (cur, y), seg.name, name_font, color)
         cur += name_widths[i]
         if i < len(segments) - 1:
-            _text(img, draw, (cur, y), MEDIAL_DOT, name_font, color)
-            cur += dot_w
+            _text(img, draw, (cur, y), seps[i], name_font, color)
+            cur += sep_widths[i]
 
 
 def render_saint_name(
@@ -211,7 +239,8 @@ def render_saint_name(
     if not segments:
         return y
 
-    dot_w = int(draw.textlength(MEDIAL_DOT, font=name_font))
+    seps = _name_separators(len(segments))
+    sep_widths = [int(draw.textlength(s, font=name_font)) for s in seps]
     name_widths = [int(draw.textlength(seg.name, font=name_font)) for seg in segments]
 
     # X offset for each segment's name start
@@ -221,13 +250,13 @@ def render_saint_name(
         x_offsets.append(cur)
         cur += w
         if i < len(segments) - 1:
-            cur += dot_w
+            cur += sep_widths[i]
 
     # Name line
     for i, seg in enumerate(segments):
         _text(img, draw, (x_offsets[i], y), seg.name, name_font, color)
         if i < len(segments) - 1:
-            _text(img, draw, (x_offsets[i] + name_widths[i], y), MEDIAL_DOT, name_font, color)
+            _text(img, draw, (x_offsets[i] + name_widths[i], y), seps[i], name_font, color)
 
     _, _, _, name_h = draw.textbbox((0, 0), "Ag", font=name_font)
     desc_y = y + name_h + 2
@@ -466,6 +495,7 @@ def render_saints_day_image(
     description: str,
     saint_image_bytes: bytes | None = None,
     font_path: str | None = None,
+    name_font_path: str | None = None,
     background: tuple[int, int, int] = (255, 255, 255),
     foreground: tuple[int, int, int] = (0, 0, 0),
     calendar_tag: str = "",
@@ -489,21 +519,37 @@ def render_saints_day_image(
     has_saint = bool(parsed and parsed.segments)
     has_descriptors = has_saint and any(seg.descriptor for seg in parsed.segments)
 
-    # ---- Font loader --------------------------------------------------------
-    def _load(pt: int) -> "FreeTypeFont":
+    # ---- Font loaders -------------------------------------------------------
+    # _load_body — description text, role subtitle, calendar tag
+    # _load_name — saint name header (uses name_font_path if set, else font_path)
+    def _load_body(pt: float) -> "FreeTypeFont":
         if font_path:
             try:
                 return ImageFont.truetype(font_path, pt)
             except Exception:
                 pass
         try:
-            return ImageFont.load_default(size=pt)
+            return ImageFont.load_default(size=round(pt))
+        except TypeError:
+            return ImageFont.load_default()
+
+    def _load_name(pt: float) -> "FreeTypeFont":
+        _path = name_font_path or font_path
+        if _path:
+            try:
+                return ImageFont.truetype(_path, pt)
+            except Exception:
+                pass
+        try:
+            return ImageFont.load_default(size=round(pt))
         except TypeError:
             return ImageFont.load_default()
 
     role_pt = max(9, H // 11)
-    desc_pt_min = max(8, H // 16)
-    role_font = _load(role_pt)
+    desc_pt_min = max(10, H // 12)    # display floor — nothing rendered below this
+    desc_budget_pt = max(9, H // 14)  # budget floor — used only to compute how much
+                                       # text to extract; may be < desc_pt_min
+    role_font = _load_body(role_pt)
 
     # ---- Portrait slot width ------------------------------------------------
     portrait_side = min(H // 2, W // 4)
@@ -511,23 +557,34 @@ def render_saints_day_image(
     # ---- Probe draw context (1×1 throwaway) ---------------------------------
     probe_draw = ImageDraw.Draw(Image.new("RGB", (1, 1)))
 
+    # ---- Calendar tag: measure early for float layout -----------------------
+    tag_pt = max(9, H // 12)   # ~10 pt at 128 px — comfortably legible
+    tag_font_obj = _load_body(tag_pt)
+    _, _, _, tag_h = probe_draw.textbbox((0, 0), "Ag", font=tag_font_obj)
+    box_pad = PAD                                        # inner padding around tag text
+    # Width cleared for the tag box (tag text + padding on both sides + gap)
+    tag_text_w = int(probe_draw.textlength(calendar_tag, font=tag_font_obj)) if calendar_tag else 0
+    tag_float_w = tag_text_w + 3 * box_pad if calendar_tag else 0   # column width to leave free
+    # Height of the float zone (tag box + gap above it)
+    tag_float_h = tag_h + 2 * box_pad if calendar_tag else 0
+
     # ---- Name / header font: shrink to fit full panel width -----------------
     if has_saint:
-        name_line = MEDIAL_DOT.join(seg.name for seg in parsed.segments)
+        name_line = _join_names(parsed.segments)
         name_pt = max(role_pt + 2, H // 5)
         while name_pt > role_pt + 2:
-            if int(probe_draw.textlength(name_line, font=_load(name_pt))) <= W - 2 * PAD:
+            if int(probe_draw.textlength(name_line, font=_load_name(name_pt))) <= W - 2 * PAD:
                 break
             name_pt -= 1
     else:
         ferial_text = week if week else (season or "")
         name_pt = max(9, H // 10)
         while name_pt > 9:
-            if int(probe_draw.textlength(ferial_text, font=_load(name_pt))) <= W - 2 * PAD:
+            if int(probe_draw.textlength(ferial_text, font=_load_name(name_pt))) <= W - 2 * PAD:
                 break
             name_pt -= 1
 
-    name_font = _load(name_pt)
+    name_font = _load_name(name_pt)
 
     # ---- Band heights -------------------------------------------------------
     _, _, _, name_h = probe_draw.textbbox((0, 0), "Ag", font=name_font)
@@ -542,21 +599,58 @@ def render_saints_day_image(
     text_x = portrait_side + PAD
     text_w = W - text_x - PAD
     text_y = portrait_y + PAD
-    avail_h = H - text_y - PAD
+    avail_h = H - text_y - PAD     # full available height; float handles tag clearance
 
-    # ---- Scale description font up to fill available space ------------------
-    desc_pt = desc_pt_min
+    # ---- Determine display text and font size --------------------------------
+    #
+    # Step 1 — content budget: wrap the full description at the legibility
+    #   floor font, take however many lines fit in avail_h, then trim back to
+    #   the last sentence boundary.  This is the fixed display text — as much
+    #   content as the panel can ever show at the smallest acceptable size.
+    #
+    # Step 2 — enlarge: find the largest font at which all of that display text
+    #   still fits.  The text is already correctly sized; we just scale the font
+    #   up as far as the layout allows.
+
+    def _wrap_for_pt(pt: float, text: str):
+        """Return (lines, max_lines) using float-aware wrapping at *pt*."""
+        f = _load_body(pt)
+        _, _, _, lh = probe_draw.textbbox((0, 0), "Ag", font=f)
+        lh_step = lh + 1
+        mx = max(1, avail_h // lh_step)
+        if calendar_tag and tag_float_w > 0:
+            fs = max(0, (avail_h - tag_float_h) // lh_step)
+            rw = max(1, text_w - tag_float_w)
+            return _wrap_lines_float(text, text_w, rw, fs, probe_draw, f), mx
+        return _wrap_lines(text, text_w, probe_draw, f), mx
+
+    # Step 1: compute display text
+    # Use desc_budget_pt (can be smaller than the display floor) to measure the
+    # maximum capacity of the panel, so we extract as much content as possible
+    # before the enlargement step scales the font back up.
+    display_text = description
     if description and text_w > 0 and avail_h > 0:
+        floor_lines, max_lines_floor = _wrap_for_pt(desc_budget_pt, description)
+        candidate = " ".join(floor_lines[:max_lines_floor])
+        last_end = max(candidate.rfind("."), candidate.rfind("!"), candidate.rfind("?"))
+        display_text = candidate[: last_end + 1] if last_end >= 0 else candidate
+
+    # Step 2: find largest font where display_text fits.
+    # Step by 0.1pt when a TrueType path is available (truetype() accepts floats);
+    # fall back to 1pt integer steps for the bitmap default font.
+    desc_pt: float = desc_pt_min
+    if display_text and text_w > 0 and avail_h > 0:
         max_desc_pt = max(desc_pt_min, min(H // 2, 80))
-        for pt in range(max_desc_pt, desc_pt_min - 1, -1):
-            f = _load(pt)
-            lines = _wrap_lines(description, text_w, probe_draw, f)
-            _, _, _, lh = probe_draw.textbbox((0, 0), "Ag", font=f)
-            if (lh + 1) * len(lines) <= avail_h:
+        step = 0.1 if font_path else 1.0   # body font governs stepping
+        pt = float(max_desc_pt)
+        while pt >= desc_pt_min:
+            lines, max_lines = _wrap_for_pt(pt, display_text)
+            if len(lines) <= max_lines:
                 desc_pt = pt
                 break
+            pt = round(pt - step, 1)
 
-    desc_font = _load(desc_pt)
+    desc_font = _load_body(desc_pt)
 
     # ---- Canvas -------------------------------------------------------------
     img = Image.new("RGB", size, background)
@@ -575,7 +669,8 @@ def render_saints_day_image(
     if subtitle_h:
         draw.rectangle([0, header_h, W - 1, header_h + subtitle_h - 1], fill=(0, 0, 0))
         # Each descriptor aligned under its name's x offset in the header
-        dot_w_n = int(probe_draw.textlength(MEDIAL_DOT, font=name_font))
+        seps_n = _name_separators(len(parsed.segments))
+        sep_ws_n = [int(probe_draw.textlength(s, font=name_font)) for s in seps_n]
         name_widths_n = [
             int(probe_draw.textlength(seg.name, font=name_font))
             for seg in parsed.segments
@@ -586,7 +681,7 @@ def render_saints_day_image(
                 _text(img, draw, (cur, header_h + PAD), seg.descriptor, role_font, (255, 255, 255))
             cur += name_widths_n[i]
             if i < len(parsed.segments) - 1:
-                cur += dot_w_n
+                cur += sep_ws_n[i]
 
     # ---- Left column: portrait or season symbol -----------------------------
     if has_saint and saint_image_bytes:
@@ -615,22 +710,98 @@ def render_saints_day_image(
         _draw_season_symbol(draw, season or "", 0, sym_y, sym_side, foreground, background)
 
     # ---- Text column: description at scaled-up font -------------------------
-    if description and text_w > 0 and avail_h > 0:
-        _draw_wrapped(img, draw, description, text_x, text_y, text_w, avail_h, desc_font, foreground)
+    if display_text and text_w > 0 and avail_h > 0:
+        if calendar_tag and tag_float_w > 0:
+            _, _, _, lh = probe_draw.textbbox((0, 0), "Ag", font=desc_font)
+            float_start = max(0, (avail_h - tag_float_h) // (lh + 1))
+            reduced_w = max(1, text_w - tag_float_w)
+            _draw_wrapped_float(
+                img, draw, display_text,
+                text_x, text_y, text_w, reduced_w, float_start, avail_h,
+                desc_font, foreground,
+            )
+        else:
+            _draw_wrapped(img, draw, display_text, text_x, text_y, text_w, avail_h, desc_font, foreground)
 
-    # ---- Calendar tag (bottom-right corner, smallest legible size) ----------
+    # ---- Calendar tag (bottom-right corner, floating text) -----------------
     if calendar_tag:
-        tag_pt = max(6, H // 18)   # ~7 pt at 128 px height
-        tag_font = _load(tag_pt)
-        tag_w = int(probe_draw.textlength(calendar_tag, font=tag_font))
-        _, _, _, tag_h = probe_draw.textbbox((0, 0), "Ag", font=tag_font)
-        tag_x = W - PAD - tag_w
+        tag_x = W - PAD - tag_text_w
         tag_y = H - PAD - tag_h
-        _text(img, draw, (tag_x, tag_y), calendar_tag, tag_font, foreground)
+        _text(img, draw, (tag_x, tag_y), calendar_tag, tag_font_obj, foreground)
 
     buf = BytesIO()
     img.save(buf, format="PNG")
     return buf.getvalue()
+
+
+def _wrap_lines_float(
+    text: str,
+    full_width: int,
+    reduced_width: int,
+    float_start_line: int,
+    draw: "ImageDraw",
+    font: "FreeTypeFont",
+) -> list[str]:
+    """Word-wrap with a right-side float starting at *float_start_line*.
+
+    Lines before *float_start_line* use *full_width*; lines at or after use
+    *reduced_width* (leaving space for the floating tag box).
+    """
+    lines: list[str] = []
+    line = ""
+    for word in text.split():
+        max_w = full_width if len(lines) < float_start_line else reduced_width
+        candidate = (line + " " + word).strip()
+        if int(draw.textlength(candidate, font=font)) <= max_w:
+            line = candidate
+        else:
+            if line:
+                lines.append(line)
+                # Re-evaluate width for the new line we're about to start
+                max_w = full_width if len(lines) < float_start_line else reduced_width
+            line = word
+    if line:
+        lines.append(line)
+    return lines
+
+
+def _draw_wrapped_float(
+    img: "Image.Image",
+    draw: "ImageDraw",
+    text: str,
+    x: int,
+    y: int,
+    full_width: int,
+    reduced_width: int,
+    float_start_line: int,
+    max_height: int,
+    font: "FreeTypeFont",
+    color: tuple[int, int, int],
+) -> int:
+    """Draw *text* word-wrapped with a right float, truncating at a sentence boundary."""
+    _, _, _, line_h = draw.textbbox((0, 0), "Ag", font=font)
+    line_h += 1
+    max_lines = max(1, max_height // line_h)
+
+    all_lines = _wrap_lines_float(text, full_width, reduced_width, float_start_line, draw, font)
+
+    if len(all_lines) > max_lines:
+        candidate_text = " ".join(all_lines[:max_lines])
+        last_end = max(
+            candidate_text.rfind("."),
+            candidate_text.rfind("!"),
+            candidate_text.rfind("?"),
+        )
+        if last_end >= 0:
+            candidate_text = candidate_text[: last_end + 1]
+        display_lines = _wrap_lines_float(candidate_text, full_width, reduced_width, float_start_line, draw, font)
+    else:
+        display_lines = all_lines
+
+    for ln in display_lines:
+        _text(img, draw, (x, y), ln, font, color)
+        y += line_h
+    return y
 
 
 def _wrap_lines(text: str, max_width: int, draw: "ImageDraw", font: "FreeTypeFont") -> list[str]:

@@ -1,7 +1,7 @@
 {
   "domain": "epaper_scribe",
   "name": "E-Paper Scribe",
-  "version": "1.19.0",
+  "version": "1.21.0",
   "codeowners": [],
   "config_flow": true,
   "dependencies": [],
