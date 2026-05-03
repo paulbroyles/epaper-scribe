@@ -1,7 +1,7 @@
 {
   "domain": "epaper_scribe",
   "name": "E-Paper Scribe",
-  "version": "2.0.0",
+  "version": "1.21.2",
   "codeowners": [],
   "config_flow": true,
   "dependencies": [],
@@ -11,7 +11,6 @@
   "requirements": [
     "Pillow>=10.0.0",
     "pillow-heif>=0.18.0",
-    "liturgical-calendar>=0.1",
-    "quickjs>=1.19.4"
+    "liturgical-calendar>=0.1"
   ]
 }
