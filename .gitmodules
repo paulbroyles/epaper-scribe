@@ -1,0 +1,3 @@
+[submodule "vendor/romcal"]
+	path = vendor/romcal
+	url = https://github.com/emagnier/romcal.git

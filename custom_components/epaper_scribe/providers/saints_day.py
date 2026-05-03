@@ -20,12 +20,13 @@ from ..const import (
 )
 from ..dither import async_render_to_file
 from . import ContentProvider, SensorDescription
-from .catholic_calendar import get_catholic_feasts
-from .combined_calendar import (
+from .liturgical_calendar import (
     AnglicanDay,
     CombinedResult,
-    _CrossDateFlags,
+    CrossDateFlags,
     build_year_cache,
+    fetch_catholic_year,
+    get_catholic_feasts,
     get_combined_result,
 )
 
@@ -123,7 +124,7 @@ class SaintsDayProvider(ContentProvider):
         # Combined mode: cache the full Anglican data + flags for a year
         self._year_cache_year: int | None = None
         self._year_cache_ang: dict[str, AnglicanDay] | None = None
-        self._year_cache_flags: _CrossDateFlags | None = None
+        self._year_cache_flags: CrossDateFlags | None = None
 
     async def async_initialize(self) -> None:
         size = _parse_size(self.config.get(CONF_DEFAULT_SIZE, "64x64"))
@@ -265,7 +266,7 @@ class SaintsDayProvider(ContentProvider):
             _fetch_anglican_year, year
         )
         cat_data = await self.hass.async_add_executor_job(
-            _fetch_catholic_year, year
+            fetch_catholic_year, year
         )
         flags = await self.hass.async_add_executor_job(
             build_year_cache, year, ang_data, cat_data
@@ -632,20 +633,6 @@ def _fetch_anglican_year(year: int) -> dict[str, AnglicanDay]:
     return result
 
 
-def _fetch_catholic_year(year: int) -> dict[str, list]:
-    """Return all Catholic feasts for year as {iso_date: [CatholicFeast]}."""
-    from datetime import timedelta
-
-    result = {}
-    d = date(year, 1, 1)
-    end = date(year, 12, 31)
-    while d <= end:
-        feasts = get_catholic_feasts(d)
-        if feasts:
-            result[d.isoformat()] = feasts
-        d += timedelta(days=1)
-    return result
-
 
 def _fetch_saint_anglican(
     today: date,
@@ -755,15 +742,7 @@ def _compute_calendar_tag(
     # For shared / Anglican wins, use the highest-ranked Catholic option.
     cat_rank_str = ""
     if cat_feasts:
-        opts: list[tuple[str, str]] = []   # (name, rank)
-        for f in cat_feasts:
-            if "/" in f.name:
-                for seg in f.name.split("/"):
-                    seg = seg.strip()
-                    if seg:
-                        opts.append((seg, f.rank))
-            else:
-                opts.append((f.name, f.rank))
+        opts: list[tuple[str, str]] = [(f.name, f.rank) for f in cat_feasts]
 
         if result.flag and result.flag_source == "catholic":
             # Match winning name to its specific rank
