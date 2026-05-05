@@ -100,13 +100,6 @@ class CombinedResult:
     anglican: AnglicanDay | None = None
 
 
-@dataclass
-class CrossDateFlags:
-    """Precomputed per-year cross-date rule outcomes.
-
-    Each flag entry maps an MM-DD key to a display override instruction.
-    """
-    overrides: dict[str, str] = field(default_factory=dict)  # mmdd → rule label
 
 
 # ---------------------------------------------------------------------------
@@ -189,14 +182,18 @@ def _filter_proper_of_time(
     feasts: Sequence[CatholicFeast],
     ang_real: bool,
     combined: bool,
+    allow_ids: frozenset[str] = frozenset(),
 ) -> list[CatholicFeast]:
     """Filter ProperOfTime entries for combined-mode display.
 
-    In Catholic-only mode all feasts pass through unchanged.
+    In Catholic-only mode (combined=False) all feasts pass through unchanged.
 
     In combined mode:
     - Sanctoral entries always pass through.
     - Sacred Heart passes through (treated as a saint's day).
+    - Feasts whose ID is in *allow_ids* pass through — used when the cross-date
+      algorithm has determined that a ProperOfTime feast (e.g. Baptism of the
+      Lord) wins its cross-date resolution and must surface in combined mode.
     - Easter Octave weekdays pass through only when Anglican has no saint
       (i.e. ang_real is False); if Anglican has a saint, Anglican carries
       the day and the ProperOfTime entry is dropped.
@@ -210,6 +207,8 @@ def _filter_proper_of_time(
     for feast in feasts:
         if not feast.is_proper_of_time:
             filtered.append(feast)
+        elif feast.feast_id in allow_ids:
+            filtered.append(feast)  # cross-date winner
         elif _is_sacred_heart(feast):
             filtered.append(feast)
         elif _is_easter_octave_weekday(feast):
@@ -273,6 +272,66 @@ def _same_feast(a: str, b: str) -> bool:
     if ta & tb:
         return True
     return ta <= tb or tb <= ta
+
+
+# ---------------------------------------------------------------------------
+# Cross-date feast identity pairs
+#
+# Each entry links a Catholic romcal feast_id (left) to a compiled regex
+# (right) matched against _base_name(ang_day).lower().
+#
+# Using explicit Catholic IDs + name-regex avoids the false positives that
+# arise from shared given names across different saints (e.g. "Augustine of
+# Canterbury" ≠ "Augustine of Hippo") or generic words (e.g. "elizabeth"
+# in the Visitation feast "…Mary to Elizabeth").
+#
+# To extend to other national calendars in future, add more entries here.
+# ---------------------------------------------------------------------------
+
+_CROSS_DATE_PAIRS: list[tuple[str, str, re.Pattern[str] | None]] = [
+    # (catholic_feast_id,                                          ang_wiki_slug,             fallback_regex)
+    ("baptism_of_the_lord",
+     "Baptism_of_the_Lord",                                        re.compile(r"baptism")),
+    ("philip_and_james_apostles",
+     "Philip_the_Apostle",                                         re.compile(r"philip\s+and\s+james")),
+    ("ephrem_the_syrian_deacon",
+     "Ephrem_the_Syrian",                                          re.compile(r"ephrem")),
+    ("cornelius_i_pope_and_cyprian_of_carthage_bishop_martyrs",
+     "Cyprian",                                                     re.compile(r"cyprian")),
+    ("elizabeth_of_hungary_religious",
+     "Elisabeth_of_Hungary",                                        re.compile(r"elizabeth\s+of\s+hungary")),
+    ("augustine_of_canterbury_bishop",
+     "Augustine_of_Canterbury",                                     re.compile(r"augustine\s+of\s+canterbury")),
+]
+
+# Derived lookup maps (built once at module load)
+_CAT_ID_TO_ANG_CROSS: dict[str, tuple[str, re.Pattern[str] | None]] = {
+    cid: (slug, pat) for cid, slug, pat in _CROSS_DATE_PAIRS
+}
+_ANG_SLUG_TO_CAT_ID: dict[str, str] = {
+    slug: cid for cid, slug, _pat in _CROSS_DATE_PAIRS
+}
+_ANG_FALLBACK_PATS: list[tuple[re.Pattern[str], str]] = [
+    (pat, cid) for cid, _slug, pat in _CROSS_DATE_PAIRS if pat is not None
+]
+
+
+def _ang_matches_cross_date(
+    ang_day: AnglicanDay,
+    slug: str,
+    pat: re.Pattern[str] | None,
+) -> bool:
+    """Return True if *ang_day* represents the feast identified by *slug*/*pat*.
+
+    Matching strategy:
+    - If the Anglican entry has a wiki_url, match on the URL slug (authoritative).
+    - Otherwise fall back to the regex pattern against the base name.
+    """
+    if ang_day.wiki_url:
+        return ang_day.wiki_url.endswith("/" + slug)
+    if pat is not None:
+        return bool(pat.search(_base_name(ang_day).lower()))
+    return False
 
 
 # ---------------------------------------------------------------------------
@@ -356,105 +415,36 @@ _SHARED_RANDOM_MMDD: frozenset[str] = frozenset({
 
 
 # ---------------------------------------------------------------------------
-# Cross-date flag precomputation
+# Cross-date resolution (on-demand, full-year lookup)
 # ---------------------------------------------------------------------------
 
-def _precompute_flags(
-    year: int,
-    ang: dict[str, AnglicanDay],
-    cat: dict[str, list[CatholicFeast]],
-) -> CrossDateFlags:
-    flags = CrossDateFlags()
+def _cross_date_decision(
+    ang_d: date,
+    cat_d: date,
+    ang_year: dict[str, AnglicanDay],
+    cat_year: dict[str, list[CatholicFeast]],
+) -> str:
+    """Return the decision for a (ang_date, cat_date) cross-date pair.
 
-    def ang_name(mmdd: str) -> str:
-        day = ang.get(f"{year}-{mmdd}")
-        return _base_name(day).lower() if day else ""
+    Decision matrix:
+      ang_comp = real Anglican content on cat_date
+      cat_comp = Catholic content on ang_date
 
-    def cat_names(mmdd: str) -> list[str]:
-        return [f.name.lower() for f in cat.get(f"{year}-{mmdd}", [])]
-
-    # --- Ephrem rule (Jun 9 + Jun 10) ---
-    if "columba" in ang_name("06-09") and "ephrem" in ang_name("06-10"):
-        flags.overrides["06-09"] = "EPHREM_ANG"
-        flags.overrides["06-10"] = "EPHREM_ANG"
-
-    # --- Fisher+More / Goretti rule (Jun 22 + Jul 6) ---
-    has_ang_alban_622 = "alban" in ang_name("06-22")
-    has_cat_fisher_622 = any("fisher" in n for n in cat_names("06-22"))
-    has_ang_fisher_706 = "fisher" in ang_name("07-06") or "more" in ang_name("07-06")
-    if has_ang_alban_622 and has_cat_fisher_622 and has_ang_fisher_706:
-        if _hash_select(date(year, 6, 22)) == 1:
-            flags.overrides["07-06"] = "FISHER_CAT"
-
-    # --- Augustine of Canterbury rule (May 26 + May 27) ---
-    has_ang_aug_526 = "augustine" in ang_name("05-26")
-    has_cat_aug_527 = any("augustine" in n for n in cat_names("05-27"))
-    if has_ang_aug_526 and has_cat_aug_527:
-        if _hash_select(date(year, 5, 26)) == 0:
-            flags.overrides["05-27"] = "AUGUSTINE_ANG"
-
-    # --- Philip and James rule (Anglican May 1 + Catholic May 3) ---
-    a501 = ang.get(f"{year}-05-01")
-    has_ang_pj_501 = (
-        a501 and "philip" in _base_name(a501).lower()
-        and "james" in _base_name(a501).lower()
-    )
-    has_cat_pj_503 = any("philip" in n for n in cat_names("05-03"))
-    if has_ang_pj_501 and has_cat_pj_503:
-        if _hash_select(date(year, 5, 1)) == 0:
-            flags.overrides["05-03"] = "PHILIPJAMES_ANG"
-
-    # --- Elizabeth of Hungary rule (Anglican Nov 17 + Catholic Nov 18) ---
-    has_ang_eliz_1117 = "elizabeth" in ang_name("11-17")
-    has_cat_eliz_1118 = any("elizabeth" in n for n in cat_names("11-18"))
-    if has_ang_eliz_1117 and has_cat_eliz_1118:
-        if _hash_select(date(year, 11, 17)) == 1:
-            flags.overrides["11-18"] = "ELIZABETH_CAT"
-
-    # --- Cyprian of Carthage rule (Anglican Sep 15 + Catholic Sep 16) ---
-    has_ang_cyprian_915 = "cyprian" in ang_name("09-15")
-    has_cat_cyprian_916 = any("cyprian" in n for n in cat_names("09-16"))
-    if has_ang_cyprian_915 and has_cat_cyprian_916:
-        if _hash_select(date(year, 9, 15)) == 0:
-            flags.overrides["09-16"] = "CYPRIAN_ANG"
-
-    # --- Baptism of Christ rule (Anglican Jan 7 fixed, Catholic variable Sunday) ---
-    has_ang_baptism_107 = "baptism" in ang_name("01-07")
-    cat_baptism_mmdd: str | None = None
-    for _dd in range(7, 14):
-        _mmdd = f"01-{_dd:02d}"
-        if any("baptism" in n for n in cat_names(_mmdd)):
-            cat_baptism_mmdd = _mmdd
-            break
-    if has_ang_baptism_107 and cat_baptism_mmdd and cat_baptism_mmdd != "01-07":
-        ang_on_cat_baptism = ang.get(f"{year}-{cat_baptism_mmdd}")
-        ang_real_on_cat_baptism = (
-            ang_on_cat_baptism is not None and _is_real_anglican(ang_on_cat_baptism)
-        )
-        if ang_real_on_cat_baptism:
-            if _hash_select(date(year, 1, 7)) == 0:
-                flags.overrides[cat_baptism_mmdd] = "BAPTISM_ANG"
-        else:
-            flags.overrides["01-07"] = "BAPTISM_CAT"
-
-    return flags
-
-
-# ---------------------------------------------------------------------------
-# Public API — year cache
-# ---------------------------------------------------------------------------
-
-def build_year_cache(
-    year: int,
-    ang_data: dict[str, AnglicanDay],
-    cat_data: dict[str, list[CatholicFeast]],
-) -> CrossDateFlags:
-    """Precompute cross-date flags for a full calendar year.
-
-    ang_data: {iso_date_string: AnglicanDay}
-    cat_data: {iso_date_string: [CatholicFeast, …]}
+      (ang_comp=No,  cat_comp=Yes) → "cat_claims"   — Catholic date wins
+      (ang_comp=Yes, cat_comp=No)  → "ang_claims"   — Anglican date wins
+      (ang_comp=No,  cat_comp=No)  → hash(ang_date) 0→ang, 1→cat
+      (ang_comp=Yes, cat_comp=Yes) → hash(ang_date) 0→ang, 1→cat
     """
-    return _precompute_flags(year, ang_data, cat_data)
+    ang_at_cat = ang_year.get(cat_d.isoformat())
+    ang_comp = ang_at_cat is not None and _is_real_anglican(ang_at_cat)
+    cat_comp = bool(cat_year.get(ang_d.isoformat()))
+
+    if not ang_comp and cat_comp:
+        return "cat_claims"
+    if ang_comp and not cat_comp:
+        return "ang_claims"
+    # Both or neither have cross-tradition competition: hash on ang_date
+    return "ang_claims" if _hash_select(ang_d) == 0 else "cat_claims"
 
 
 # ---------------------------------------------------------------------------
@@ -464,27 +454,101 @@ def build_year_cache(
 def get_combined_result(
     d: date,
     ang_day: AnglicanDay,
-    flags: CrossDateFlags,
+    ang_year: dict[str, AnglicanDay],
 ) -> CombinedResult:
-    """Classify *d* and return a CombinedResult using precomputed cross-date flags."""
+    """Classify *d* and return a CombinedResult.
+
+    Cross-date detection is performed on-demand by searching the full Anglican
+    and Catholic year calendars for same-feast matches on different dates.
+    No pre-scan pass is required — the year caches are already in memory.
+
+    ang_year: {iso_date_string: AnglicanDay} for the full year.
+    """
     mmdd = d.strftime("%m-%d")
-    cat_feasts_raw = get_catholic_feasts(d)
+    d_iso = d.isoformat()
+    cat_year = fetch_catholic_year(d.year)
+    cat_feasts_raw = cat_year.get(d_iso, [])
 
     ang_real = _is_real_anglican(ang_day)
-
-    # Filter ProperOfTime entries for combined-mode display rules
-    cat_feasts = _filter_proper_of_time(cat_feasts_raw, ang_real=ang_real, combined=True)
-    cat_real = bool(cat_feasts)
-
     ang_name_base = _base_name(ang_day)
     ang_season = ang_day.season
     ang_week = ang_day.week
 
-    def _make(cat: str, src: str, flag: bool, flag_src: str) -> CombinedResult:
+    # -----------------------------------------------------------------
+    # Cross-date analysis: find same feast at a different date in the
+    # other tradition, then decide which date claims it.
+    # -----------------------------------------------------------------
+    suppress_cat_ids: set[str] = set()   # Catholic feast IDs to remove at this date
+    allow_pot_ids: frozenset[str] = frozenset()  # ProperOfTime IDs allowed here
+    force_cat: bool = False              # Anglican feast belongs at its Catholic date
+
+    # 1) From the Catholic side: for each Catholic feast at this date, look up
+    #    its feast_id in _CAT_ID_TO_ANG_CROSS to get the Anglican wiki slug and
+    #    fallback regex, then search ang_year for a matching entry on a different
+    #    date.
+    _allow_pot: set[str] = set()
+    for cat_feast in cat_feasts_raw:
+        cross = _CAT_ID_TO_ANG_CROSS.get(cat_feast.feast_id)
+        if cross is None:
+            continue  # not a known cross-date feast
+        slug, pat = cross
+        # Search Anglican year for the matching feast on a different date
+        for ang_iso, ang_check in ang_year.items():
+            if ang_iso == d_iso:
+                continue
+            if not _is_real_anglican(ang_check):
+                continue
+            if not _ang_matches_cross_date(ang_check, slug, pat):
+                continue
+            # Found: Anglican ang_iso ↔ Catholic d (current)
+            ang_d = date.fromisoformat(ang_iso)
+            decision = _cross_date_decision(ang_d, d, ang_year, cat_year)
+            if decision == "ang_claims":
+                suppress_cat_ids.add(cat_feast.feast_id)
+            else:
+                if cat_feast.is_proper_of_time:
+                    _allow_pot.add(cat_feast.feast_id)
+            break  # first matching Anglican entry is sufficient
+
+    allow_pot_ids = frozenset(_allow_pot)
+
+    # 2) From the Anglican side: if Anglican has a real feast here, identify
+    #    its cross-date Catholic counterpart (by URL slug if available, regex
+    #    fallback otherwise), then look up the Catholic date in cat_year.
+    if ang_real:
+        cat_id_found: str | None = None
+        if ang_day.wiki_url:
+            slug = ang_day.wiki_url.rsplit("/", 1)[-1]
+            cat_id_found = _ANG_SLUG_TO_CAT_ID.get(slug)
+        if cat_id_found is None:
+            ang_base_lower = ang_name_base.lower()
+            for pat, cat_id in _ANG_FALLBACK_PATS:
+                if pat.search(ang_base_lower):
+                    cat_id_found = cat_id
+                    break
+        if cat_id_found is not None:
+            for cat_iso, cat_feasts_there in cat_year.items():
+                if cat_iso == d_iso:
+                    continue
+                if not any(f.feast_id == cat_id_found for f in cat_feasts_there):
+                    continue
+                # Found: Anglican d (current) ↔ Catholic cat_iso
+                cat_d = date.fromisoformat(cat_iso)
+                decision = _cross_date_decision(d, cat_d, ang_year, cat_year)
+                if decision == "cat_claims":
+                    force_cat = True
+                break  # found the Catholic date for this pair
+
+    # -----------------------------------------------------------------
+    # Apply cross-date results before normal resolution
+    # -----------------------------------------------------------------
+
+    def _make(cat: str, src: str, flag: bool, flag_src: str,
+              cf: list[CatholicFeast] | None = None) -> CombinedResult:
         wiki_url = ang_day.wiki_url if src == "anglican" else ""
         return CombinedResult(
             category=cat,
-            display_name=_pick_display(src, ang_name_base, cat_feasts),
+            display_name=_pick_display(src, ang_name_base, cf or []),
             source=src,
             flag=flag,
             flag_source=flag_src,
@@ -493,64 +557,6 @@ def get_combined_result(
             wiki_url=wiki_url,
             anglican=ang_day,
         )
-
-    # --- Cross-date overrides ---
-    override = flags.overrides.get(mmdd)
-    if override == "EPHREM_ANG":
-        return _make("CROSS_DATE", "anglican", False, "")
-    if override == "FISHER_CAT":
-        return CombinedResult(
-            category="CROSS_DATE",
-            display_name=cat_feasts[0].name if cat_feasts else "",
-            source="catholic",
-            flag=False,
-            flag_source="",
-            season=ang_season,
-            week=ang_week,
-            anglican=ang_day,
-        )
-    if override in ("AUGUSTINE_ANG", "PHILIPJAMES_ANG", "CYPRIAN_ANG", "BAPTISM_ANG"):
-        return _make("CROSS_DATE", "anglican", False, "")
-    if override in ("ELIZABETH_CAT", "BAPTISM_CAT"):
-        return CombinedResult(
-            category="CROSS_DATE",
-            display_name=cat_feasts[0].name if cat_feasts else "",
-            source="catholic",
-            flag=False,
-            flag_source="",
-            season=ang_season,
-            week=ang_week,
-            anglican=ang_day,
-        )
-
-    # --- Epiphany: always Anglican Jan 6, never Catholic promoted date ---
-    if mmdd == "01-06" and ang_real and "epiphany" in ang_name_base.lower():
-        return _make("ANG_ONLY", "anglican", True, "anglican")
-
-    if cat_real and any("epiphany" in f.name.lower() for f in cat_feasts) and mmdd != "01-06":
-        cat_feasts = [f for f in cat_feasts if "epiphany" not in f.name.lower()]
-        cat_real = bool(cat_feasts)
-
-    # --- Holy Week ---
-    if ang_day.season == "Holy Week":
-        if ang_real:
-            return _make("HOLY_WEEK", "anglican", False, "")
-        if cat_real:
-            return CombinedResult(
-                category="HOLY_WEEK",
-                display_name=cat_feasts[0].name,
-                source="catholic",
-                flag=False,
-                flag_source="",
-                season=ang_season,
-                week=ang_week,
-                anglican=ang_day,
-            )
-        return _make("NO_FEAST", "none", False, "")
-
-    # --- No feast ---
-    if not ang_real and not cat_real:
-        return _make("NO_FEAST", "none", False, "")
 
     def _cat_result(cat: str, name: str, flag: bool, flag_src: str) -> CombinedResult:
         return CombinedResult(
@@ -564,13 +570,61 @@ def get_combined_result(
             anglican=ang_day,
         )
 
+    if force_cat:
+        # Anglican feast belongs at its own Catholic date; suppress it here.
+        # Show whatever Catholic content is available at this (Anglican) date.
+        remaining = [
+            f for f in cat_feasts_raw
+            if f.feast_id not in suppress_cat_ids
+        ]
+        remaining = _filter_proper_of_time(remaining, ang_real=False, combined=False)
+        if remaining:
+            return _cat_result("CROSS_DATE", _hash_pick(d, remaining).name,
+                               flag=True, flag_src="catholic")
+        return _make("NO_FEAST", "none", False, "")
+
+    # Normal path: apply suppress + ProperOfTime filter
+    cat_feasts_filtered = [
+        f for f in cat_feasts_raw if f.feast_id not in suppress_cat_ids
+    ]
+    cat_feasts = _filter_proper_of_time(
+        cat_feasts_filtered, ang_real=ang_real, combined=True,
+        allow_ids=allow_pot_ids,
+    )
+    cat_real = bool(cat_feasts)
+
+    # If a Catholic feast was suppressed at the current (Catholic) date because
+    # the Anglican date claimed it, but it's a ProperOfTime entry that would
+    # otherwise have been shown as a cross-date winner, un-suppress it.
+    # (allow_pot_ids handles this via _filter_proper_of_time above.)
+
+    # --- Epiphany: always Anglican Jan 6, never Catholic promoted date ---
+    if mmdd == "01-06" and ang_real and "epiphany" in ang_name_base.lower():
+        return _make("ANG_ONLY", "anglican", True, "anglican", cat_feasts)
+
+    if cat_real and any("epiphany" in f.name.lower() for f in cat_feasts) and mmdd != "01-06":
+        cat_feasts = [f for f in cat_feasts if "epiphany" not in f.name.lower()]
+        cat_real = bool(cat_feasts)
+
+    # --- Holy Week ---
+    if ang_day.season == "Holy Week":
+        if ang_real:
+            return _make("HOLY_WEEK", "anglican", False, "", cat_feasts)
+        if cat_real:
+            return _cat_result("HOLY_WEEK", cat_feasts[0].name, False, "")
+        return _make("NO_FEAST", "none", False, "")
+
+    # --- No feast ---
+    if not ang_real and not cat_real:
+        return _make("NO_FEAST", "none", False, "")
+
     # --- Anglican transferred feast loses to any Catholic feast ---
     if ang_real and _is_transferred(ang_day) and cat_real:
         return _cat_result("CAT_ONLY", _hash_pick(d, cat_feasts).name, True, "catholic")
 
     # --- Anglican only ---
     if ang_real and not cat_real:
-        return _make("ANG_ONLY", "anglican", True, "anglican")
+        return _make("ANG_ONLY", "anglican", True, "anglican", cat_feasts)
 
     # --- Catholic only: hash-pick among options ---
     if not ang_real and cat_real:
@@ -581,14 +635,14 @@ def get_combined_result(
     # SHARED_RANDOM fixed dates
     if mmdd in _SHARED_RANDOM_MMDD:
         if _hash_select(d) == 0:
-            return _make("SHARED_RANDOM", "anglican", False, "")
+            return _make("SHARED_RANDOM", "anglican", False, "", cat_feasts)
         return _cat_result("SHARED_RANDOM", _hash_pick(d, cat_feasts).name, False, "")
 
     # Alias: same feast, different name strings
     alias_opt = next((o for o in cat_feasts if _is_alias(ang_name_base, o.name)), None)
     if alias_opt:
         if _hash_select(d) == 0:
-            return _make("ALIAS", "anglican", False, "")
+            return _make("ALIAS", "anglican", False, "", cat_feasts)
         return _cat_result("ALIAS", alias_opt.name, False, "")
 
     # N-way deduplicated pool selection
@@ -607,7 +661,7 @@ def get_combined_result(
     chosen_src, chosen_name = pool[_hash_mod(d, len(pool))]
 
     if chosen_src == "anglican":
-        return _make("CONFLICT", "anglican", True, "anglican")
+        return _make("CONFLICT", "anglican", True, "anglican", cat_feasts)
     if chosen_src == "shared":
         return CombinedResult(
             category="SHARED",

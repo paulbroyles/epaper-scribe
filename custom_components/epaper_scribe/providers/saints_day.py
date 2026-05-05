@@ -23,8 +23,6 @@ from . import ContentProvider, SensorDescription
 from .liturgical_calendar import (
     AnglicanDay,
     CombinedResult,
-    CrossDateFlags,
-    build_year_cache,
     fetch_catholic_year,
     get_catholic_feasts,
     get_combined_result,
@@ -124,7 +122,6 @@ class SaintsDayProvider(ContentProvider):
         # Combined mode: cache the full Anglican data + flags for a year
         self._year_cache_year: int | None = None
         self._year_cache_ang: dict[str, AnglicanDay] | None = None
-        self._year_cache_flags: CrossDateFlags | None = None
 
     async def async_initialize(self) -> None:
         size = _parse_size(self.config.get(CONF_DEFAULT_SIZE, "64x64"))
@@ -202,7 +199,7 @@ class SaintsDayProvider(ContentProvider):
             ang_day = AnglicanDay(name="", week="", season="Ordinary", type_="", wiki_url="")
 
         result: CombinedResult = await self.hass.async_add_executor_job(
-            get_combined_result, today, ang_day, self._year_cache_flags
+            get_combined_result, today, ang_day, self._year_cache_ang
         )
 
         saint_name = ""
@@ -263,19 +260,14 @@ class SaintsDayProvider(ContentProvider):
         }
 
     async def _build_year_cache(self, year: int) -> None:
-        """Fetch the full year of Anglican data and precompute cross-date flags."""
+        """Fetch the full year of Anglican data and warm the Catholic year cache."""
         ang_data: dict[str, AnglicanDay] = await self.hass.async_add_executor_job(
             _fetch_anglican_year, year
         )
-        cat_data = await self.hass.async_add_executor_job(
-            fetch_catholic_year, year
-        )
-        flags = await self.hass.async_add_executor_job(
-            build_year_cache, year, ang_data, cat_data
-        )
+        # Warm the module-level Catholic year cache so the first render is fast.
+        await self.hass.async_add_executor_job(fetch_catholic_year, year)
         self._year_cache_year = year
         self._year_cache_ang = ang_data
-        self._year_cache_flags = flags
 
     # ------------------------------------------------------------------
     # Anglican-only mode (original behaviour)
