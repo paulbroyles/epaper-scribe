@@ -10,7 +10,17 @@ Each config entry = one provider instance. Multiple entries supported.
 from __future__ import annotations
 
 import logging
+import sys
+from pathlib import Path
 from typing import Any
+
+# Make the vendored romcal package importable as 'romcal'.
+# python-romcal is bundled in this directory rather than installed via pip
+# because HAOS does not provide git inside the HA container, making git+
+# URL requirements uninstallable.
+_COMPONENT_DIR = Path(__file__).parent
+if str(_COMPONENT_DIR) not in sys.path:
+    sys.path.insert(0, str(_COMPONENT_DIR))
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall, SupportsResponse
