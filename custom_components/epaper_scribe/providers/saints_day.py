@@ -175,6 +175,8 @@ class SaintsDayProvider(ContentProvider):
             data = await self._render_combined(today, size, palette)
         elif calendar_type == CALENDAR_ANGLICAN:
             data = await self._render_anglican(today, size, palette)
+        elif calendar_type == CALENDAR_CATHOLIC:
+            data = await self._render_catholic(today, size, palette)
         else:
             _LOGGER.warning("Calendar type '%s' not implemented", calendar_type)
             return {}
@@ -337,6 +339,79 @@ class SaintsDayProvider(ContentProvider):
             "season_description": _get_season_description(season),
             "has_saint": has_saint,
             "calendar_source": "anglican",
+            "calendar_flag": False,
+        }
+
+    # ------------------------------------------------------------------
+    # Catholic-only mode
+    # ------------------------------------------------------------------
+
+    async def _render_catholic(
+        self, today: date, size: tuple[int, int], palette: str
+    ) -> dict[str, Any]:
+        """Render Roman Catholic calendar without any Anglican data."""
+        cat_feasts = await self.hass.async_add_executor_job(get_catholic_feasts, today)
+
+        saint_name = ""
+        saint_role = ""
+        description = ""
+        image_bytes: bytes | None = None
+        calendar_tag = ""
+        parsed = None
+
+        if cat_feasts:
+            # romcal returns entries highest-precedence first; take the primary
+            primary = cat_feasts[0]
+            from ..saint_name import parse_saint_name
+            parsed = parse_saint_name(primary.name)
+            saint_role_parts = [s.descriptor for s in parsed.segments if s.descriptor]
+            saint_name = (
+                " · ".join(s.name for s in parsed.segments)
+                if parsed.segments else primary.name
+            )
+            saint_role = " · ".join(saint_role_parts)
+
+            names = [s.name for s in parsed.segments] if parsed.segments else [primary.name]
+            descs = [s.descriptor for s in parsed.segments] if parsed.segments else []
+            description, image_url = await self._fetch_wikipedia(names, "", descs)
+            if image_url:
+                image_bytes = await self._fetch_image(image_url)
+
+            rank_label = _CAT_RANK_LABELS.get(primary.rank.lower(), primary.rank.title())
+            calendar_tag = f"Catholic {rank_label}"
+
+        font_path = self.config.get(CONF_FONT_PATH)
+        name_font_path = self.config.get(CONF_NAME_FONT_PATH)
+        season_desc = ""  # Catholic mode has no Anglican season framework
+        composed = await self.hass.async_add_executor_job(
+            _compose_image,
+            size,
+            parsed,
+            "",   # season — not available without Anglican data
+            "",   # week
+            description if saint_name else season_desc,
+            image_bytes,
+            font_path,
+            name_font_path,
+            calendar_tag,
+        )
+
+        filename = f"saints_day_artwork_{size[1]}.png"
+        await async_render_to_file(
+            self.hass, filename, composed, size, palette, (180, 160, 140)
+        )
+        self._image_bytes = composed
+        self._image_last_updated = datetime.now()
+
+        return {
+            "saint_name": saint_name,
+            "saint_role": saint_role,
+            "season": "",
+            "week": "",
+            "description": description,
+            "season_description": "",
+            "has_saint": bool(saint_name),
+            "calendar_source": "catholic",
             "calendar_flag": False,
         }
 
