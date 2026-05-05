@@ -12,6 +12,6 @@
     "Pillow>=10.0.0",
     "pillow-heif>=0.18.0",
     "liturgical-calendar>=0.1",
-    "git+https://github.com/paulbroyles/python-romcal.git"
+    "git+https://github.com/paulbroyles/python-romcal.git@romcal-3.0.0-dev.125-v1.0.0"
   ]
 }
