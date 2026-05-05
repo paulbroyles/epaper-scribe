@@ -5,10 +5,8 @@ Covers three modes:
   - "anglican"  — Church of England calendar only
   - "catholic"  — Roman Catholic General Calendar only
 
-Catholic data is sourced from romcal/romcal 3.0.0-dev.125 (General Roman
-Calendar, English locale) running inside a QuickJS embedded JS engine.
-No Node.js or network access required at runtime; the pre-built IIFE bundle
-and the English locale bundle are vendored alongside this module.
+Catholic data is sourced from python-romcal, a pure-Python port of
+romcal/romcal 3.0.0-dev.125 (General Roman Calendar, English locale).
 
 Anglican data is sourced from the `liturgical-calendar` Python package.
 
@@ -22,22 +20,13 @@ Catholic rank values (highest → lowest):
 from __future__ import annotations
 
 import hashlib
-import json
-import os
 import re
 from dataclasses import dataclass, field
 from datetime import date
 from typing import Sequence
 
-import quickjs
-
-# ---------------------------------------------------------------------------
-# Paths for vendored JS bundles
-# ---------------------------------------------------------------------------
-
-_DIR = os.path.dirname(__file__)
-_BUNDLE_PATH = os.path.join(_DIR, "romcal.bundle.js")
-_LOCALE_BUNDLE_PATH = os.path.join(_DIR, "romcal_en.bundle.js")
+from romcal import Romcal
+from romcal.bundles import GeneralRoman_En
 
 # romcal 3.x rank strings → CatholicFeast rank
 _RANK_MAP: dict[str, str] = {
@@ -56,23 +45,6 @@ _EASTER_OCTAVE_WEEKDAY_IDS: frozenset[str] = frozenset({
     "easter_friday",
     "easter_saturday",
 })
-
-# JS snippet that resolves a display name from a romcal LiturgicalDay object.
-# ProperOfTime entries have i18nDef but no .name; sanctoral entries get .name
-# set by the locale bundle when localizedCalendar is passed.
-_RESOLVE_NAME_JS = """
-function resolveName(day) {
-    if (day.name) return day.name;
-    var i18n = GeneralRoman_En.i18n;
-    var def = day.i18nDef && day.i18nDef[0];
-    if (def && typeof def === 'string') {
-        var parts = def.split(':');
-        if (parts.length === 2 && i18n[parts[0]])
-            return i18n[parts[0]][parts[1]] || day.id;
-    }
-    return day.id;
-}
-"""
 
 # ---------------------------------------------------------------------------
 # Data structures
@@ -141,27 +113,8 @@ class CrossDateFlags:
 # Module-level singletons (lazy-initialised)
 # ---------------------------------------------------------------------------
 
-_ctx: quickjs.Context | None = None
+_romcal = Romcal(localized_calendar=GeneralRoman_En)
 _year_cache: dict[int, dict[str, list[CatholicFeast]]] = {}
-
-
-def _ensure_context() -> quickjs.Context:
-    """Initialise the QuickJS context and load romcal bundles (once)."""
-    global _ctx
-    if _ctx is None:
-        _ctx = quickjs.Context()
-        # QuickJS has no console; shim it so the bundles don't error
-        _ctx.eval(
-            "var console = {"
-            " log: function(){}, warn: function(){}, error: function(){}"
-            " };"
-        )
-        with open(_BUNDLE_PATH, encoding="utf-8") as f:
-            _ctx.eval(f.read())
-        with open(_LOCALE_BUNDLE_PATH, encoding="utf-8") as f:
-            _ctx.eval(f.read())
-        _ctx.eval(_RESOLVE_NAME_JS)
-    return _ctx
 
 
 # ---------------------------------------------------------------------------
@@ -170,39 +123,21 @@ def _ensure_context() -> quickjs.Context:
 
 
 def _build_year_calendar(year: int) -> dict[str, list[CatholicFeast]]:
-    """Generate the full Roman Catholic calendar for *year* via romcal."""
-    ctx = _ensure_context()
-    ctx.eval(
-        f"var __rc = null;"
-        f"(new Romcal.Romcal({{ localizedCalendar: GeneralRoman_En }}))"
-        f"  .generateCalendar({year})"
-        f"  .then(function(cal){{"
-        f"    __rc = JSON.stringify(Object.fromEntries("
-        f"      Object.entries(cal).map(function(e){{"
-        f"        return [e[0], e[1].map(function(d){{"
-        f"          return Object.assign({{}}, d, {{ name: resolveName(d) }});"
-        f"        }})];"
-        f"      }}"
-        f"    )));"
-        f"  }});"
-    )
-    while ctx.execute_pending_job():
-        pass
-
-    raw: dict[str, list[dict]] = json.loads(ctx.eval("__rc"))
+    """Generate the full Roman Catholic calendar for *year* via python-romcal."""
+    raw = _romcal.generate_calendar(year)
 
     calendar: dict[str, list[CatholicFeast]] = {}
     for date_str, days in raw.items():
         feasts: list[CatholicFeast] = []
         for day in days:
-            rank = _RANK_MAP.get(day.get("rank", ""))
+            rank = _RANK_MAP.get(day.rank)
             if rank is None:
                 continue  # skip WEEKDAY, SUNDAY, COMMEMORATION, etc.
             feasts.append(CatholicFeast(
-                name=day.get("name") or day.get("id", ""),
+                name=day.name,
                 rank=rank,
-                from_calendar=day.get("fromCalendarId", ""),
-                feast_id=day.get("id", ""),
+                from_calendar=day.from_calendar_id,
+                feast_id=day.id,
             ))
         if feasts:
             calendar[date_str] = feasts
