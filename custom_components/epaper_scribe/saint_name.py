@@ -282,15 +282,20 @@ def _draw_season_symbol(
     season: str,
     x: int,
     y: int,
-    side: int,
+    w: int,
+    h: int,
     color: tuple[int, int, int],
     background: tuple[int, int, int] = (255, 255, 255),
 ) -> None:
-    """Draw a distinct liturgical season glyph centred in the square (x,y,side).
+    """Draw a distinct liturgical season glyph in the slot (x, y, w, h).
+
+    Vertically-oriented shapes (candle, tree, tau cross, Latin crosses) use the
+    full w × h slot; naturally square shapes (star, Celtic cross, triquetra,
+    crown, flames) centre a square within it so their geometry is undistorted.
 
     Seasons handled:
       Advent        — candle with triangular flame
-      Christmas     — manger (trapezoidal trough outline)
+      Christmas     — two-tier tree + star at apex
       Epiphany      — eight-pointed star (two overlapping squares)
       before Lent   — Celtic / sun cross (equal-arm cross inside a circle)
       Lent          — tau cross (T-shape; no top arm)
@@ -304,8 +309,10 @@ def _draw_season_symbol(
     import math
 
     s = season.lower() if season else ""
-    cx = x + side // 2
-    cy = y + side // 2
+    cx = x + w // 2
+    cy = y + h // 2
+    # Square icons use the smaller dimension; centred in the full slot.
+    side = min(w, h)
     pad = max(2, side // 6)
     r = side // 2 - pad
     arm_w = max(2, side // 8)
@@ -313,30 +320,38 @@ def _draw_season_symbol(
 
     if "advent" in s:
         # ── Candle: rectangular body + triangular flame ──────────────────────
-        bw = max(2, side // 5)
-        draw.rectangle([cx - bw // 2, cy - r // 3, cx + bw // 2, cy + r], fill=color)
+        # Uses full w × h: candle fills the height, flame tip at top.
+        bw = max(2, w // 5)
+        pad_h = max(1, h // 10)
+        flame_h = max(3, (h - 2 * pad_h) // 3)
+        candle_top = y + pad_h + flame_h
+        candle_bot = y + h - pad_h
+        draw.rectangle([cx - bw // 2, candle_top, cx + bw // 2, candle_bot], fill=color)
         draw.polygon(
-            [(cx, cy - r - r // 3), (cx - bw // 2, cy - r // 3), (cx + bw // 2, cy - r // 3)],
+            [(cx, y + pad_h), (cx - bw // 2, candle_top), (cx + bw // 2, candle_top)],
             fill=color,
         )
 
     elif "christmas" in s:
         # ── Christmas tree: two-tier triangle + small star at apex ───────────
-        star_r = max(3, r // 4)
-        apex_y  = cy - r                       # top of tree / centre of star
-        base_y  = cy + r                       # bottom of tree
-        tree_h  = base_y - (apex_y + star_r)  # height available for triangles
-        # Two tiers: upper narrower, lower full-width
-        tier2_y = apex_y + star_r + tree_h * 6 // 10   # bottom of upper tier
+        # Uses full w × h for maximum tree height.
+        pad_h = max(1, h // 12)
+        pad_w = max(2, w // 10)
+        rw = w // 2 - pad_w           # half-width of tree base
+        star_r = max(3, rw // 4)
+        apex_y = y + pad_h
+        base_y = y + h - pad_h
+        tree_h = base_y - (apex_y + star_r)
+        tier2_y = apex_y + star_r + tree_h * 6 // 10
         draw.polygon([
             (cx, apex_y + star_r),
-            (cx - r * 7 // 10, tier2_y),
-            (cx + r * 7 // 10, tier2_y),
+            (cx - rw * 7 // 10, tier2_y),
+            (cx + rw * 7 // 10, tier2_y),
         ], fill=color)
         draw.polygon([
             (cx, apex_y + star_r + tree_h // 4),
-            (cx - r, base_y),
-            (cx + r, base_y),
+            (cx - rw, base_y),
+            (cx + rw, base_y),
         ], fill=color)
         # Small 5-pointed star at apex
         ri_s = star_r // 2
@@ -376,9 +391,10 @@ def _draw_season_symbol(
 
     elif "lent" in s:
         # ── Tau cross: T-shape (horizontal + lower vertical arm only) ────────
-        hy = y + pad + (side - 2 * pad) * 2 // 5   # crossbar y
-        draw.rectangle([cx - arm_w // 2, hy, cx + arm_w // 2, y + side - pad], fill=color)
-        draw.rectangle([x + pad, hy - arm_w // 2, x + side - pad, hy + arm_w // 2], fill=color)
+        # Uses full w × h: crossbar at 2/5 of height, drop arm to bottom.
+        hy = y + pad + (h - 2 * pad) * 2 // 5   # crossbar y
+        draw.rectangle([cx - arm_w // 2, hy, cx + arm_w // 2, y + h - pad], fill=color)
+        draw.rectangle([x + pad, hy - arm_w // 2, x + w - pad, hy + arm_w // 2], fill=color)
 
     elif "holy week" in s or "holy_week" in s:
         # ── Palm frond: diagonal stem + opposing leaflet pairs ────────────────
@@ -405,12 +421,13 @@ def _draw_season_symbol(
         # tails begin at arm_bot (emerge from behind arm below).  Cloth drawn as
         # filled polygons with perpendicular offsets so edges are pixel-precise
         # and survive BWR Floyd-Steinberg dithering without fragmentation.
-        _pad      = max(1, side // 8)
-        _arm_w    = max(2, side // 10)
+        # Uses full w × h: extra height lengthens the stem and cloth tails.
+        _pad      = max(1, w // 8)
+        _arm_w    = max(2, w // 10)
         _left_x   = x + _pad
-        _right_x  = x + side - _pad
+        _right_x  = x + w - _pad
         _top_y    = y + _pad
-        _bot_y    = y + side - _pad
+        _bot_y    = y + h - _pad
         _hy       = _top_y + (_bot_y - _top_y) * 2 // 5
         _vbar_l   = cx - _arm_w // 2
         _arm_top  = _hy - _arm_w // 2
@@ -531,9 +548,10 @@ def _draw_season_symbol(
 
     else:
         # ── Fallback: plain Latin cross ───────────────────────────────────────
-        draw.rectangle([cx - arm_w // 2, y + pad, cx + arm_w // 2, y + side - pad], fill=color)
-        hy = y + pad + (side - 2 * pad) * 2 // 5
-        draw.rectangle([x + pad, hy - arm_w // 2, x + side - pad, hy + arm_w // 2], fill=color)
+        # Uses full w × h: longer stem gives better cross proportions.
+        draw.rectangle([cx - arm_w // 2, y + pad, cx + arm_w // 2, y + h - pad], fill=color)
+        hy = y + pad + (h - 2 * pad) * 2 // 5
+        draw.rectangle([x + pad, hy - arm_w // 2, x + w - pad, hy + arm_w // 2], fill=color)
 
 
 # ---------------------------------------------------------------------------
@@ -762,9 +780,7 @@ def render_saints_day_image(
         except Exception:
             pass
     elif not has_saint:
-        sym_side = min(portrait_side, slot_h)
-        sym_y = portrait_y + (slot_h - sym_side) // 2
-        _draw_season_symbol(draw, season or "", 0, sym_y, sym_side, foreground, background)
+        _draw_season_symbol(draw, season or "", 0, portrait_y, portrait_side, slot_h, foreground, background)
 
     # ---- Text column: description at scaled-up font -------------------------
     if display_text and text_w > 0 and avail_h > 0:
