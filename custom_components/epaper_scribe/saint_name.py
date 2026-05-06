@@ -318,10 +318,25 @@ def _draw_season_symbol(
     arm_w = max(2, side // 8)
     lw = max(1, arm_w // 2)
 
-    if "advent" in s:
+    if "before advent" in s:
+        # ── Crown: three-tined with solid body ────────────────────────────────
+        # Checked before "advent" so "before advent" doesn't hit the candle branch.
+        crown_bot = cy + r // 2
+        crown_mid = cy - r // 5      # top of solid body / base of tines
+        tine_h = r * 4 // 5
+        draw.rectangle([cx - r, crown_mid, cx + r, crown_bot], fill=color)
+        draw.rectangle([cx - r, crown_bot - lw * 2, cx + r, crown_bot], fill=color)
+        tine_hw = r // 3
+        for tx, th in [(cx - r * 2 // 3, tine_h * 3 // 4),
+                       (cx,               tine_h),
+                       (cx + r * 2 // 3, tine_h * 3 // 4)]:
+            draw.polygon([(tx, crown_mid - th), (tx - tine_hw, crown_mid), (tx + tine_hw, crown_mid)], fill=color)
+
+    elif "advent" in s:
         # ── Candle: rectangular body + triangular flame ──────────────────────
         # Uses full w × h: candle fills the height, flame tip at top.
-        bw = max(2, w // 5)
+        # bw uses w//4 (not //5) so the candle reads as a candle, not a pillar.
+        bw = max(3, w // 4)
         pad_h = max(1, h // 10)
         flame_h = max(3, (h - 2 * pad_h) // 3)
         candle_top = y + pad_h + flame_h
@@ -522,29 +537,6 @@ def _draw_season_symbol(
         for (px, py), (start, end) in zip(centres, arcs):
             bbox = [px - arc_r, py - arc_r, px + arc_r, py + arc_r]
             draw.arc(bbox, start=start, end=end, fill=color, width=lw)
-
-    elif "before advent" in s:
-        # ── Crown: three-tined with solid body ────────────────────────────────
-        crown_bot = cy + r // 2
-        crown_mid = cy - r // 5      # top of solid body / base of tines
-        tine_h = r * 4 // 5
-        # Solid crown body
-        draw.rectangle([cx - r, crown_mid, cx + r, crown_bot], fill=color)
-        # Bottom band
-        draw.rectangle([cx - r, crown_bot - lw * 2, cx + r, crown_bot], fill=color)
-        # Three tines (centre tine tallest)
-        tine_positions = [
-            (cx - r * 2 // 3, tine_h * 3 // 4),  # left tine
-            (cx,               tine_h),             # centre tine (tallest)
-            (cx + r * 2 // 3, tine_h * 3 // 4),  # right tine
-        ]
-        tine_hw = r // 3    # half-width of each tine base
-        for tx, th in tine_positions:
-            draw.polygon([
-                (tx, crown_mid - th),
-                (tx - tine_hw, crown_mid),
-                (tx + tine_hw, crown_mid),
-            ], fill=color)
 
     else:
         # ── Fallback: plain Latin cross ───────────────────────────────────────
