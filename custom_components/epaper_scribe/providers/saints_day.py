@@ -18,7 +18,7 @@ from ..const import (
     CONF_PALETTE,
     PALETTE_BWR,
 )
-from ..dither import async_render_to_file
+from ..dither import async_write_to_file
 from . import ContentProvider, SensorDescription
 from .liturgical_calendar import (
     AnglicanDay,
@@ -125,7 +125,7 @@ class SaintsDayProvider(ContentProvider):
 
     async def async_initialize(self) -> None:
         size = _parse_size(self.config.get(CONF_DEFAULT_SIZE, "64x64"))
-        await async_render_to_file(
+        await async_write_to_file(
             self.hass,
             f"saints_day_artwork_{size[1]}.png",
             None,
@@ -238,11 +238,12 @@ class SaintsDayProvider(ContentProvider):
             font_path,
             name_font_path,
             calendar_tag,
+            palette,
         )
 
         filename = f"saints_day_artwork_{size[1]}.png"
-        await async_render_to_file(
-            self.hass, filename, composed, size, palette, (180, 160, 140)
+        await async_write_to_file(
+            self.hass, filename, composed, size, (180, 160, 140)
         )
         self._image_bytes = composed
         self._image_last_updated = datetime.now()
@@ -313,11 +314,12 @@ class SaintsDayProvider(ContentProvider):
             font_path,
             name_font_path,
             calendar_tag,
+            palette,
         )
 
         filename = f"saints_day_artwork_{size[1]}.png"
-        await async_render_to_file(
-            self.hass, filename, composed, size, palette, (180, 160, 140)
+        await async_write_to_file(
+            self.hass, filename, composed, size, (180, 160, 140)
         )
         self._image_bytes = composed
         self._image_last_updated = datetime.now()
@@ -386,11 +388,12 @@ class SaintsDayProvider(ContentProvider):
             font_path,
             name_font_path,
             calendar_tag,
+            palette,
         )
 
         filename = f"saints_day_artwork_{size[1]}.png"
-        await async_render_to_file(
-            self.hass, filename, composed, size, palette, (180, 160, 140)
+        await async_write_to_file(
+            self.hass, filename, composed, size, (180, 160, 140)
         )
         self._image_bytes = composed
         self._image_last_updated = datetime.now()
@@ -746,6 +749,7 @@ def _compose_image(
     font_path: str | None,
     name_font_path: str | None,
     calendar_tag: str = "",
+    palette: str | None = None,
 ) -> bytes:
     from ..saint_name import render_saints_day_image
     return render_saints_day_image(
@@ -758,6 +762,7 @@ def _compose_image(
         font_path=font_path,
         name_font_path=name_font_path,
         calendar_tag=calendar_tag,
+        palette=palette,
     )
 
 

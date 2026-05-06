@@ -552,6 +552,7 @@ def render_saints_day_image(
     background: tuple[int, int, int] = (255, 255, 255),
     foreground: tuple[int, int, int] = (0, 0, 0),
     calendar_tag: str = "",
+    palette: str | None = None,
 ) -> bytes:
     """Compose a complete saints-day panel and return PNG bytes at *size*.
 
@@ -754,6 +755,9 @@ def render_saints_day_image(
                     crop_h = max(1, int(si_w / slot_aspect))
                     simg = simg.crop((0, 0, si_w, min(crop_h, si_h)))
             simg = simg.resize((slot_w, slot_h), Image.LANCZOS)
+            if palette:
+                from .dither import dither_pil_image
+                simg = dither_pil_image(simg, palette)
             img.paste(simg, (0, portrait_y))
         except Exception:
             pass

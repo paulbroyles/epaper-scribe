@@ -21,6 +21,25 @@ from .const import PALETTES, PALETTE_BWR
 _LOGGER = logging.getLogger(__name__)
 
 
+def dither_pil_image(img: "Image.Image", palette_name: str) -> "Image.Image":
+    """Dither a PIL Image to the named palette and return an RGB PIL Image.
+
+    Synchronous — intended to be called from within an executor job so it
+    doesn't block the event loop.  Use this to dither individual external
+    images (portrait, album art) before compositing them onto the canvas,
+    rather than dithering the fully-composed canvas.
+    """
+    palette_colors = PALETTES.get(palette_name, PALETTES[PALETTE_BWR])
+    n_colors = len(palette_colors) // 3
+    padded = palette_colors + [0, 0, 0] * (256 - n_colors)
+    palette_img = Image.new("P", (1, 1))
+    palette_img.putpalette(padded)
+    dithered = img.convert("RGB").quantize(
+        palette=palette_img, dither=Image.Dither.FLOYDSTEINBERG
+    )
+    return dithered.convert("RGB")
+
+
 def _dither_sync(image_bytes: bytes, size: tuple[int, int], palette_name: str) -> bytes:
     """Synchronous dithering — run in executor to avoid blocking the event loop."""
     palette_colors = PALETTES.get(palette_name, PALETTES[PALETTE_BWR])
@@ -110,4 +129,51 @@ async def async_render_to_file(
         return True
     except Exception as exc:
         _LOGGER.warning("Failed to dither image for %s: %s", filename, exc)
+        return False
+
+
+async def async_write_to_file(
+    hass,
+    filename: str,
+    image_bytes: bytes | None,
+    size: tuple[int, int],
+    placeholder_color: tuple[int, int, int] = (128, 128, 128),
+) -> bool:
+    """Write a pre-rendered image to <config>/www/epaper_scribe/<filename>
+    WITHOUT dithering the full canvas.
+
+    Use this when the canvas is already rendered in palette-correct colors
+    (pure black/white/red) and any embedded external images have already been
+    individually dithered before compositing.  Skipping the full-canvas
+    Floyd-Steinberg pass preserves crisp pixel-rendered text and icons.
+
+    Always writes a placeholder first so the file exists even if the write
+    fails.  Returns True if the real image was written, False if only the
+    placeholder was used.
+    """
+    www_dir = hass.config.path("www", "epaper_scribe")
+    path = os.path.join(www_dir, filename)
+    _LOGGER.debug("async_write_to_file: writing to %s", path)
+
+    def _write(data: bytes) -> None:
+        os.makedirs(www_dir, exist_ok=True)
+        with open(path, "wb") as f:
+            f.write(data)
+        _LOGGER.debug("async_write_to_file: wrote %d bytes to %s", len(data), path)
+
+    try:
+        await hass.async_add_executor_job(_write, make_placeholder(size, placeholder_color))
+    except Exception as exc:
+        _LOGGER.error("async_write_to_file: failed to write placeholder to %s: %s", path, exc)
+        return False
+
+    if not image_bytes:
+        return False
+
+    try:
+        await hass.async_add_executor_job(_write, image_bytes)
+        _LOGGER.debug("async_write_to_file: image written to %s", path)
+        return True
+    except Exception as exc:
+        _LOGGER.warning("async_write_to_file: failed to write image to %s: %s", path, exc)
         return False
