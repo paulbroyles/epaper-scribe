@@ -1,0 +1,6438 @@
+{
+  "205_blessed_martyrs_of_japan": {
+    "canonizationLevel": "BLESSED",
+    "name": "205 Blessed Martyrs of Japan",
+    "count": 205
+  },
+  "aaron_of_caerleon_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Aaron",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "achard_of_saint_victor_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Achard",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": 1100,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": "1171-03-29"
+  },
+  "achilleus_of_terracina_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Achilleus",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "adalbert_of_prague_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Adalbert",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 997
+  },
+  "adelaide_of_burgundy_empress": {
+    "canonizationLevel": "SAINT",
+    "name": "Adelaide of Burgundy",
+    "titles": [
+      "EMPRESS"
+    ],
+    "dateOfDeath": "999-12-16"
+  },
+  "adeline_de_mortain_abbess": {
+    "canonizationLevel": "SAINT",
+    "name": "Adeline de Mortain",
+    "titles": [
+      "ABBESS"
+    ],
+    "dateOfDeath": 1125,
+    "dateOfDeathIsApproximative": true
+  },
+  "adelphus_of_metz_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Adolph Kolping",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 5
+    }
+  },
+  "adolph_kolping_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Adolph Kolping",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "aelred_of_rievaulx_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Aelred of Rievaulx",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "aengus_of_tallaght_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Aengus",
+    "titles": [
+      "BISHOP",
+      "ABBOT"
+    ]
+  },
+  "agatha_of_sicily_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Agatha",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ],
+    "dateOfDeath": 251
+  },
+  "agnes_cao_guiying_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Agnes Cao Guiying",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "agnes_of_bohemia_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Agnes of Bohemia",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "agnes_of_rome_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Agnes",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ],
+    "dateOfDeath": 304,
+    "dateOfDeathIsApproximative": true
+  },
+  "aidan_of_ferns_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Aidan",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "aidan_of_lindisfarne_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Aidan of Lindisfarne",
+    "titles": [
+      "BISHOP",
+      "MISSIONARY"
+    ]
+  },
+  "ailbe_of_emly_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Ailbe",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "alban_of_britain_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Alban",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "alberic_crescitelli_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Alberic Crescitelli",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "albert_chmielowski_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Albert Chmielowski",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "albert_the_great_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Albert the Great",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1280
+  },
+  "albertina_berkenbrock_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Albertina Berkenbrock",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ]
+  },
+  "alberto_hurtado_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Alberto Hurtado",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "albinus_of_angers_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Albinus",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": 468,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": "550-03-01"
+  },
+  "alexander_of_lyon_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Alexander",
+    "dateOfDeath": 178,
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "all_holy_bishops_of_the_diocese_of_angers": {
+    "canonizationLevel": "SAINT",
+    "hideCanonizationLevel": true,
+    "name": "All Holy Bishops of the Diocese of Angers",
+    "count": "many",
+    "titles": [
+      "BISHOP"
+    ],
+    "hideTitles": true
+  },
+  "all_holy_bishops_of_the_diocese_of_coutances": {
+    "canonizationLevel": "SAINT",
+    "hideCanonizationLevel": true,
+    "name": "The Holy Bishops of the diocese of Coutances and Avranches",
+    "count": "many",
+    "titles": [
+      "BISHOP"
+    ],
+    "hideTitles": true
+  },
+  "all_holy_priest_of_the_diocese_of_coutances": {
+    "canonizationLevel": "SAINT",
+    "hideCanonizationLevel": true,
+    "name": "The Holy Priests of the diocese of Coutances and Avranches",
+    "count": "many",
+    "titles": [
+      "PRIEST"
+    ],
+    "hideTitles": true
+  },
+  "all_saints": {
+    "name": "All Saints"
+  },
+  "all_saints_of_ireland": {
+    "canonizationLevel": "SAINT",
+    "name": "All Saints of Ireland",
+    "count": "many"
+  },
+  "all_saints_of_the_archdiocese_of_paris": {
+    "canonizationLevel": "SAINT",
+    "name": "All Saints of the Archdiocese of Paris",
+    "count": "many"
+  },
+  "all_saints_of_the_diocese_of_coutances": {
+    "canonizationLevel": "SAINT",
+    "hideCanonizationLevel": true,
+    "name": "All Saints of the Diocese of Coutances and Avranches",
+    "count": "many"
+  },
+  "all_saints_of_the_diocese_of_saint_denis": {
+    "canonizationLevel": "SAINT",
+    "name": "All Saints of the Diocese of Saint-Denis",
+    "count": "many"
+  },
+  "all_saints_of_wales": {
+    "canonizationLevel": "SAINT",
+    "name": "All Saints of Wales",
+    "count": "many"
+  },
+  "aloysius_gonzaga_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Aloysius Gonzaga",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1591
+  },
+  "aloysius_stepinac_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Aloysius Stepinac",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "aloysius_versiglia_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Aloysius Versiglia",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "alphonsa_of_the_immaculate_conception_muttathupadathu_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Alphonsa of the Immaculate Conception Muttathupadathu",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "alphonsus_mary_liguori_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Alphonsus Mary Liguori",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ]
+  },
+  "alphonsus_rodriguez_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Alphonsus Rodríguez",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "amand_of_maastricht_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Amand",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 676,
+    "dateOfDeathIsApproximative": true
+  },
+  "amandus_of_strasbourg_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Amandus of Strasbourg",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 346,
+    "dateOfDeathIsApproximative": true
+  },
+  "amarin_of_alsace_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Amarin",
+    "titles": [
+      "ABBOT",
+      "MARTYR"
+    ],
+    "dateOfDeath": {
+      "or": [
+        674,
+        676
+      ]
+    }
+  },
+  "ambrose_francis_ferro_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Ambrose Francis Ferro",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "ambrose_of_milan_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Ambrose",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 397
+  },
+  "andre_bessette_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "André Bessette",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1937
+  },
+  "andre_grasset_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "André Grasset",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1792
+  },
+  "andrew_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "Andrew",
+    "titles": [
+      "APOSTLE"
+    ]
+  },
+  "andrew_bauer_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Andrew Bauer",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": "1900-07-09"
+  },
+  "andrew_bobola_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Andrew Bobola",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "andrew_de_soveral_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Andrew de Soveral",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "andrew_dung_lac_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Andrew Dũng-Lạc",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": {
+      "between": [
+        1745,
+        1862
+      ]
+    }
+  },
+  "andrew_kim_tae_gon_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Andrew Kim Tae-gŏn",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": {
+      "between": [
+        1745,
+        1862
+      ]
+    }
+  },
+  "andrew_zorard_of_nitra_hermit": {
+    "canonizationLevel": "SAINT",
+    "name": "Andrew Zorard",
+    "titles": [
+      "HERMIT"
+    ],
+    "dateOfDeath": 1009
+  },
+  "angela_merici_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Angela Merici",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1540
+  },
+  "angela_salawa_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Angela Salawa",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "anne_line_virgin_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Anne Line",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "anne_mother_of_mary": {
+    "canonizationLevel": "SAINT",
+    "name": "Anne",
+    "titles": [
+      "PARENTS_OF_THE_BLESSED_VIRGIN_MARY"
+    ],
+    "dateOfDeath": {
+      "century": 1
+    }
+  },
+  "annemund_of_lyon_bishop": {
+    "name": "Annemund",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 658,
+    "dateOfDeathIsApproximative": true
+  },
+  "anno_of_cologne_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Anno of Cologne",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "annunciation_of_the_lord": {
+    "name": "The Annunciation of the Lord"
+  },
+  "anselm_of_canterbury_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Anselm",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1109
+  },
+  "ansgar_of_hamburg_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Ansgar",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 865
+  },
+  "anthony_fantosati_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Anthony Fantosati",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "anthony_julian_nowowiejski_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Anthony Julian Nowowiejski",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "anthony_mary_claret_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Anthony Mary Claret",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": "1807-12-23",
+    "dateOfDeath": "1870-10-24"
+  },
+  "anthony_of_egypt_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Anthony",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfDeath": 356
+  },
+  "anthony_of_padua_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Anthony of Padua",
+    "titles": [
+      "PRIEST",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1231
+  },
+  "anthony_of_saint_anne_galvao_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Anthony of Saint Anne Galvão",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "anthony_of_the_caves_monk": {
+    "canonizationLevel": "SAINT",
+    "name": "Anthony of the Caves",
+    "titles": [
+      "MONK"
+    ]
+  },
+  "anthony_zaccaria_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Anthony Zaccaria",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1539
+  },
+  "anthony_chevrier_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Anthony Chevrier",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfBirth": "1826-4-16",
+    "dateOfDeath": "1879-10-2"
+  },
+  "apollinaris_of_ravenna_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Apollinaris",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 81
+  },
+  "arbogast_of_strasbourg_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Arbogast",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 678
+  },
+  "asaph_of_wales_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Asaph",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "ascension_of_the_lord": {
+    "name": "The Ascension of the Lord"
+  },
+  "ash_wednesday": {
+    "name": "Ash Wednesday"
+  },
+  "asicus_of_elphin_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Asicus",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "assumption_of_the_blessed_virgin_mary": {
+    "name": "The Assumption of the Blessed Virgin Mary"
+  },
+  "athanasius_of_alexandria_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Athanasius",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 373
+  },
+  "attala_of_alsace_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Attale",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": {
+      "century": 8
+    }
+  },
+  "attracta_of_killaraght_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Attracta",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "aubert_of_avranches_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Aubert",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": 660,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": "725-06-18"
+  },
+  "audoen_of_rouen_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Audoen",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 684
+  },
+  "audomar_of_therouanne_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Audomar",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirthIsApproximative": true,
+    "dateOfBirth": 600,
+    "dateOfDeath": "670-11-01"
+  },
+  "augurius_of_tarragona_deacon": {
+    "canonizationLevel": "SAINT",
+    "name": "Augurius",
+    "titles": [
+      "DEACON",
+      "MARTYR"
+    ]
+  },
+  "augustine_kazotic_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Augustine Kažotić",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "augustine_of_canterbury_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Augustine of Canterbury",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 604
+  },
+  "augustine_of_hippo_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Augustine",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 430
+  },
+  "augustine_zhao_rong_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Augustine Zhao Rong",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": {
+      "between": [
+        1648,
+        1930
+      ]
+    }
+  },
+  "holy_martyrs_and_blesseds_of_china": {
+    "canonizationLevel": "SAINT",
+    "name": "The Holy Martyrs and Blesseds of China",
+    "count": "many"
+  },
+  "augustus_chapdelaine_priest": {
+    "canonizationLevel": "SAINT",
+    "dateOfCanonization": "2000-10-01",
+    "name": "Auguste Chapdelaine",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfBirth": "1814-01-06",
+    "dateOfDeath": "1856-02-29"
+  },
+  "aurelia_of_strasbourg_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Aurelia",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "aventin_of_larboust_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Aventin",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": {
+      "century": 8
+    }
+  },
+  "baldomerus_of_lyon_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Saint Galmier",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": "630-2-27",
+    "dateOfDeathIsApproximative": true
+  },
+  "baptism_of_the_lord": {
+    "name": "The Baptism of the Lord"
+  },
+  "barbara_of_heliopolis_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Barbara",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ]
+  },
+  "barnabas_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "Barnabas",
+    "titles": [
+      "APOSTLE"
+    ]
+  },
+  "bartholomew_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "Bartholomew",
+    "titles": [
+      "APOSTLE"
+    ]
+  },
+  "bartholomew_dias_laurel_religious": {
+    "canonizationLevel": "BLESSED",
+    "name": "Bartholomew Días Laurel",
+    "titles": [
+      "RELIGIOUS",
+      "MARTYR"
+    ]
+  },
+  "bartholomew_of_the_martyrs_fernandes_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Bartholomew of the Martyrs Fernandes",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "basil_the_great_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Basil the Great",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 379
+  },
+  "beatrice_da_silva_meneses_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Beatrice da Silva Meneses",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "bede_the_venerable_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Bede the Venerable",
+    "titles": [
+      "PRIEST",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 735
+  },
+  "benedict_of_aniane_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Benedict of Aniane",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfDeath": "820-2-11"
+  },
+  "benedict_of_jesus_valdivielso_saez_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Benedict of Jesus Valdivielso Sáez",
+    "titles": [
+      "RELIGIOUS",
+      "MARTYR"
+    ]
+  },
+  "benedict_of_nursia_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Benedict",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfDeath": 547,
+    "dateOfDeathIsApproximative": true
+  },
+  "benedict_the_moor_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Benedict the Moor",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfBirth": "1524-03-31",
+    "dateOfDeath": "1589-04-04",
+    "dateOfCanonization": "1807-05-24"
+  },
+  "benedict_of_skalka_hermit": {
+    "canonizationLevel": "SAINT",
+    "name": "Benedict",
+    "titles": [
+      "HERMIT"
+    ],
+    "dateOfDeath": 1012
+  },
+  "benno_of_meissen_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Benno of Meissen",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "bernadette_soubirous_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Bernadette Soubirous",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1879
+  },
+  "bernard_of_clairvaux_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Bernard",
+    "titles": [
+      "ABBOT",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1153
+  },
+  "bernardine_of_siena_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Bernardine of Siena",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1444
+  },
+  "bertrand_of_comminges_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Bertrand of Comminges",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": 1050,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": 1126,
+    "dateOfBeatification": 1220,
+    "dateOfBeatificationIsApproximative": true,
+    "dateOfCanonization": 1309
+  },
+  "beuno_of_wales_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Beuno",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "blaise_of_sebaste_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Blaise",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 316
+  },
+  "blandina_of_lyon_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Blandina",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ],
+    "dateOfDeath": 177
+  },
+  "blessed_martyrs_of_angers": {
+    "canonizationLevel": "BLESSED",
+    "name": "Martyrs of Angers",
+    "count": "many",
+    "titles": [
+      "MARTYR"
+    ],
+    "hideTitles": true
+  },
+  "blessed_martyrs_of_paris": {
+    "canonizationLevel": "BLESSED",
+    "name": "Martyrs of Paris",
+    "count": "many",
+    "titles": [
+      "MARTYR"
+    ],
+    "hideTitles": true
+  },
+  "bogumilus_of_dobrow_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Bogumilus",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "boleslawa_mary_lament_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Boleslawa Mary Lament",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "bonaventure_of_bagnoregio_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Bonaventure",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfBirth": 1221,
+    "dateOfDeath": 1274
+  },
+  "boniface_of_mainz_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Boniface",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 754
+  },
+  "boris_of_kiev_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Boris",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "brendan_of_clonfert_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Brendan",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "bridget_of_sweden_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Bridget",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1373
+  },
+  "brigid_of_kildare_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Brigid",
+    "titles": [
+      "ABBESS"
+    ],
+    "dateOfDeath": 523
+  },
+  "bronislava_of_poland_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Bronislava",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "bronislaw_markiewicz_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Bronisław Markiewicz",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "bruno_of_cologne_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Bruno",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1101
+  },
+  "bruno_of_querfurt_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Bruno of Querfurt",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "caesarius_of_arles_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Caesarius of Arles",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 542
+  },
+  "cajetan_of_thiene_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Cajetan",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1547
+  },
+  "callistus_caravario_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Callistus Caravario",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "callistus_i_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Callistus I",
+    "titles": [
+      "POPE",
+      "MARTYR"
+    ],
+    "dateOfDeath": 222
+  },
+  "camillus_de_lellis_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Camillus de Lellis",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1614
+  },
+  "canice_of_kilkenny_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Canice",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "canute_iv_of_denmark_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Canute",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "carlos_manuel_rodriguez_santiago": {
+    "canonizationLevel": "BLESSED",
+    "name": "Carlos Manuel Rodríguez Santiago"
+  },
+  "carmelites_of_compiegne_virgins_and_martyrs": {
+    "canonizationLevel": "BLESSED",
+    "name": "Carmelites of Compiègne",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ],
+    "count": 16,
+    "dateOfDeath": "21-7-1794"
+  },
+  "caroline_kozka_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Caroline Kózka",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ]
+  },
+  "carthage_of_lismore_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Carthage",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "casimir_of_poland": {
+    "canonizationLevel": "SAINT",
+    "name": "Casimir",
+    "dateOfDeath": 1484
+  },
+  "catherine_of_alexandria_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Catherine of Alexandria",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ],
+    "dateOfDeath": 305,
+    "dateOfDeathIsApproximative": true
+  },
+  "catherine_of_siena_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Catherine of Siena",
+    "titles": [
+      "VIRGIN",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1380
+  },
+  "catherine_zoe_laboure_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Catherine Labouré",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1876
+  },
+  "ceallach_of_armagh_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Ceallach",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "cecilia_of_rome_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Cecilia",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ],
+    "dateOfDeath": 230
+  },
+  "cedd_of_lastingham_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Cedd",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "ceferino_gimenez_malla_martyr": {
+    "canonizationLevel": "BLESSED",
+    "name": "Ceferino Giménez Malla",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "ceraunus_of_paris_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Céran of Paris",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 7
+    }
+  },
+  "ceslaus_of_poland_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Ceslaus",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "chad_of_mercia_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Chad",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "chair_of_saint_peter_the_apostle": {
+    "name": "Chair of Saint Peter the Apostle"
+  },
+  "charles_borromeo_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Charles Borromeo",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 1584
+  },
+  "charles_i_of_austria": {
+    "canonizationLevel": "BLESSED",
+    "name": "Charles of Austria"
+  },
+  "charles_lwanga_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Charles Lwanga",
+    "dateOfDeath": 618
+  },
+  "charles_of_jesus_de_foucauld": {
+    "canonizationLevel": "SAINT",
+    "name": "Charles de Foucauld",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": "1916-12-1"
+  },
+  "charles_spinola_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Charles Spinola",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "christopher_magallanes_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Christopher Magallanes",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1927
+  },
+  "christopher_of_palestine_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Christopher",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "ciaran_of_clonmacnoise_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Ciaran",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "clair_of_normandy_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Clair",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfBirth": 845,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": 884,
+    "dateOfDeathIsApproximative": true
+  },
+  "clare_of_assisi_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Clare",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "marie_of_saint_ignatius_claudine_thevenet_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Claudine Thévenet",
+    "dateOfDeath": 1837,
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "clement_i_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Clement I",
+    "titles": [
+      "POPE",
+      "MARTYR"
+    ],
+    "dateOfDeath": 97
+  },
+  "clement_mary_hofbauer_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Clement Mary Hofbauer",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "clement_of_ohrid_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Clement of Ohrid",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "clotilde_of_burgundy": {
+    "canonizationLevel": "SAINT",
+    "name": "Clotilde",
+    "titles": [
+      "QUEEN"
+    ],
+    "dateOfDeath": 545
+  },
+  "colman_of_cloyne_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Colman of Cloyne",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "colman_of_dromore_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Colman of Dromore",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "colman_of_kilmacduagh_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Colman of Kilmacduagh",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "columba_marmion_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Columba Marmion",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "columba_of_iona_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Columba",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfDeath": 615
+  },
+  "columban_of_luxeuil_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Columban",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "comgall_of_bangor_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Comgall",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "commemoration_of_all_the_faithful_departed": {
+    "name": "The Commemoration of All the Faithful Departed"
+  },
+  "companions_martyrs": {
+    "name": "Companions",
+    "titles": [
+      "MARTYR"
+    ],
+    "count": "many"
+  },
+  "conleth_of_kildare_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Conleth",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "conrad_of_constance_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Conrad of Constance",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "conrad_of_parzham_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Conrad of Parzham",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "conversion_of_saint_paul_the_apostle": {
+    "name": "Conversion of Saint Paul the Apostle"
+  },
+  "corbinian_of_freising_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Corbinian",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "cornelius_i_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Cornelius",
+    "titles": [
+      "POPE",
+      "MARTYR"
+    ],
+    "dateOfDeath": "253-06"
+  },
+  "cosmas_of_cilicia_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Cosmas",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "cunigunde_of_luxembourg": {
+    "canonizationLevel": "SAINT",
+    "name": "Cunigunde"
+  },
+  "cuthbert_of_lindisfarne_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Cuthbert",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "cyprian_of_carthage_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Cornelius",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": "258-09-14"
+  },
+  "cyril_constantine_the_philosopher_monk": {
+    "canonizationLevel": "SAINT",
+    "name": "Cyril",
+    "titles": [
+      "MONK"
+    ],
+    "dateOfDeath": "869-02-14"
+  },
+  "cyril_of_alexandria_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Cyril of Alexandria",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 444
+  },
+  "cyril_of_jerusalem_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Cyril of Jerusalem",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 387
+  },
+  "damasus_i_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Damasus I",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfDeath": 384
+  },
+  "damian_of_cilicia_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Damian",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "damien_de_veuster_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Damien de Veuster",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1889
+  },
+  "daniel_brottier_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Daniel Brottier",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": "28-2-1936"
+  },
+  "david_lewis_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "David Lewis",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "david_of_wales_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "David",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "davnet_of_sliabh_beagh_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Davnet",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "declan_of_ardmore_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Declan",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "dedication_of_the_cathedral_of_notre_dame_of_coutances_france": {
+    "dateOfDedication": "1057-12-03"
+  },
+  "dedication_of_the_basilica_of_mont_saint_michel_france": {
+    "dateOfDedication": "709-10-16"
+  },
+  "dedication_of_the_basilica_of_saint_mary_major": {
+    "name": "Dedication of the Basilica of Saint Mary Major"
+  },
+  "dedication_of_the_basilicas_of_saints_peter_and_paul_apostles": {
+    "name": "Dedication of the Basilicas of Saints Peter and Paul",
+    "titles": [
+      "APOSTLE"
+    ],
+    "count": 2
+  },
+  "dedication_of_the_cathedral_of_saint_maurice_of_agaunum_angers_france": {
+    "dateOfDedication": 1096
+  },
+  "dedication_of_the_cathedral_of_saint_stephen_of_toulouse_france": {
+    "dateOfDedication": "1592-08-30"
+  },
+  "dedication_of_the_cathedral_of_the_immaculate_conception_hong_kong": {
+    "name": "Dedication of the Cathedral of the Immaculate Conception, Hong Kong"
+  },
+  "dedication_of_the_lateran_basilica": {
+    "name": "Dedication of the Lateran Basilica"
+  },
+  "deiniol_of_bangor_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Deiniol",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "demetrius_of_thessaloniki_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Demetrius of Thessaloniki",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "denis_of_paris_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Denis",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": {
+      "or": [
+        250,
+        258,
+        270
+      ]
+    }
+  },
+  "dina_belanger_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Dina Bélanger",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1929
+  },
+  "dulce_lopes_pontes_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Dulce Lopes Pontes",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfBirth": "1914-05-26",
+    "dateOfDeath": "1992-03-13",
+    "dateOfCanonization": "2019-10-13",
+    "dateOfBeatification": "2011-05-22"
+  },
+  "dionysius_the_areopagite_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Dionysius the Areopagite",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "dismas_the_good_thief": {
+    "canonizationLevel": "SAINT",
+    "name": "Dismas the Good Thief"
+  },
+  "divine_mercy_sunday": {
+    "name": "Sunday of Divine Mercy"
+  },
+  "dominic_de_guzman_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Dominic",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1221
+  },
+  "dominic_of_the_mother_of_god_barberi_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Dominic of the Mother of God Barberi",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "droctoveus_of_autun_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Droctoveus",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfDeath": 558
+  },
+  "dunstan_of_canterbury_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Dunstan",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "dyfrig_of_wales_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Dyfrig",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "easter_sunday": {
+    "name": "Easter Sunday of the Resurrection of the Lord"
+  },
+  "edmund_bojanowski": {
+    "canonizationLevel": "BLESSED",
+    "name": "Edmund Bojanowski"
+  },
+  "edmund_campion_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Edmund Campion",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "edmund_ignatius_rice_religious": {
+    "canonizationLevel": "BLESSED",
+    "name": "Edmund Rice",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "edmund_of_abingdon_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Edmund of Abingdon",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "edward_the_confessor": {
+    "canonizationLevel": "SAINT",
+    "name": "Edward the Confessor"
+  },
+  "eligius_of_noyon_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Eloi",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 660
+  },
+  "elijah_prophet": {
+    "canonizationLevel": "SAINT",
+    "name": "Elijah",
+    "titles": [
+      "PROPHET"
+    ]
+  },
+  "elizabeth_ann_seton_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Elizabeth Ann Seton",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "elizabeth_hesselblad_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Elizabeth Hesselblad",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "elizabeth_of_hungary_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Elizabeth of Hungary",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1231
+  },
+  "elizabeth_of_portugal": {
+    "canonizationLevel": "SAINT",
+    "name": "Elizabeth of Portugal",
+    "titles": [
+      "QUEEN"
+    ],
+    "dateOfDeath": 1336
+  },
+  "emeric_of_hungary": {
+    "canonizationLevel": "SAINT",
+    "name": "Emeric"
+  },
+  "emilie_tavernier_gamelin_religious": {
+    "canonizationLevel": "BLESSED",
+    "name": "Émilie Tavernier-Gamelin",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1851
+  },
+  "enda_of_aran_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Enda",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "english_martyrs": {
+    "name": "English Martyrs",
+    "titles": [
+      "MARTYR"
+    ],
+    "hideTitles": true,
+    "count": "many"
+  },
+  "eoghan_of_ardstraw_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Eoghan",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "ephrem_the_syrian_deacon": {
+    "canonizationLevel": "SAINT",
+    "name": "Ephrem",
+    "titles": [
+      "DEACON",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 373
+  },
+  "epiphany_of_the_lord": {
+    "name": "The Epiphany of the Lord"
+  },
+  "epipodius_of_lyon_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Epipodius",
+    "dateOfDeath": 178,
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "erembert_of_toulouse_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Erembert",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": 615,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": 672,
+    "dateOfDeathIsApproximative": true
+  },
+  "eric_ix_of_sweden_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Eric IX of Sweden",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "etheldreda_of_ely_abbess": {
+    "canonizationLevel": "SAINT",
+    "name": "Etheldreda",
+    "titles": [
+      "ABBESS"
+    ]
+  },
+  "eucherius_of_lyon_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Eucharius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": 380,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": 449,
+    "dateOfDeathIsApproximative": true
+  },
+  "eucharius_of_trier_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Eucharius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 3
+    }
+  },
+  "eugene_de_mazenod_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Eugène de Mazenod",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 1861
+  },
+  "eugenia_of_alsace_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Eugenie of Alsace",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": {
+      "century": 8
+    }
+  },
+  "eulalia_of_merida_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Eulalia of Merida",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ]
+  },
+  "eulogius_of_cordoba_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Eulogius of Córdoba",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "eulogius_of_tarragona_deacon": {
+    "canonizationLevel": "SAINT",
+    "name": "Eulogius",
+    "titles": [
+      "DEACON",
+      "MARTYR"
+    ]
+  },
+  "eusebius_of_esztergom_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Eusebius of Esztergom",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "eusebius_of_vercelli_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Eusebius of Vercelli",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 371
+  },
+  "exaltation_of_the_holy_cross": {
+    "name": "The Exaltation of the Holy Cross"
+  },
+  "exuperius_of_toulouse_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Exuperius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 410,
+    "dateOfDeathIsApproximative": true
+  },
+  "eysteinn_of_nidaros_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Eysteinn of Nidaros",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "ezequiel_moreno_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Ezequiel Moreno",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "fabian_i_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Fabian",
+    "titles": [
+      "POPE",
+      "MARTYR"
+    ],
+    "dateOfDeath": 250
+  },
+  "fachanan_of_kilfenora_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Fachanan",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "fachtna_of_rosscarbery_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Fachtna",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "faustina_kowalska_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Faustina Kowalska",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1938
+  },
+  "felicity_of_carthage_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Felicity",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 203
+  },
+  "ferdinand_iii_of_castile": {
+    "canonizationLevel": "SAINT",
+    "name": "Ferdinand III of Castile"
+  },
+  "fiacre_of_breuil_monk": {
+    "canonizationLevel": "SAINT",
+    "name": "Fiacre",
+    "titles": [
+      "MONK"
+    ]
+  },
+  "fidelis_of_sigmaringen_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Fidelis of Sigmaringen",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1622
+  },
+  "finbarr_of_cork_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Finbarr",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "finding_of_the_holy_cross": {
+    "name": "Finding of the Holy Cross"
+  },
+  "finnian_of_clonard_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Finian",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "fintan_of_clonenagh_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Fintan",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "first_martyrs_of_the_holy_roman_church": {
+    "name": "First Martyrs of the Holy Roman Church",
+    "titles": [
+      "MARTYR"
+    ],
+    "hideTitles": true,
+    "count": "many",
+    "dateOfDeath": 64
+  },
+  "first_polish_martyrs": {
+    "canonizationLevel": "SAINT",
+    "name": "Saints Benedict, John, Matthew, Isaac and Christian, the First Polish Martyrs",
+    "titles": [
+      "MARTYR"
+    ],
+    "hideTitles": true,
+    "count": 5
+  },
+  "five_wounds_of_the_lord": {
+    "name": "Five Wounds of the Lord"
+  },
+  "flannan_of_killaloe_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Flannan",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "florentius_of_anjou_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Florentius",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfDeath": {
+      "century": 5
+    }
+  },
+  "florentius_of_strasbourg_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Florentius of Strasbourg",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 7
+    }
+  },
+  "florian_of_lorch_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Florian",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "floscellus_of_normandy_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Floscellus",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfBirth": 280,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": "296-09-17"
+  },
+  "frances_of_rome_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Frances of Rome",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1440
+  },
+  "frances_xavier_cabrini_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Frances Xavier Cabrini",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "francis_borgia_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Francis Borgia",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "francis_de_sales_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Francis de Sales",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1622
+  },
+  "francis_diaz_del_rincon_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Francis Díaz del Rincon",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "francis_ferdinand_de_capillas_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Francis Ferdinand de Capillas",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "francis_fogolla_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Francis Fogolla",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "francis_of_assisi": {
+    "canonizationLevel": "SAINT",
+    "name": "Francis of Assisi",
+    "dateOfDeath": 1226
+  },
+  "francis_of_paola_hermit": {
+    "canonizationLevel": "SAINT",
+    "name": "Francis of Paola",
+    "titles": [
+      "HERMIT"
+    ],
+    "dateOfDeath": 1507
+  },
+  "francis_solanus_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Francis Solanus",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "francis_xavier_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Francis Xavier",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1552
+  },
+  "francis_xavier_seelos_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Francis Xavier Seelos",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "francisco_marto": {
+    "canonizationLevel": "SAINT",
+    "name": "Francisco Marto"
+  },
+  "francois_de_montmorency_laval_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "François de Laval",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 1708
+  },
+  "frederic_janssoone_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Frédéric Janssoone",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1916
+  },
+  "frederic_ozanam_founder": {
+    "canonizationLevel": "BLESSED",
+    "name": "Frédéric Ozanam",
+    "dateOfBirth": "1813-4-23",
+    "dateOfDeath": "1853-9-8"
+  },
+  "friday_of_the_passion_of_the_lord": {
+    "name": "Friday of the Passion of the Lord"
+  },
+  "fridolin_of_sackingen_monk": {
+    "canonizationLevel": "SAINT",
+    "name": "Fridolin of Säckingen",
+    "titles": [
+      "MONK",
+      "MISSIONARY"
+    ],
+    "dateOfDeath": "540-3-6",
+    "dateOfDeathIsApproximative": true
+  },
+  "fromundus_of_coutances_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Fromundus",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 691,
+    "dateOfDeathIsApproximative": true
+  },
+  "fructuosus_of_braga_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Fructuosus of Braga",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "fructuosus_of_tarragona_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Fructuosus",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "fursa_of_peronne_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Fursa",
+    "titles": [
+      "ABBOT",
+      "MISSIONARY"
+    ]
+  },
+  "gabriel_archangel": {
+    "canonizationLevel": "SAINT",
+    "name": "Gabriel",
+    "titles": [
+      "ARCHANGEL"
+    ]
+  },
+  "gabriel_taurin_dufresse_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Gabriel-Taurin Dufresse",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "gabriele_maria_allegra_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Gabriele Maria Allegra",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "gall_of_switzerland_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Gall",
+    "titles": [
+      "ABBOT",
+      "MISSIONARY"
+    ],
+    "dateOfDeath": {
+      "or": [
+        641,
+        646
+      ]
+    }
+  },
+  "gaud_of_evreux_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Gaud",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 491,
+    "dateOfDeathIsApproximative": true
+  },
+  "gebhard_of_constance_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Gebhard of Constance",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "genevieve_of_paris_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Genevieve",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 500
+  },
+  "geoffrey_of_savigny_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Geoffrey of Savigny",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "george_matulaitis_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "George Matulaitis",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "george_of_lydda_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "George",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 303
+  },
+  "george_preca_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "George Preca",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "gerald_of_braga_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Gerald of Braga",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "gerard_of_csanad_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Gerard of Csanád",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "germain_of_paris_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Germain of Paris",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 576
+  },
+  "germaine_cousin_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Germaine Cousin",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfBirth": 1579,
+    "dateOfDeath": 1601,
+    "dateOfBeatification": "1854-05-07",
+    "dateOfCanonization": "1867-06-29"
+  },
+  "germanus_of_auxerre_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Germanus of Auxerre",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 448
+  },
+  "germanus_of_normandy_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Germanus of Normandy",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 480,
+    "dateOfDeathIsApproximative": true
+  },
+  "gertrude_of_nivelles_abbess": {
+    "canonizationLevel": "SAINT",
+    "name": "Gertrude of Nivelles",
+    "titles": [
+      "ABBESS"
+    ],
+    "dateOfDeath": 659
+  },
+  "gertrude_the_great_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Gertrude",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1301
+  },
+  "gisela_of_hungary": {
+    "canonizationLevel": "BLESSED",
+    "name": "Gisela"
+  },
+  "gleb_of_kiev_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Gleb",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "gobnait_of_ballyvourney_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Gobnait",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "gorazd_of_moravia": {
+    "canonizationLevel": "SAINT",
+    "name": "Gorazd"
+  },
+  "gorazd_of_moravia_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Gorazd",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "gotthard_of_hildesheim_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Gotthard",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "gratia_of_cattaro_religious": {
+    "canonizationLevel": "BLESSED",
+    "name": "Gratia of Cattaro",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "gregory_grassi_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Gregory Grassi",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "gregory_i_the_great_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Gregory the Great",
+    "titles": [
+      "POPE",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 604
+  },
+  "gregory_nazianzen_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Gregory Nazianzen",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 390
+  },
+  "gregory_of_narek_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Gregory of Narek",
+    "titles": [
+      "ABBOT",
+      "DOCTOR_OF_THE_CHURCH"
+    ]
+  },
+  "gregory_vii_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Gregory VII",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfDeath": 1085
+  },
+  "gregory_x_pope": {
+    "canonizationLevel": "BLESSED",
+    "name": "Gregory X",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfDeath": "1276-1-10"
+  },
+  "guardian_angel_of_portugal": {
+    "name": "Guardian Angel of Portugal"
+  },
+  "guillaume_niobe_of_savigny_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Guillaume Niobe of Savigny",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "gundisalvus_garcia_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Gundisalvus Garcia",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "gundisalvus_of_amarante_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Gundisalvus of Amarante",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "gundisalvus_of_lagos_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Gundisalvus of Lagos",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "hedwig_of_poland": {
+    "canonizationLevel": "SAINT",
+    "name": "Hedwig of Poland"
+  },
+  "hedwig_of_silesia_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Hedwig",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1243
+  },
+  "helena_of_constantinople": {
+    "canonizationLevel": "SAINT",
+    "name": "Helena"
+  },
+  "helier_of_jersey_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Helier",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 552,
+    "dateOfDeathIsApproximative": true
+  },
+  "hemma_of_gurk": {
+    "canonizationLevel": "SAINT",
+    "name": "Hemma of Gurk"
+  },
+  "hemming_of_turku_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Hemming of Turku",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "henry_ii_emperor": {
+    "canonizationLevel": "SAINT",
+    "name": "Henry",
+    "dateOfDeath": 1024
+  },
+  "henry_of_finland_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Henry",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1156
+  },
+  "henry_suso_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Henry Suso",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "hermann_joseph_of_steinfeld_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Hermann Joseph",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "hermenegild_the_visigoths_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Hermenegild",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "hilarius_of_toulouse_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Hilarius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 360,
+    "dateOfDeathIsApproximative": true
+  },
+  "hilary_of_poitiers_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Hilary",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 367
+  },
+  "hilda_of_whitby_abbess": {
+    "canonizationLevel": "SAINT",
+    "name": "Hilda",
+    "titles": [
+      "ABBESS"
+    ]
+  },
+  "hildegard_of_bingen_abbess": {
+    "canonizationLevel": "SAINT",
+    "name": "Hildegard of Bingen",
+    "titles": [
+      "ABBESS",
+      "DOCTOR_OF_THE_CHURCH"
+    ]
+  },
+  "hippolytus_of_rome_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Hippolytus",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": 235
+  },
+  "holy_child_of_cebu": {
+    "name": "Holy Child of Cebú"
+  },
+  "holy_family_of_jesus_mary_and_joseph": {
+    "name": "The Holy Family of Jesus, Mary and Joseph"
+  },
+  "holy_guardian_angels": {
+    "name": "The Holy Guardian Angels",
+    "count": "many"
+  },
+  "holy_hermits_and_evangelists": {
+    "titles": [
+      "HERMIT",
+      "EVANGELIST"
+    ],
+    "count": "many"
+  },
+  "holy_innocents_martyrs": {
+    "name": "Holy Innocents",
+    "titles": [
+      "MARTYR"
+    ],
+    "count": "many",
+    "dateOfDeath": 2,
+    "dateOfDeathIsApproximative": true
+  },
+  "holy_saturday": {
+    "name": "Holy Saturday/Easter Vigil"
+  },
+  "holy_thursday": {
+    "name": "Holy Thursday"
+  },
+  "honorat_kozminski_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Honorat Koźmiński",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "hosanna_of_cattaro_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Hosanna of Cattaro",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "hroznata_of_bohemia_martyr": {
+    "canonizationLevel": "BLESSED",
+    "name": "Hroznata",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "hubert_of_liege_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Hubert",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 727
+  },
+  "hugh_of_lincoln_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Hugh of Lincoln",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "hungarian_saints_and_blesseds": {
+    "name": "Hungarian Saints and Blesseds",
+    "count": "many"
+  },
+  "hyacinth_of_poland_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Hyacinth",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "ignatius_de_azevedo_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Ignatius de Azevedo",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "ignatius_falzon": {
+    "canonizationLevel": "BLESSED",
+    "name": "Ignatius Falzon"
+  },
+  "ignatius_of_antioch_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Ignatius of Antioch",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 115
+  },
+  "ignatius_of_loyola_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Ignatius of Loyola",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1556
+  },
+  "ildephonsus_of_toledo_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Ildephonsus of Toledo",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "illtud_the_knight_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Illtud",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "immaculate_conception_of_the_blessed_virgin_mary": {
+    "name": "The Immaculate Conception of the Blessed Virgin Mary"
+  },
+  "immaculate_heart_of_mary": {
+    "name": "The Immaculate Heart of the Blessed Virgin Mary"
+  },
+  "innocent_v_pope": {
+    "canonizationLevel": "BLESSED",
+    "name": "Innocent V",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfBirth": 1224,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": "1276-6-22"
+  },
+  "innocent_xi_pope": {
+    "canonizationLevel": "BLESSED",
+    "name": "Innocent XI",
+    "titles": [
+      "POPE"
+    ]
+  },
+  "irenaeus_of_lyon_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Irenaeus",
+    "titles": [
+      "BISHOP",
+      "MARTYR",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfBirth": 130,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": 201,
+    "dateOfDeathIsApproximative": true
+  },
+  "irene_of_macedonia": {
+    "canonizationLevel": "SAINT",
+    "name": "Irene"
+  },
+  "irish_martyrs": {
+    "name": "Irish Martyrs",
+    "count": "many"
+  },
+  "isaac_jogues_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Isaac Jogues",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": "1646-10-18"
+  },
+  "isabelle_of_france_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Isabelle of France",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1272
+  },
+  "isidore_of_seville_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Isidore",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 636
+  },
+  "isidore_the_farmer": {
+    "canonizationLevel": "SAINT",
+    "name": "Isidore"
+  },
+  "istvan_sandor_religious": {
+    "canonizationLevel": "BLESSED",
+    "name": "István Sándor",
+    "titles": [
+      "RELIGIOUS",
+      "MARTYR"
+    ]
+  },
+  "ita_of_killeedy_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Ita",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "ivan_merz": {
+    "canonizationLevel": "BLESSED",
+    "name": "Ivan Merz"
+  },
+  "ivo_of_kermartin_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Ivo",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1303
+  },
+  "jacinta_marto": {
+    "canonizationLevel": "SAINT",
+    "name": "Jacinta Marto"
+  },
+  "jacques_francois_lefranc_martyr": {
+    "canonizationLevel": "BLESSED",
+    "name": "Jacques François Lefranc",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfBirth": "1739-03-30",
+    "dateOfDeath": "1792-09-02"
+  },
+  "jacques_jules_bonnaud_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Jacques Jules Bonnaud",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfBirth": 1740,
+    "dateOfDeath": "1792-09-02"
+  },
+  "james_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "James",
+    "titles": [
+      "APOSTLE"
+    ],
+    "dateOfDeath": 44
+  },
+  "james_strzemie_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "James Strzemię",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "jane_frances_de_chantal_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Jane Frances de Chantal",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1641
+  },
+  "januarius_i_of_benevento_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Januarius",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 305
+  },
+  "jarlath_of_tuam_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Jarlath",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "jean_chevillard_martyr": {
+    "canonizationLevel": "BLESSED",
+    "name": "Jean Chevillard",
+    "titles": [
+      "RELIGIOUS",
+      "MARTYR"
+    ],
+    "dateOfBirth": "1925-08-27",
+    "dateOfDeath": "1994-12-27"
+  },
+  "jean_louis_bonnard_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Jean-Louis Bonnard",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": "1852-5-01"
+  },
+  "jean_pierre_neel_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Jean-Pierre Néel",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": "1862-2-18"
+  },
+  "jean_robert_queneau_martyr": {
+    "canonizationLevel": "BLESSED",
+    "name": "Jean-Robert Queneau",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfBirth": "1758-04-09",
+    "dateOfDeath": "1792-09-02"
+  },
+  "jean_theophane_venard_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Jean Théophane Venard",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfBirth": "1829-11-21",
+    "dateOfDeath": "1861-02-02"
+  },
+  "jeanne_delanoue_of_the_cross_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Jeanne Delanoue",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfBirth": "1666-06-18",
+    "dateOfDeath": "1736-08-17"
+  },
+  "jerome_de_angelis_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Jerome de Angelis",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "jerome_emiliani": {
+    "canonizationLevel": "SAINT",
+    "name": "Jerome Emiliani",
+    "dateOfDeath": 1537
+  },
+  "jerome_of_stridon_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Jerome",
+    "titles": [
+      "PRIEST",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 420
+  },
+  "joachim_father_of_mary": {
+    "canonizationLevel": "SAINT",
+    "name": "Joachim",
+    "titles": [
+      "PARENTS_OF_THE_BLESSED_VIRGIN_MARY"
+    ],
+    "dateOfDeath": {
+      "century": 1
+    }
+  },
+  "joachim_he_kaizhi_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Joachim He Kaizhi",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "joan_of_arc_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Joan of Arc",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1431
+  },
+  "joan_of_portugal_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Joan of Portugal",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "joaquina_of_saint_francis_of_assisi_de_vedruna_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Joaquina of Saint Francis of Assisi de Vedruna",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "john_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "John",
+    "titles": [
+      "APOSTLE",
+      "EVANGELIST"
+    ]
+  },
+  "john_baptist_de_la_salle_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Baptist de la Salle",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1719
+  },
+  "john_berchmans_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "John Berchmans",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1621
+  },
+  "john_beyzym_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "John Beyzym",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "john_bosco_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Bosco",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1888
+  },
+  "john_brenner_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "John Brenner",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "john_cassian_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Cassian",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "john_chrysostom_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "John Chrysostom",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 407
+  },
+  "john_damascene_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Damascene",
+    "titles": [
+      "PRIEST",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 749
+  },
+  "john_de_brebeuf_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John de Brébeuf",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfBirth": "1593-03-25",
+    "dateOfDeath": "1649-03-16"
+  },
+  "john_de_britto_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John de Brito",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "john_del_castillo_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Roch González",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "john_eudes_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Eudes",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfBirth": "1601-11-14",
+    "dateOfDeath": "1680-08-19"
+  },
+  "john_fisher_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "John Fisher",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": "1535-06-22"
+  },
+  "john_francis_regis_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Francis Regis",
+    "titles": [
+      "PRIEST",
+      "MISSIONARY"
+    ],
+    "dateOfBirth": "1597-01-31",
+    "dateOfDeath": "1640-12-31",
+    "dateOfBeatification": "1716-05-18",
+    "dateOfCanonization": "1737-04-05"
+  },
+  "john_gabriel_perboyre_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Gabriel Perboyre",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "john_henry_newman_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Henry Newman",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "john_i_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "John I",
+    "titles": [
+      "POPE",
+      "MARTYR"
+    ],
+    "dateOfDeath": 526
+  },
+  "john_jones_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Jones",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "john_leonardi_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Leonardi",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1609
+  },
+  "john_lloyd_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Lloyd",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "john_macias_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "John Macías",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "john_martin_moye_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "John Martin Moye",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "john_mary_vianney_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Vianney",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfBirth": 1786,
+    "dateOfDeath": 1859
+  },
+  "john_nepomucene_neumann_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "John Neumann",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "john_nepomucene_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Nepomucene",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "john_of_avila_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John of Ávila",
+    "titles": [
+      "PRIEST",
+      "DOCTOR_OF_THE_CHURCH"
+    ]
+  },
+  "john_of_capistrano_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John of Capistrano",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1456
+  },
+  "john_of_dukla_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John of Dukla",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "john_of_god_duarte_cidade_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "John of God",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1550
+  },
+  "john_of_kanty_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John of Kanty",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1473
+  },
+  "john_of_the_cross_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John of the Cross",
+    "titles": [
+      "PRIEST",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1591
+  },
+  "john_of_triora_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John of Triora",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "john_ogilvie_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Ogilvie",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "john_paul_ii_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "John Paul II",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfDeath": 2005
+  },
+  "john_roberts_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Roberts",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "john_sarkander_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "John Sarkander",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "john_scheffler_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "John Scheffler",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "john_xxiii_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "John XXIII",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfDeath": 1963
+  },
+  "josaphat_kuntsevych_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Josaphat",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1623
+  },
+  "jose_maria_de_yermo_y_parres_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "José Maria de Yermo y Parres",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "josemaria_escriva_de_balaguer_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Josemaría Escrivá de Balaguer",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "joseph_bilczewski_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Joseph Bilczewski",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "joseph_de_anchieta_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Joseph de Anchieta",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "joseph_freinademetz_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Joseph Freinademetz",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "joseph_of_calasanz_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Joseph of Calasanz",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1648
+  },
+  "joseph_sebastian_pelczar_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Joseph Sebastian Pelczar",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "joseph_spouse_of_mary": {
+    "canonizationLevel": "SAINT",
+    "name": "Joseph",
+    "titles": [
+      "SPOUSE_OF_THE_BLESSED_VIRGIN_MARY"
+    ]
+  },
+  "joseph_the_worker": {
+    "canonizationLevel": "SAINT",
+    "name": "Joseph the Worker"
+  },
+  "joseph_vaz_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Joseph Vaz",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "joseph_yuan_gengyin_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Joseph Yuan Gengyin",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "joseph_zhang_dapeng_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Joseph Zhang Dapeng",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "josephine_bakhita_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Josephine Bakhita",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1947
+  },
+  "juan_diego_cuauhtlatoatzin": {
+    "canonizationLevel": "SAINT",
+    "name": "Juan Diego Cuauhtlatoatzin",
+    "dateOfDeath": 1548
+  },
+  "jude_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "Jude",
+    "titles": [
+      "APOSTLE"
+    ]
+  },
+  "juliana_of_liege_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Juliana of Liège",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1258
+  },
+  "julie_billiart_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Julie Billiart",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1816
+  },
+  "julius_of_caerleon_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Julius",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "junipero_serra_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Junípero Serra",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "justin_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Justin",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 165
+  },
+  "justus_of_lyon_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Justus of Lyon",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": {
+      "century": 4
+    },
+    "dateOfDeath": 389,
+    "dateOfDeathIsApproximative": true
+  },
+  "kateri_tekakwitha_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Kateri Tekakwitha",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1680
+  },
+  "katharine_drexel_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Katharine Drexel",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "kentigern_of_scotland_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Kentigern",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "kevin_of_glendalough_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Kevin",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "kieran_of_saigir_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Kieran",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "kilian_of_wurzburg_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Kilian",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "kinga_of_poland_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Kinga",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "kuriakose_elias_of_the_holy_family_chavara_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Kuriakose Elias of the Holy Family Chavara",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "ladislas_of_gielniow_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Ladislas of Gielniow",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "ladislaus_batthyany_strattmann": {
+    "canonizationLevel": "BLESSED",
+    "name": "Ladislaus Batthyány-Strattmann"
+  },
+  "ladislaus_i_of_hungary": {
+    "canonizationLevel": "SAINT",
+    "name": "Ladislaus"
+  },
+  "lambert_of_maastricht_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Lambert of Maastricht",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 705
+  },
+  "landry_of_paris_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Landry of Paris",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 7
+    }
+  },
+  "laserian_of_leighlin_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Laserian",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "laud_of_coutances_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Laud",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 566
+  },
+  "laura_vicuna_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Laura Vicuña",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "laurence_otoole_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Laurence O’Toole",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "laurence_wang_bing_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Laurence Wang Bing",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "lawrence_bai_xiaoman_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Lawrence Bai Xiaoman",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "lawrence_of_brindisi_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Lawrence of Brindisi",
+    "titles": [
+      "PRIEST",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1619
+  },
+  "lawrence_of_rome_deacon": {
+    "canonizationLevel": "SAINT",
+    "name": "Lawrence",
+    "titles": [
+      "DEACON",
+      "MARTYR"
+    ],
+    "dateOfDeath": 258
+  },
+  "lawrence_ruiz_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Lawrence Ruiz",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 1635,
+    "dateOfDeathIsApproximative": true
+  },
+  "lazarus_of_bethany": {
+    "canonizationLevel": "SAINT",
+    "name": "Lazarus",
+    "dateOfDeath": {
+      "century": 1
+    }
+  },
+  "leander_of_seville_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Leander of Seville",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "lelia_of_killeely_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Lelia",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "leo_i_the_great_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Leo the Great",
+    "titles": [
+      "POPE",
+      "DOCTOR_OF_THE_CHURCH"
+    ]
+  },
+  "leo_ignatius_mangin_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Leo Ignatius Mangin",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "leo_ix_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Leo IX",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfDeath": "1054-4-19"
+  },
+  "leoba_of_tauberbischofsheim_abbess": {
+    "canonizationLevel": "SAINT",
+    "name": "Leoba",
+    "titles": [
+      "ABBESS"
+    ]
+  },
+  "leodegar_of_autun_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Leodegar",
+    "titles": [
+      "ABBOT",
+      "MARTYR"
+    ],
+    "dateOfDeath": {
+      "or": [
+        679,
+        680
+      ]
+    }
+  },
+  "leon_de_carentan_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Leo of Carentan",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfBirth": 856,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": 890,
+    "dateOfDeathIsApproximative": true
+  },
+  "leonard_of_noblac_hermit": {
+    "canonizationLevel": "SAINT",
+    "name": "Leonard of Noblac",
+    "titles": [
+      "HERMIT"
+    ]
+  },
+  "leonid_feodorov_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Leonid Feodorov",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "leopold_iii_of_babenberg": {
+    "canonizationLevel": "SAINT",
+    "name": "Leopold III of Babenberg"
+  },
+  "leopold_mandic_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Leopold Mandić",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "licinius_of_angers_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Licinius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": 540,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": 610,
+    "dateOfDeathIsApproximative": true
+  },
+  "louis_bertrand_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Louis Bertrand",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "louis_flores_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Louis Flores",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "louis_grignion_de_montfort_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Louis Grignion de Montfort",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfBirth": "1673-01-31",
+    "dateOfDeath": "1716-04-28"
+  },
+  "louis_ix_of_france": {
+    "canonizationLevel": "SAINT",
+    "name": "Louis",
+    "titles": [
+      "KING"
+    ],
+    "dateOfDeath": 1270
+  },
+  "louis_of_toulouse_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Louis of Toulouse",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": "1274-02-09",
+    "dateOfDeath": "1297-08-19",
+    "dateOfCanonization": "1317-04-07"
+  },
+  "louis_zephirin_moreau_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Louis-Zéphirin Moreau",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 1901
+  },
+  "louise_de_marillac_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Louise de Marillac",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1660
+  },
+  "lucius_of_chur_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Lucius of Chur",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "lucy_of_syracuse_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Lucy",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ],
+    "dateOfDeath": 305,
+    "dateOfDeathIsApproximative": true
+  },
+  "lucy_yi_zhenmei_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Lucy Yi Zhenmei",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ]
+  },
+  "ludan_of_scotland_pilgrim": {
+    "canonizationLevel": "SAINT",
+    "name": "Ludan",
+    "titles": [
+      "PILGRIM"
+    ],
+    "dateOfDeath": "1202-02-12"
+  },
+  "ludger_of_munster_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Ludger of Münster",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "ludmila_of_bohemia_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Ludmila",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "luigi_orione_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Luigi Orione",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "luke_evangelist": {
+    "canonizationLevel": "SAINT",
+    "name": "Luke",
+    "titles": [
+      "EVANGELIST"
+    ]
+  },
+  "lydia_of_philippi": {
+    "canonizationLevel": "SAINT",
+    "name": "Lydia of Philippi"
+  },
+  "mac_nissi_of_connor_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Mac Nissi",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "macartan_of_clogher_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Macartan",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "madeleine_sophie_barat_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Madeleine Sophie Barat",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1865
+  },
+  "maelruain_of_tallaght_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Maelruain",
+    "titles": [
+      "BISHOP",
+      "ABBOT"
+    ]
+  },
+  "mafalda_of_portugal_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mafalda",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "maglorius_of_dol_monk": {
+    "canonizationLevel": "SAINT",
+    "name": "Maglorius",
+    "titles": [
+      "MONK"
+    ],
+    "dateOfBirth": 535,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": {
+      "between": [
+        586,
+        617
+      ]
+    }
+  },
+  "magnus_erlendsson_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Magnus",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "malachy_of_armagh_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Malachy",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "marcel_callo_martyr": {
+    "canonizationLevel": "BLESSED",
+    "name": "Marcel Callo",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "marcelina_darowska_religious": {
+    "canonizationLevel": "BLESSED",
+    "name": "Marcelina Darowska",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "marcellin_champagnat_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Marcellin Champagnat",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfBirth": 1789,
+    "dateOfDeath": "1840-6-6"
+  },
+  "marcellinus_of_rome_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Marcellinus",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 304
+  },
+  "marcellus_of_paris_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Marcellus of Paris",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 5
+    }
+  },
+  "marculf_of_normandy_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Marculf",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfBirth": 490,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": 558,
+    "dateOfDeathIsApproximative": true
+  },
+  "margaret_clitherow_virgin_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Margaret Clitherow",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "margaret_mary_alacoque_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Margaret Mary Alacoque",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1690
+  },
+  "margaret_of_antioch_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Margaret of Antioch",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ]
+  },
+  "margaret_of_hungary_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Margaret of Hungary",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "margaret_of_scotland": {
+    "canonizationLevel": "SAINT",
+    "name": "Margaret of Scotland",
+    "dateOfDeath": 1093
+  },
+  "margaret_ward_virgin_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Margaret Ward",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "marguerite_bourgeoys_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Marguerite Bourgeoys",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1700
+  },
+  "marguerite_dyouville_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Marguerite d’Youville",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1771
+  },
+  "maria_goretti_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Maria Goretti",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1902
+  },
+  "maria_guadalupe_garcia_zavala_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "María Guadalupe García Zavala",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "maria_micaela_of_the_blessed_sacrament_desmaisieres_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "María Micaela of the Blessed Sacrament Desmaisières",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "mariana_of_jesus_de_paredes_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Mariana of Jesus de Paredes",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "marianne_cope_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Marianne Cope",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "marie_anne_blondin_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Marie-Anne Blondin",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1890
+  },
+  "marie_eugenie_of_jesus_milleret_de_brou_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Marie-Eugénie of Jesus Milleret de Brou",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1898
+  },
+  "marie_leonie_paradis_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Marie-Léonie Paradis",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1912
+  },
+  "marie_madeleine_julie_francoise_catherine_postel_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Marie Madeleine Postel",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfBirth": "1756-11-28",
+    "dateOfDeath": "1846-07-16"
+  },
+  "marie_rose_durocher_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Marie Rose Durocher",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1849
+  },
+  "mark_evangelist": {
+    "canonizationLevel": "SAINT",
+    "name": "Mark",
+    "titles": [
+      "EVANGELIST"
+    ]
+  },
+  "marko_krizin_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Marko Krizin",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "maron_of_syria_hermit": {
+    "canonizationLevel": "SAINT",
+    "name": "Maroun",
+    "titles": [
+      "HERMIT"
+    ]
+  },
+  "martha_of_bethany": {
+    "canonizationLevel": "SAINT",
+    "name": "Martha",
+    "dateOfDeath": {
+      "century": 1
+    }
+  },
+  "marthe_aimee_adele_le_bouteiller_virgin": {
+    "canonizationLevel": "BLESSED",
+    "dateOfBeatification": "1990-11-04",
+    "name": "Martha Aimée-Adèle le Bouteiller",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfBirth": "1816-12-02",
+    "dateOfDeath": "1883-03-18"
+  },
+  "martin_de_porres_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Martin de Porres",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1639
+  },
+  "martin_i_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Martin I",
+    "titles": [
+      "POPE",
+      "MARTYR"
+    ],
+    "dateOfDeath": 656
+  },
+  "martin_of_braga_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Martin of Braga",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "martin_of_tours_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Martin of Tours",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 397
+  },
+  "martin_wu_xuesheng_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Martin Wu Xuesheng",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "martyrs_of_the_french_revolution": {
+    "name": "Martyrs of the French Revolution",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": {
+      "between": [
+        "1792-09-02",
+        "1792-09-03"
+      ]
+    },
+    "count": "many"
+  },
+  "mary_adeodata_pisani_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mary Adeodata Pisani",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "mary_angela_truszkowska_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mary Angela Truszkowska",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "mary_assunta_pallotta_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mary Assunta Pallotta",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "mary_catherine_of_saint_augustine_catherine_de_simon_de_longpre_virgin": {
+    "canonizationLevel": "BLESSED",
+    "dateOfBeatification": "1989-04-23",
+    "name": "Catherine of Saint Augustine",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfBirth": "1632-05-03",
+    "dateOfDeath": "1668-05-08"
+  },
+  "mary_euphrasia_pelletier_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Mary Euphrasia Pelletier",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfBirth": "1796-07-31",
+    "dateOfDeath": "1868-04-24"
+  },
+  "mary_magdalene": {
+    "canonizationLevel": "SAINT",
+    "name": "Mary Magdalene",
+    "dateOfDeath": {
+      "century": 1
+    }
+  },
+  "mary_magdalene_de_pazzi_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Mary Magdalene de’ Pazzi",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1607
+  },
+  "mary_mother_of_god": {
+    "name": "Mary, the Holy Mother of God"
+  },
+  "mary_mother_of_the_church": {
+    "canonizationLevel": "BLESSED",
+    "name": "Virgin Mary, Mother of the Church"
+  },
+  "mary_of_bethany": {
+    "canonizationLevel": "SAINT",
+    "name": "Mary",
+    "dateOfDeath": {
+      "century": 1
+    }
+  },
+  "mary_of_jesus_crucified_petkovic_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mary of Jesus Crucified Petković",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "mary_of_jesus_in_the_blessed_sacrament_venegas_de_la_torre_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Mary of Jesus in the Blessed Sacrament Venegas de la Torre",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "mary_of_jesus_the_good_shepherd_siedliska_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mary of Jesus the Good Shepherd Siedliska",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "mary_of_the_cross_mackillop_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Mary of the Cross MacKillop",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "mary_of_the_incarnation_barbara_acarie_religious": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mary of the Incarnation Barbara Acarie",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1618
+  },
+  "mary_of_the_incarnation_marie_guyart_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Mary of the Incarnation Marie Guyart",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1672
+  },
+  "mary_of_the_providence_eugenie_smet_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mary of the Providence Eugénie Smet",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1871
+  },
+  "mary_of_the_sacred_heart_sophie_therese_de_soubiran_la_louviere_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mary Thérèse de Soubiran La Louvière",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1889
+  },
+  "mary_soledad_torres_acosta_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Mary Soledad Torres y Acosta",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "mary_stella_of_the_blessed_sacrament_mardosewicz_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mary Stella of the Blessed Sacrament Mardosewicz",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ]
+  },
+  "mary_theresa_chiramel_mankidiyan_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Mary Theresa Chiramel Mankidiyan",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "mary_theresa_ledochowska_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mary Theresa Ledóchowska",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "mary_ursula_of_jesus_ledochowska_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Mary Ursula of Jesus Ledóchowska",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "marydolores_rodriguez_sopena_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Mary Dolores Rodríguez Sopeña",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "maternus_of_cologne_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Maternus",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 4
+    }
+  },
+  "matilda_of_ringelheim": {
+    "canonizationLevel": "SAINT",
+    "name": "Matilda"
+  },
+  "matthew_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "Matthew",
+    "titles": [
+      "APOSTLE",
+      "EVANGELIST"
+    ]
+  },
+  "matthias_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "Matthias",
+    "titles": [
+      "APOSTLE"
+    ]
+  },
+  "maurice_of_agaunum_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Maurice",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfBirth": {
+      "century": 3
+    },
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": 287,
+    "dateOfDeathIsApproximative": true
+  },
+  "maurice_tornay_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Maurice Tornay",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "maurilius_of_angers_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Maurilius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": 363,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": "453-09-13"
+  },
+  "maurus_of_glanfeuil_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Maurus",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfBirth": "512-01-01",
+    "dateOfDeath": "584-01-15"
+  },
+  "maurus_of_pecs_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Maurus",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "maximilian_mary_raymund_kolbe_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Maximilian Mary Kolbe",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1941
+  },
+  "mederic_of_autun_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Mederic",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 7
+    }
+  },
+  "meinrad_of_einsiedeln_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Meinrad of Einsiedeln",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "mel_of_ardagh_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Mel",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "melchior_grodziecki_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Melchior Grodziecki",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "methodius_michael_of_thessaloniki_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Methodius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": "885-04-06"
+  },
+  "michael_archangel": {
+    "canonizationLevel": "SAINT",
+    "name": "Michael",
+    "titles": [
+      "ARCHANGEL"
+    ]
+  },
+  "michael_kozal_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Michael Kozal",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "miguel_agustin_pro_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Miguel Agustin Pro",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "miguel_febres_cordero_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Miguel Febres Cordero",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "modestus_andlauer_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Modestus Andlauer",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": "1900-6-19"
+  },
+  "monica_of_hippo": {
+    "canonizationLevel": "SAINT",
+    "name": "Monica",
+    "dateOfDeath": 387
+  },
+  "moninne_of_killeavy_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Moninne",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "morand_of_cluny_monk": {
+    "canonizationLevel": "SAINT",
+    "name": "Morand",
+    "titles": [
+      "MONK"
+    ],
+    "dateOfDeath": "1115-6-3",
+    "dateOfDeathIsApproximative": true
+  },
+  "most_holy_body_and_blood_of_christ": {
+    "name": "The Most Holy Body and Blood of Christ"
+  },
+  "most_holy_name_of_jesus": {
+    "name": "Most Holy Name of Jesus"
+  },
+  "most_holy_name_of_mary": {
+    "name": "Most Holy Name of Mary"
+  },
+  "most_holy_trinity": {
+    "name": "The Most Holy Trinity"
+  },
+  "most_sacred_heart_of_jesus": {
+    "name": "The Most Sacred Heart of Jesus"
+  },
+  "munchin_of_limerick_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Munchin",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "muredach_of_killala_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Muredach",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "mutien_marie_wiaux_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Mutien-Marie Wiaux",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1917
+  },
+  "nativity_of_john_the_baptist": {
+    "name": "The Nativity of Saint John the Baptist"
+  },
+  "nativity_of_the_blessed_virgin_mary": {
+    "name": "The Nativity of the Blessed Virgin Mary"
+  },
+  "nativity_of_the_lord": {
+    "name": "The Nativity of the Lord"
+  },
+  "nazaria_ignacia_of_saint_teresa_of_jesus_march_mesa_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Nazaria Ignacia of Saint Teresa of Jesus March Mesa",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "nereus_of_terracina_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Nereus",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 304,
+    "dateOfDeathIsApproximative": true
+  },
+  "nicholas_barre_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Nicholas Barré",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": "1686-5-31"
+  },
+  "nicholas_of_flue_hermit": {
+    "canonizationLevel": "SAINT",
+    "name": "Nicholas of Flüe",
+    "titles": [
+      "HERMIT"
+    ]
+  },
+  "nicholas_of_myra_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Nicholas",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 350,
+    "dateOfDeathIsApproximative": true
+  },
+  "nicholas_steno_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Nicholas Steno",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "nicholas_tavelic_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Nicholas Tavelić",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "ninian_of_whithorn_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Ninian",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "nicetius_of_lyon_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Nicetius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": "573-4-2"
+  },
+  "noel_pinot_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Noël Pinot",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfBirth": "1747-12-19",
+    "dateOfDeath": "1794-02-21"
+  },
+  "norbert_of_xanten_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Norbert",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 1134
+  },
+  "nuno_of_saint_mary_pereira_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Nuno of Saint Mary Pereira",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "nykyta_budka_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Nykyta Budka",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1949
+  },
+  "odile_of_alsace_abbess": {
+    "canonizationLevel": "SAINT",
+    "name": "Odile of Alsace",
+    "titles": [
+      "ABBESS"
+    ],
+    "dateOfDeath": 720,
+    "dateOfDeathIsApproximative": true
+  },
+  "odoric_of_pordenone_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Odoric of Pordenone",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "olaf_ii_of_norway_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Olaf II",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "oleksiy_zarytskyi_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Oleksiy Zarytskyi",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "olga_of_kiev": {
+    "canonizationLevel": "SAINT",
+    "name": "Olga"
+  },
+  "oliver_plunket_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Oliver Plunket",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "ortaire_of_landelles_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Ortaire",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfBirth": 482,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": "580-04-15"
+  },
+  "otteran_of_iona_monk": {
+    "canonizationLevel": "SAINT",
+    "name": "Otteran",
+    "titles": [
+      "MONK"
+    ]
+  },
+  "otto_of_bamberg_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Otto of Bamberg",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "our_lady_help_of_christians": {
+    "name": "Our Lady, Help of Christians"
+  },
+  "our_lady_mediatrix_of_all_grace": {
+    "name": "Our Lady, Mediatrix of All Grace"
+  },
+  "our_lady_mother_of_christian_unity": {
+    "name": "Our Lady, Mother of Christian Unity"
+  },
+  "our_lady_mother_of_divine_providence": {
+    "name": "Our Lady, Mother of Divine Providence"
+  },
+  "our_lady_of_angels": {
+    "name": "Our Lady of Angels"
+  },
+  "our_lady_of_aparecida": {
+    "name": "Our Lady of Aparecida"
+  },
+  "our_lady_of_bethlehem": {
+    "name": "Our Lady of Bethlehem"
+  },
+  "our_lady_of_china": {
+    "name": "Our Lady of China"
+  },
+  "our_lady_of_czestochowa": {
+    "name": "Our Lady of Częstochowa"
+  },
+  "our_lady_of_fatima": {
+    "name": "Our Lady of Fatima"
+  },
+  "our_lady_of_fourviere": {
+    "name": "Our Lady of Fourvière"
+  },
+  "our_lady_of_good_counsel": {
+    "name": "Our Lady of Good Counsel"
+  },
+  "our_lady_of_guadalupe": {
+    "name": "Our Lady of Guadalupe"
+  },
+  "our_lady_of_hungary": {
+    "name": "Our Lady of Hungary"
+  },
+  "our_lady_of_itati": {
+    "name": "Our Lady of Itatí"
+  },
+  "our_lady_of_knock": {
+    "name": "Our Lady of Knock"
+  },
+  "our_lady_of_lanka": {
+    "name": "Our Lady of Lanka"
+  },
+  "our_lady_of_lebanon": {
+    "name": "Our Lady of Lebanon"
+  },
+  "our_lady_of_loreto": {
+    "name": "Our Lady of Loreto"
+  },
+  "our_lady_of_lourdes": {
+    "name": "Our Lady of Lourdes"
+  },
+  "our_lady_of_lujan": {
+    "name": "Our Lady of Luján"
+  },
+  "our_lady_of_madhu": {
+    "name": "Our Lady of Madhu"
+  },
+  "our_lady_of_marija_bistrica": {
+    "name": "Our Lady of Marija Bistrica"
+  },
+  "our_lady_of_mercy": {
+    "name": "Our Lady of Mercy"
+  },
+  "our_lady_of_mount_carmel": {
+    "name": "Our Lady of Mount Carmel"
+  },
+  "our_lady_of_perpetual_help": {
+    "name": "Our Lady of Perpetual Help"
+  },
+  "our_lady_of_pontmain": {
+    "name": "Our Lady of Pontmain"
+  },
+  "our_lady_of_sorrows": {
+    "name": "Our Lady of Sorrows"
+  },
+  "our_lady_of_the_discovery_of_the_hidden_christians": {
+    "name": "Our Lady of the Discovery of the Hidden Christians"
+  },
+  "our_lady_of_the_gate_of_dawn": {
+    "name": "Our Lady of the Gate of Dawn"
+  },
+  "our_lady_of_the_miraculous_medal": {
+    "name": "Our Lady of the Miraculous Medal"
+  },
+  "our_lady_of_the_pillar": {
+    "name": "Our Lady of the Pillar"
+  },
+  "our_lady_of_the_rosary": {
+    "name": "Our Lady of the Rosary"
+  },
+  "our_lady_of_the_valley": {
+    "name": "Our Lady of the Valley"
+  },
+  "our_lady_of_vladimir": {
+    "name": "Our Lady of Vladimir"
+  },
+  "our_lady_of_walsingham": {
+    "name": "Our Lady of Walsingham"
+  },
+  "our_lady_queen_of_peace": {
+    "name": "Our Lady of Peace"
+  },
+  "our_lady_queen_of_poland": {
+    "name": "Our Lady",
+    "titles": [
+      "QUEEN_OF_POLAND"
+    ]
+  },
+  "our_lady_refuge_of_sinners": {
+    "name": "Our Lady, Refuge of Sinners"
+  },
+  "our_lord_jesus_christ_king_of_the_universe": {
+    "name": "Our Lord Jesus Christ, King of the Universe",
+    "titles": []
+  },
+  "our_lord_jesus_christ_the_eternal_high_priest": {
+    "name": "Our Lord Jesus Christ, the Eternal High Priest"
+  },
+  "our_lord_of_miracles": {
+    "name": "Our Lord of Miracles"
+  },
+  "palm_sunday_of_the_passion_of_the_lord": {
+    "name": "Palm Sunday of the Passion of the Lord"
+  },
+  "pancras_of_rome_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Pancras",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 304,
+    "dateOfDeathIsApproximative": true
+  },
+  "pantaleon_of_nicomedia_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Pantaleon of Nicomedia",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "paschal_baylon_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Paschal Baylón",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "passion_of_saint_john_the_baptist": {
+    "name": "Passion of Saint John the Baptist"
+  },
+  "paternus_of_avranches_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Paternus",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfBirth": 480,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": 565,
+    "dateOfDeathIsApproximative": true
+  },
+  "patrick_of_ireland_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Patrick",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 461
+  },
+  "paul_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "Paul",
+    "titles": [
+      "APOSTLE"
+    ]
+  },
+  "paul_chen_changpin_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Paul Chen Changpin",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "paul_chong_ha_sang_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Paul Chŏng Ha-sang",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": {
+      "between": [
+        1745,
+        1862
+      ]
+    }
+  },
+  "paul_liu_hanzuo_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Paul Liu Hanzuo",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "paul_miki_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Paul Miki",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 1597
+  },
+  "paul_of_narbonne_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Paul of Narbonne",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 3
+    }
+  },
+  "paul_of_the_cross_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Paul of the Cross",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1776
+  },
+  "paul_of_thebes_hermit": {
+    "canonizationLevel": "BLESSED",
+    "name": "Paul of Thebes",
+    "titles": [
+      "HERMIT"
+    ]
+  },
+  "paul_vi_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Paul VI",
+    "titles": [
+      "POPE"
+    ]
+  },
+  "paulina_of_the_agonizing_heart_of_jesus_visintainer_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Paulina of the Agonizing Heart of Jesus Visintainer",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "paulinus_of_nola_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Paulinus of Nola",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 431
+  },
+  "paulinus_of_trier_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Paulinus of Trier",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "paulinus_of_york_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Paulinus of York",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "pavel_peter_gojdic_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Pavel Peter Gojdič",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "pedro_calungsod_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Pedro Calungsod",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "pelagius_of_cordoba_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Pelagius of Córdoba",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "pentecost_sunday": {
+    "name": "Pentecost Sunday"
+  },
+  "perpetua_of_carthage_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Perpetua",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 203
+  },
+  "peter_adrian_toulorge_priest": {
+    "canonizationLevel": "BLESSED",
+    "dateOfBeatification": "2012-04-29",
+    "name": "Pierre-Adrien Toulorge",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfBirth": "1757-05-04",
+    "dateOfDeath": "1793-10-13"
+  },
+  "peter_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter",
+    "titles": [
+      "APOSTLE"
+    ]
+  },
+  "peter_baptist_blasquez_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter Baptist Blásquez",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "peter_canisius_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter Canisius",
+    "titles": [
+      "PRIEST",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": "1597-12-21"
+  },
+  "peter_chanel_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter Chanel",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1841
+  },
+  "peter_chrysologus_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter Chrysologus",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 451
+  },
+  "peter_claver_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter Claver",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1654
+  },
+  "peter_damian_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter Damian",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1072
+  },
+  "peter_de_zuniga_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Peter de Zúñiga",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "peter_julian_eymard_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter Julian Eymard",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfBirth": "1811-02-04",
+    "dateOfDeath": "1868-08-01"
+  },
+  "peter_kibe_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Peter Kibe",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "peter_liu_wenyuan_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter Liu Wenyuan",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "peter_nolasco_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter Nolasco",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfBirth": 1189,
+    "dateOfDeath": "1256-05-06",
+    "dateOfCanonization": "1628-09-30"
+  },
+  "peter_of_alcantara_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter of Alcántara",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "peter_sanz_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter Sanz",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "peter_the_exorcist_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 304
+  },
+  "peter_to_rot_martyr": {
+    "canonizationLevel": "BLESSED",
+    "name": "Peter To Rot",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "peter_wu_guosheng_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Peter Wu Guosheng",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "philip_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "Philip",
+    "titles": [
+      "APOSTLE"
+    ]
+  },
+  "philip_evans_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Philip Evans",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "philip_neri_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Philip Neri",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1595
+  },
+  "philip_of_jesus_de_las_casas_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Philip of Jesus de las Casas",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "pirmin_of_hornbach_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Pirmin",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfDeath": "753-11-3"
+  },
+  "pius_francesco_forgione_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Pius of Pietrelcina",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1968
+  },
+  "pius_ix_pope": {
+    "canonizationLevel": "BLESSED",
+    "name": "Pius IX",
+    "titles": [
+      "POPE"
+    ]
+  },
+  "pius_v_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Pius V",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfDeath": 1572
+  },
+  "pius_x_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Pius X",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfDeath": 1914
+  },
+  "placide_eulalie_victoire_jacqueline_viel_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Placide Viel",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfBirth": "1815-09-26",
+    "dateOfDeath": "1877-03-04"
+  },
+  "polycarp_of_smyrna_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Polycarp",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 167
+  },
+  "pontian_i_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Pontian",
+    "titles": [
+      "POPE",
+      "MARTYR"
+    ],
+    "dateOfDeath": 235
+  },
+  "pothinus_of_lyon_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Pothinus",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 177
+  },
+  "presentation_of_the_blessed_virgin_mary": {
+    "name": "The Presentation of the Blessed Virgin Mary"
+  },
+  "presentation_of_the_lord": {
+    "name": "The Presentation of the Lord"
+  },
+  "procopius_of_sazava_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Procopius of Sázava",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "publius_of_malta_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Publius",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "queenship_of_the_blessed_virgin_mary": {
+    "name": "The Queenship of the Blessed Virgin Mary"
+  },
+  "quirinus_of_sescia_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Quirinus of Sescia",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "rabanus_maurus_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Rabanus Maurus",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "radim_of_gniezno_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Radim",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "rafqa_pietra_choboq_ar_rayes_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Rafqa Pietra Choboq Ar-Rayès",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "raphael_archangel": {
+    "canonizationLevel": "SAINT",
+    "name": "Raphael",
+    "titles": [
+      "ARCHANGEL"
+    ]
+  },
+  "raphael_chylinski_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Raphael Chyliński",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "raphael_guizar_y_valencia_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Raphael Guízar y Valencia",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "raphael_of_saint_joseph_kalinowski_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Raphael of Saint Joseph Kalinowski",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "raymond_costeran_martyr": {
+    "canonizationLevel": "BLESSED",
+    "name": "Raymond Costeran",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": "1242-05-29"
+  },
+  "raymond_of_penyafort_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Raymond of Penyafort",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1275
+  },
+  "raymond_gayrard_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Raymond Gayrard",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": "1118-07-03"
+  },
+  "remigius_of_reims_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Remigius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 530
+  },
+  "rene_goupil_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "René Goupil",
+    "titles": [
+      "RELIGIOUS",
+      "MARTYR"
+    ],
+    "dateOfBirth": "1608-05-15",
+    "dateOfDeath": "1642-09-29"
+  },
+  "richard_gwyn_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Richard Gwyn",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "richard_of_chichester_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Richard of Chichester",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "richardis_of_swabia_empress": {
+    "canonizationLevel": "SAINT",
+    "name": "Richardis",
+    "titles": [
+      "EMPRESS"
+    ],
+    "dateOfDeath": {
+      "or": [
+        894,
+        896
+      ]
+    }
+  },
+  "rita_of_cascia_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Rita of Cascia",
+    "titles": [
+      "RELIGIOUS"
+    ],
+    "dateOfDeath": 1456
+  },
+  "robert_bellarmine_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Robert Bellarmine",
+    "titles": [
+      "BISHOP",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1621
+  },
+  "roch_gonzalez_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Roch González",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "roch_of_montpellier": {
+    "canonizationLevel": "SAINT",
+    "name": "Roch"
+  },
+  "romuald_of_ravenna_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Romuald",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfDeath": 1027
+  },
+  "rosalie_jeanne_marie_rendu_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Rosalie Rendu",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": "1856-2-7"
+  },
+  "rose_of_lima_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Rose of Lima",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 1617
+  },
+  "rose_philippine_duchesne_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Rose Philippine Duchesne",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "rumpharius_of_coutances_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Rumpharius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 6
+    }
+  },
+  "rupert_of_salzburg_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Rupert Salzburg",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "saints_of_lindisfarne": {
+    "canonizationLevel": "SAINT",
+    "name": "The Saints of Lindisfarne",
+    "count": "many"
+  },
+  "salomea_of_poland_religious": {
+    "canonizationLevel": "BLESSED",
+    "name": "Salomea of Poland",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "sancha_of_portugal_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Sancha",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "sara_salkahazi_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Sára Salkaházi",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ]
+  },
+  "saturnin_of_toulouse_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Saturnin",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfBirth": {
+      "century": 3
+    },
+    "dateOfDeath": 257,
+    "dateOfDeathIsApproximative": true
+  },
+  "scholastica_of_nursia_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Scholastica",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfDeath": 543
+  },
+  "scubilion_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Scubilion",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfDeath": 565,
+    "dateOfDeathIsApproximative": true
+  },
+  "sebastian_de_aparicio_religious": {
+    "canonizationLevel": "BLESSED",
+    "name": "Sebastian de Aparicio",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "sebastian_of_milan_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Sebastian",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 284,
+    "dateOfDeathIsApproximative": true
+  },
+  "senan_of_inis_cathaigh_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Senan",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "senerius_of_normandy_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Senerius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 574,
+    "dateOfDeathIsApproximative": true
+  },
+  "seven_holy_founders_of_the_servite_order": {
+    "name": "Seven Holy Founders of the Servite Order",
+    "count": 7,
+    "dateOfDeath": 1310
+  },
+  "seven_martyred_nuns_from_the_franciscan_missionaries_of_mary": {
+    "name": "Seven Martyred Nuns from the Franciscan Missionaries of Mary",
+    "count": 7
+  },
+  "severinus_of_noricum_monk": {
+    "canonizationLevel": "SAINT",
+    "name": "Severinus of Noricum",
+    "titles": [
+      "MONK"
+    ]
+  },
+  "severus_of_avranches_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Severus",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 578,
+    "dateOfDeathIsApproximative": true
+  },
+  "sharbel_makhluf_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Sharbel Makhlūf",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1898
+  },
+  "shipwreck_of_saint_paul_apostle": {
+    "name": "Shipwreck of Saint Paul",
+    "titles": [
+      "APOSTLE"
+    ]
+  },
+  "sigismund_of_burgundy_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Sigismund",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "sigmund_felix_felinski_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Sigmund Felix Feliński",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "simon_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "Simon",
+    "titles": [
+      "APOSTLE"
+    ]
+  },
+  "simon_of_lipnica_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Simon of Lipnica",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "six_welsh_martyrs": {
+    "name": "Six Welsh Martyrs",
+    "hideTitles": true,
+    "count": 6
+  },
+  "sixtus_ii_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Sixtus II",
+    "titles": [
+      "POPE",
+      "MARTYR"
+    ],
+    "dateOfDeath": 258
+  },
+  "spyridon_of_trimythous_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Spyridon",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "stanislaus_kazimierczyk_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Stanislaus Kazimierczyk",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "stanislaus_kostka_religious": {
+    "canonizationLevel": "SAINT",
+    "name": "Stanislaus Kostka",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "stanislaus_of_szczepanow_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Stanislaus",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1079
+  },
+  "stephen_i_of_hungary": {
+    "canonizationLevel": "SAINT",
+    "name": "Stephen of Hungary",
+    "titles": [
+      "KING"
+    ],
+    "dateOfDeath": 1038
+  },
+  "stephen_pongracz_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Stephen Pongrácz",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "stephen_the_first_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Stephen",
+    "titles": [
+      "THE_FIRST_MARTYR"
+    ],
+    "dateOfDeath": 35
+  },
+  "sunday_of_the_word_of_god": {
+    "name": "Sunday of the Word of God"
+  },
+  "sunniva_of_norway_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Sunniva",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ]
+  },
+  "swithun_of_winchester_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Swithun",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "sylvester_i_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Sylvester I",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfDeath": 335
+  },
+  "sylvius_of_toulouse_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Sylvius",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 400,
+    "dateOfDeathIsApproximative": true
+  },
+  "szilard_bogdanffy_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Szilárd Bogdánffy",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "teilo_of_llandaff_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Teilo",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "teresa_benedicta_of_the_cross_stein_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Teresa Benedicta of the Cross Stein",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1942
+  },
+  "teresa_of_calcutta_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Teresa of Calcutta",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "teresa_of_jesus_jornet_ibars_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Teresa of Jesus Jornet Ibars",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "teresa_of_jesus_of_avila_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Teresa of Jesus of Ávila",
+    "titles": [
+      "VIRGIN",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1582
+  },
+  "teresa_of_jesus_of_los_andes_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Teresa of Jesus of Los Andes",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "teresa_of_portugal_religious": {
+    "canonizationLevel": "BLESSED",
+    "name": "Teresa of Portugal",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "theodore_of_canterbury_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Theodore of Canterbury",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "theodore_romzha_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Theodore Romzha",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "theodosius_of_the_caves_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Theodosius of the Caves",
+    "titles": [
+      "ABBOT"
+    ]
+  },
+  "theotonius_of_coimbra_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Theotonius of Coimbra",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "therese_marie_victoire_couderc_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Thérèse Couderc",
+    "titles": [
+      "VIRGIN"
+    ],
+    "dateOfBirth": "1805-2-1",
+    "dateOfDeath": "1885-9-26"
+  },
+  "therese_of_the_child_jesus_and_the_holy_face_of_lisieux_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Thérèse of the Child Jesus and the Holy Face of Lisieux",
+    "titles": [
+      "VIRGIN",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfDeath": 1897
+  },
+  "thomas_apostle": {
+    "canonizationLevel": "SAINT",
+    "name": "Thomas",
+    "titles": [
+      "APOSTLE"
+    ]
+  },
+  "thomas_aquinas_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Thomas Aquinas",
+    "titles": [
+      "PRIEST",
+      "DOCTOR_OF_THE_CHURCH"
+    ],
+    "dateOfBirth": 1225,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": "1274-03-07",
+    "dateOfCanonization": "1323-07-19"
+  },
+  "thomas_becket_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Thomas Becket",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfBirth": {
+      "or": [
+        "1118-12-21",
+        "1120-12-21"
+      ]
+    },
+    "dateOfDeath": "1170-12-29"
+  },
+  "thomas_helye_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Thomas Hélye",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfBirth": {
+      "between": [
+        1180,
+        1187
+      ]
+    },
+    "dateOfDeath": "1257-10-19"
+  },
+  "thomas_hioji_rokuzayemon_nishi_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Thomas Hioji Rokuzayemon Nishi",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "thomas_jean_georges_rehm_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Jean-Georges Rehm",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ],
+    "dateOfDeath": "1794-8"
+  },
+  "thomas_more_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Thomas More",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": "1537-07-6"
+  },
+  "thomas_of_villanova_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Thomas of Villanova",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "thorfinn_of_hamar_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Thorfinn",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "thorlac_of_iceland_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Thorlac",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "timothy_of_ephesus_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Timothy",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 1
+    }
+  },
+  "titus_of_crete_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Titus",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": {
+      "century": 1
+    }
+  },
+  "transfiguration_of_the_lord": {
+    "name": "The Transfiguration of the Lord"
+  },
+  "translation_of_the_relics_of_saint_stephen_of_hungary": {
+    "name": "Translation of the Relics of Saint Stephen of Hungary"
+  },
+  "turibius_of_mogrovejo_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Turibius of Mogrovejo",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 1606
+  },
+  "ulrich_of_augsburg_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Ulrich of Augsburg",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": "973-7-4"
+  },
+  "urban_i_pope": {
+    "canonizationLevel": "SAINT",
+    "name": "Urban I",
+    "titles": [
+      "POPE",
+      "MARTYR"
+    ],
+    "dateOfDeath": {
+      "century": 3
+    }
+  },
+  "urban_ii_pope": {
+    "canonizationLevel": "BLESSED",
+    "name": "Urban II",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfBirth": 1035,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": "1099-07-29"
+  },
+  "urban_v_pope": {
+    "canonizationLevel": "BLESSED",
+    "name": "Urban V",
+    "titles": [
+      "POPE"
+    ],
+    "dateOfBirth": 1310,
+    "dateOfDeath": "1370-12-19",
+    "dateOfBeatification": "1870-05-10"
+  },
+  "ursula_of_cologne_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Ursula",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ]
+  },
+  "valentine_of_raetia_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Valentine of Raetia",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "valerius_of_trier_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Valerius of Trier",
+    "titles": [
+      "BISHOP"
+    ],
+    "dateOfDeath": 320
+  },
+  "vasyl_velychkovsky_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Vasyl Velychkovsky",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ],
+    "dateOfDeath": 1973
+  },
+  "viator_of_lyon": {
+    "canonizationLevel": "SAINT",
+    "name": "Viator of Lyons",
+    "dateOfBirth": 370,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": 389,
+    "dateOfDeathIsApproximative": true
+  },
+  "vincent_de_paul_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Vincent de Paul",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1660
+  },
+  "vincent_ferrer_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Vincent Ferrer",
+    "titles": [
+      "PRIEST"
+    ],
+    "dateOfDeath": 1419
+  },
+  "vincent_kadlubek_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Vincent Kadłubek",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "vincent_lewoniuk_martyr": {
+    "canonizationLevel": "BLESSED",
+    "name": "Vincent Lewoniuk",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "vincent_of_saragossa_deacon": {
+    "canonizationLevel": "SAINT",
+    "name": "Vincent",
+    "titles": [
+      "DEACON",
+      "MARTYR"
+    ],
+    "dateOfDeath": 304
+  },
+  "vincent_pallotti_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Vincent Pallotti",
+    "titles": [
+      "PRIEST"
+    ]
+  },
+  "virgilius_of_salzburg_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Virgilius of Salzburg",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "visitation_of_mary": {
+    "name": "Visitation of the Blessed Virgin Mary"
+  },
+  "vitalis_of_savigny_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "Vitalis of Savigny",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfBirth": 1050,
+    "dateOfBirthIsApproximative": true,
+    "dateOfDeath": "1122-09-16"
+  },
+  "vitus_of_lucania_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Vitus",
+    "titles": [
+      "MARTYR"
+    ]
+  },
+  "vladimir_ghika_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Vladimir Ghika",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "vladimir_i_the_great_of_kiev": {
+    "canonizationLevel": "SAINT",
+    "name": "Vladimir the Great"
+  },
+  "waitangi_day": {
+    "name": "Waitangi Day"
+  },
+  "walpurga_of_heidenheim_abbess": {
+    "canonizationLevel": "SAINT",
+    "name": "Walpurga of Heidenheim",
+    "titles": [
+      "ABBESS"
+    ]
+  },
+  "wenceslaus_i_of_bohemia_martyr": {
+    "canonizationLevel": "SAINT",
+    "name": "Wenceslaus",
+    "titles": [
+      "MARTYR"
+    ],
+    "dateOfDeath": 929
+  },
+  "wendelin_of_trier_hermit": {
+    "canonizationLevel": "SAINT",
+    "name": "Wendelin of Trier",
+    "titles": [
+      "HERMIT",
+      "ABBOT"
+    ],
+    "dateOfDeath": 617
+  },
+  "wilfrid_of_york_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Wilfrid",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "william_apor_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "William Apor",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "william_firmatus_abbot": {
+    "canonizationLevel": "SAINT",
+    "name": "William Firmatus",
+    "titles": [
+      "ABBOT"
+    ],
+    "dateOfBirth": 1026,
+    "dateOfDeath": "1103-04-24"
+  },
+  "willibald_of_eichstatt_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Willibald",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "willibrord_of_utrecht_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Willibrord",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "winefride_of_flintshire_virgin": {
+    "canonizationLevel": "SAINT",
+    "name": "Winefride",
+    "titles": [
+      "VIRGIN"
+    ]
+  },
+  "wladyslaw_bladzinski_priest": {
+    "canonizationLevel": "BLESSED",
+    "name": "Wladyslaw Błądziński",
+    "titles": [
+      "PRIEST",
+      "MARTYR"
+    ]
+  },
+  "wolfgang_of_regensburg_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Wolfgang of Regensburg",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "wulstan_of_worcester_bishop": {
+    "canonizationLevel": "SAINT",
+    "name": "Wulstan",
+    "titles": [
+      "BISHOP"
+    ]
+  },
+  "yolanda_of_poland_religious": {
+    "canonizationLevel": "BLESSED",
+    "name": "Yolanda",
+    "titles": [
+      "RELIGIOUS"
+    ]
+  },
+  "zdenka_cecilia_schelingova_virgin": {
+    "canonizationLevel": "BLESSED",
+    "name": "Zdenka Cecilia Schelingová",
+    "titles": [
+      "VIRGIN",
+      "MARTYR"
+    ]
+  },
+  "zdislava_of_lemberk": {
+    "canonizationLevel": "SAINT",
+    "name": "Zdislava"
+  },
+  "zepherin_namuncura": {
+    "canonizationLevel": "BLESSED",
+    "name": "Zepherin Namuncurá"
+  },
+  "zoltan_lajos_meszlenyi_bishop": {
+    "canonizationLevel": "BLESSED",
+    "name": "Zoltán Lajos Meszlényi",
+    "titles": [
+      "BISHOP",
+      "MARTYR"
+    ]
+  },
+  "zygmunt_gorazdowski_priest": {
+    "canonizationLevel": "SAINT",
+    "name": "Zygmunt Gorazdowski",
+    "titles": [
+      "PRIEST"
+    ]
+  }
+}

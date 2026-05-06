@@ -1,0 +1,186 @@
+{
+  "argentina": [
+    "americas"
+  ],
+  "australia": [],
+  "austria": [
+    "europe"
+  ],
+  "belgium": [
+    "europe"
+  ],
+  "bolivia": [
+    "americas"
+  ],
+  "bosnia-herzegovina": [
+    "europe"
+  ],
+  "brazil": [
+    "americas"
+  ],
+  "canada": [
+    "americas"
+  ],
+  "chile": [
+    "americas"
+  ],
+  "china": [],
+  "costa-rica": [
+    "americas"
+  ],
+  "croatia": [
+    "europe"
+  ],
+  "czech-republic": [
+    "europe"
+  ],
+  "denmark": [
+    "europe"
+  ],
+  "england": [
+    "europe"
+  ],
+  "finland": [
+    "europe"
+  ],
+  "france-lyon": [
+    "europe",
+    "france"
+  ],
+  "france-paris": [
+    "europe",
+    "france"
+  ],
+  "france-toulouse": [
+    "europe",
+    "france"
+  ],
+  "france-angers": [
+    "europe",
+    "france"
+  ],
+  "france-coutances": [
+    "europe",
+    "france"
+  ],
+  "france-saint-denis": [
+    "europe",
+    "france"
+  ],
+  "france-strasbourg": [
+    "europe",
+    "france"
+  ],
+  "france": [
+    "europe"
+  ],
+  "germany": [
+    "europe"
+  ],
+  "greece": [
+    "europe"
+  ],
+  "guatemala": [
+    "americas"
+  ],
+  "hong-kong": [],
+  "hungary": [
+    "europe"
+  ],
+  "india": [],
+  "ireland": [
+    "europe"
+  ],
+  "italy": [
+    "europe"
+  ],
+  "japan": [],
+  "lebanon": [],
+  "lithuania": [
+    "europe"
+  ],
+  "malta": [
+    "europe"
+  ],
+  "mexico": [
+    "americas"
+  ],
+  "netherlands": [
+    "europe"
+  ],
+  "new-zealand": [],
+  "norway": [
+    "europe"
+  ],
+  "panama": [
+    "americas"
+  ],
+  "paraguay": [
+    "americas"
+  ],
+  "peru": [
+    "americas"
+  ],
+  "philippines": [],
+  "poland": [
+    "europe"
+  ],
+  "portugal": [
+    "europe"
+  ],
+  "puerto-rico": [
+    "americas"
+  ],
+  "romania": [
+    "europe"
+  ],
+  "asian-russia": [
+    "asia",
+    "russia"
+  ],
+  "european-russia": [
+    "europe",
+    "russia"
+  ],
+  "russia": [],
+  "scotland": [
+    "europe"
+  ],
+  "slovakia": [
+    "europe"
+  ],
+  "slovenia": [
+    "europe"
+  ],
+  "spain": [
+    "europe"
+  ],
+  "sri-lanka": [],
+  "sweden": [
+    "europe"
+  ],
+  "switzerland": [
+    "europe"
+  ],
+  "ukraine": [
+    "europe"
+  ],
+  "united-states": [
+    "americas"
+  ],
+  "uruguay": [
+    "americas"
+  ],
+  "venezuela": [
+    "americas"
+  ],
+  "vietnam": [],
+  "wales": [
+    "europe"
+  ],
+  "general-roman": [],
+  "africa": [],
+  "americas": [],
+  "asia": [],
+  "europe": []
+}

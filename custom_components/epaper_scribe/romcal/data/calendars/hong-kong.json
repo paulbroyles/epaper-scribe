@@ -1,0 +1,119 @@
+{
+  "mary_mother_of_god": {
+    "isHolyDayOfObligation": false
+  },
+  "joseph_freinademetz_priest": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 1,
+      "date": 29
+    }
+  },
+  "gabriele_maria_allegra_priest": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 1,
+      "date": 30
+    }
+  },
+  "aloysius_versiglia_bishop_and_callistus_caravario_priest_martyrs": {
+    "precedence": "OPTIONAL_MEMORIAL_12",
+    "dateDef": {
+      "month": 2,
+      "date": 25
+    },
+    "martyrology": [
+      "aloysius_versiglia_bishop",
+      "callistus_caravario_priest"
+    ]
+  },
+  "our_lady_of_china": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 5,
+      "dayOfWeek": 6,
+      "nthWeekInMonth": 2
+    }
+  },
+  "our_lady_help_of_christians": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 5,
+      "date": 24
+    }
+  },
+  "holy_martyrs_and_blesseds_of_china": {
+    "precedence": "PROPER_SOLEMNITY__PRINCIPAL_PATRON_4A",
+    "dateDef": {
+      "month": 7,
+      "date": 9
+    }
+  },
+  "therese_of_the_child_jesus_and_the_holy_face_of_lisieux_virgin": {
+    "precedence": "PROPER_FEAST_8F",
+    "dateDef": {
+      "month": 10,
+      "date": 1
+    }
+  },
+  "francis_xavier_priest": {
+    "precedence": "PROPER_FEAST_8F",
+    "dateDef": {
+      "month": 12,
+      "date": 3
+    }
+  },
+  "immaculate_conception_of_the_blessed_virgin_mary": {
+    "precedence": "PROPER_SOLEMNITY__PRINCIPAL_PATRON_4A",
+    "dateDef": {
+      "dateFn": "immaculateConceptionOfMary"
+    },
+    "titles": {
+      "append": [
+        "PRINCIPAL_PATRON_OF_THE_DIOCESE"
+      ]
+    }
+  },
+  "dedication_of_the_cathedral_of_the_immaculate_conception_hong_kong": {
+    "precedence": "PROPER_FEAST__DEDICATION_OF_THE_CATHEDRAL_CHURCH_8B",
+    "isOptional": true,
+    "dateDef": {
+      "month": 12,
+      "date": 9
+    }
+  },
+  "thanksgiving_mass_on_lunar_new_year_eve": {
+    "precedence": "OPTIONAL_MEMORIAL_12",
+    "allowSimilarRankItems": true,
+    "isOptional": true,
+    "dateDef": {
+      "dateFn": "lunarNewYear",
+      "dateArgs": [
+        8
+      ],
+      "subtractDay": 1
+    }
+  },
+  "eucharistic_celebration_on_lunar_new_year_day": {
+    "precedence": "OPTIONAL_MEMORIAL_12",
+    "allowSimilarRankItems": true,
+    "isOptional": true,
+    "dateDef": {
+      "dateFn": "lunarNewYear",
+      "dateArgs": [
+        8
+      ]
+    }
+  },
+  "sunday_after_lunar_new_years_day": {
+    "precedence": "OPTIONAL_MEMORIAL_12",
+    "allowSimilarRankItems": true,
+    "isOptional": true,
+    "dateDef": {
+      "dateFn": "sundayOnOrAfterLunarNewYear",
+      "dateArgs": [
+        8
+      ]
+    }
+  }
+}

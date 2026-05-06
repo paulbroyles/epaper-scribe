@@ -1,0 +1,105 @@
+{
+  "argentina": {},
+  "australia": {
+    "epiphanyOnSunday": false,
+    "ascensionOnSunday": false,
+    "corpusChristiOnSunday": false
+  },
+  "austria": {},
+  "belgium": {},
+  "bolivia": {},
+  "bosnia-herzegovina": {},
+  "brazil": {},
+  "canada": {
+    "epiphanyOnSunday": true,
+    "ascensionOnSunday": true,
+    "corpusChristiOnSunday": true
+  },
+  "chile": {},
+  "china": {},
+  "costa-rica": {},
+  "croatia": {},
+  "czech-republic": {
+    "epiphanyOnSunday": false,
+    "ascensionOnSunday": false,
+    "corpusChristiOnSunday": false
+  },
+  "denmark": {},
+  "england": {},
+  "finland": {},
+  "france-lyon": {},
+  "france-paris": {},
+  "france-toulouse": {},
+  "france-angers": {},
+  "france-coutances": {},
+  "france-saint-denis": {},
+  "france-strasbourg": {},
+  "france": {
+    "epiphanyOnSunday": true,
+    "ascensionOnSunday": false,
+    "corpusChristiOnSunday": true
+  },
+  "germany": {},
+  "greece": {
+    "easterCalculationType": "julian"
+  },
+  "guatemala": {},
+  "hong-kong": {
+    "ascensionOnSunday": true,
+    "epiphanyOnSunday": true,
+    "corpusChristiOnSunday": true
+  },
+  "hungary": {},
+  "india": {},
+  "ireland": {},
+  "italy": {},
+  "japan": {},
+  "lebanon": {},
+  "lithuania": {},
+  "malta": {},
+  "mexico": {},
+  "netherlands": {},
+  "new-zealand": {},
+  "norway": {},
+  "panama": {},
+  "paraguay": {},
+  "peru": {},
+  "philippines": {},
+  "poland": {},
+  "portugal": {},
+  "puerto-rico": {},
+  "romania": {},
+  "asian-russia": {},
+  "european-russia": {},
+  "russia": {},
+  "scotland": {},
+  "slovakia": {
+    "epiphanyOnSunday": false,
+    "ascensionOnSunday": false,
+    "corpusChristiOnSunday": false
+  },
+  "slovenia": {},
+  "spain": {},
+  "sri-lanka": {},
+  "sweden": {},
+  "switzerland": {},
+  "ukraine": {},
+  "united-states": {
+    "epiphanyOnSunday": true,
+    "ascensionOnSunday": true,
+    "corpusChristiOnSunday": true
+  },
+  "uruguay": {},
+  "venezuela": {},
+  "vietnam": {},
+  "wales": {},
+  "general-roman": {
+    "epiphanyOnSunday": false,
+    "ascensionOnSunday": false,
+    "corpusChristiOnSunday": false
+  },
+  "africa": {},
+  "americas": {},
+  "asia": {},
+  "europe": {}
+}

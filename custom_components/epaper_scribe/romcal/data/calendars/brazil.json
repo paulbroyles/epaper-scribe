@@ -1,0 +1,219 @@
+{
+  "peter_and_paul_apostles": {
+    "dateExceptions": [
+      {
+        "ifIsBetween": {
+          "from": {
+            "month": 6,
+            "date": 28
+          },
+          "to": {
+            "month": 7,
+            "date": 4
+          },
+          "inclusive": true
+        },
+        "setDate": {
+          "month": 7,
+          "nthWeekInMonth": 1,
+          "dayOfWeek": 0
+        }
+      },
+      "// If June 29 is already Sunday, keep it on that date",
+      {
+        "ifIsDayOfWeek": 0,
+        "setDate": {
+          "month": 6,
+          "date": 29
+        }
+      }
+    ]
+  },
+  "ephrem_the_syrian_deacon": {
+    "dateDef": {
+      "month": 6,
+      "date": 8
+    }
+  },
+  "joseph_de_anchieta_priest": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 6,
+      "date": 9
+    }
+  },
+  "augustine_zhao_rong_priest_and_companions_martyrs": {
+    "dateDef": {
+      "month": 7,
+      "date": 8
+    }
+  },
+  "paulina_of_the_agonizing_heart_of_jesus_visintainer_virgin": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 7,
+      "date": 9
+    }
+  },
+  "our_lady_of_mount_carmel": {
+    "precedence": "PROPER_FEAST_8F",
+    "dateDef": {
+      "month": 7,
+      "date": 16
+    }
+  },
+  "ignatius_de_azevedo_priest_and_companions_martyrs": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 7,
+      "date": 17
+    },
+    "martyrology": [
+      "ignatius_de_azevedo_priest",
+      "companions_martyrs"
+    ]
+  },
+  "pontian_i_pope_and_hippolytus_of_rome_priest": {
+    "dateDef": {
+      "month": 8,
+      "date": 12
+    }
+  },
+  "dulce_lopes_pontes_virgin": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 8,
+      "date": 13
+    }
+  },
+  "assumption_of_the_blessed_virgin_mary": {
+    "dateExceptions": [
+      {
+        "ifIsBetween": {
+          "from": {
+            "month": 8,
+            "date": 14
+          },
+          "to": {
+            "month": 8,
+            "date": 20
+          },
+          "inclusive": true
+        },
+        "setDate": {
+          "month": 8,
+          "nthWeekInMonth": 3,
+          "dayOfWeek": 0
+        }
+      },
+      "// If August 15 is already Sunday, keep it on that date",
+      {
+        "ifIsDayOfWeek": 0,
+        "setDate": {
+          "month": 8,
+          "date": 15
+        }
+      }
+    ]
+  },
+  "rose_of_lima_virgin": {
+    "precedence": "PROPER_FEAST_8F",
+    "dateDef": {
+      "month": 8,
+      "date": 23
+    }
+  },
+  "andrew_de_soveral_and_ambrose_francis_ferro_priests": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 10,
+      "date": 3
+    },
+    "martyrology": [
+      "andrew_de_soveral_priest",
+      "ambrose_francis_ferro_priest"
+    ]
+  },
+  "benedict_the_moor_religious": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 10,
+      "date": 5
+    }
+  },
+  "faustina_kowalska_virgin": {
+    "dateDef": {
+      "month": 10,
+      "date": 6
+    }
+  },
+  "our_lady_of_aparecida": {
+    "customLocaleId": "our_lady_of_aparecida_patroness_of_brazil",
+    "precedence": "PROPER_SOLEMNITY__PRINCIPAL_PATRON_4A",
+    "dateDef": {
+      "month": 10,
+      "date": 12
+    },
+    "titles": {
+      "append": [
+        "PATRONESS_OF_BRAZIL"
+      ]
+    }
+  },
+  "peter_of_alcantara_priest": {
+    "precedence": "OPTIONAL_MEMORIAL_12",
+    "dateDef": {
+      "month": 10,
+      "date": 19
+    }
+  },
+  "anthony_of_saint_anne_galvao_priest": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 10,
+      "date": 25
+    }
+  },
+  "all_saints": {
+    "dateExceptions": [
+      {
+        "ifIsBetween": {
+          "from": {
+            "month": 10,
+            "date": 31
+          },
+          "to": {
+            "month": 11,
+            "date": 6
+          },
+          "inclusive": true
+        },
+        "setDate": {
+          "month": 11,
+          "nthWeekInMonth": 1,
+          "dayOfWeek": 0
+        }
+      },
+      "// If November 1 is already Sunday, keep it on that date",
+      {
+        "ifIsDayOfWeek": 0,
+        "setDate": {
+          "month": 11,
+          "date": 1
+        }
+      }
+    ]
+  },
+  "roch_gonzalez_alphonsus_rodriguez_and_john_del_castillo_priests": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 11,
+      "date": 19
+    },
+    "martyrology": [
+      "roch_gonzalez_priest",
+      "alphonsus_rodriguez_priest",
+      "john_del_castillo_priest"
+    ]
+  }
+}

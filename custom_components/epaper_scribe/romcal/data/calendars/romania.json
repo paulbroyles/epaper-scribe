@@ -1,0 +1,16 @@
+{
+  "john_cassian_priest": {
+    "precedence": "PROPER_MEMORIAL_11B",
+    "dateDef": {
+      "month": 2,
+      "date": 28
+    }
+  },
+  "vladimir_ghika_priest": {
+    "precedence": "OPTIONAL_MEMORIAL_12",
+    "dateDef": {
+      "month": 5,
+      "date": 16
+    }
+  }
+}

@@ -1,0 +1,16 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Editor / OS
+.DS_Store
+*.swp
+
+# Test fixtures
+tests/fixtures/*.json
