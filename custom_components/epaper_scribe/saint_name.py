@@ -401,24 +401,77 @@ def _draw_season_symbol(
 
     elif "easter" in s:
         # ── Latin cross with draped cloth over the crossbar ───────────────────
-        hy = y + pad + (side - 2 * pad) * 2 // 5   # crossbar y
-        # Draw cross first
-        draw.rectangle([cx - arm_w // 2, y + pad, cx + arm_w // 2, y + side - pad], fill=color)
-        draw.rectangle([x + pad, hy - arm_w // 2, x + side - pad, hy + arm_w // 2], fill=color)
-        # Cloth: diagonal parallelogram (upper-right → lower-left) crossing crossbar
-        ca = math.radians(-45)
-        cdx, cdy = math.cos(ca), math.sin(ca)       # along-cloth unit vector
-        pdx, pdy = -math.sin(ca), math.cos(ca)      # perpendicular unit vector
-        half_len = r * 3 // 5
-        half_wid = int(arm_w * 1.2)
-        cloth_pts = [
-            (cx + cdx * half_len + pdx * half_wid, hy + cdy * half_len + pdy * half_wid),
-            (cx + cdx * half_len - pdx * half_wid, hy + cdy * half_len - pdy * half_wid),
-            (cx - cdx * half_len - pdx * half_wid, hy - cdy * half_len - pdy * half_wid),
-            (cx - cdx * half_len + pdx * half_wid, hy - cdy * half_len + pdy * half_wid),
-        ]
-        draw.polygon([(int(px), int(py)) for px, py in cloth_pts],
-                     fill=background, outline=color)
+        # Design: sag cloth terminates at arm_top (tucks behind arm from above);
+        # tails begin at arm_bot (emerge from behind arm below).  Cloth drawn as
+        # filled polygons with perpendicular offsets so edges are pixel-precise
+        # and survive BWR Floyd-Steinberg dithering without fragmentation.
+        _pad      = max(1, side // 8)
+        _arm_w    = max(2, side // 10)
+        _left_x   = x + _pad
+        _right_x  = x + side - _pad
+        _top_y    = y + _pad
+        _bot_y    = y + side - _pad
+        _hy       = _top_y + (_bot_y - _top_y) * 2 // 5
+        _vbar_l   = cx - _arm_w // 2
+        _arm_top  = _hy - _arm_w // 2
+        _arm_bot  = _hy + _arm_w // 2
+        _arm_run  = _vbar_l - _left_x
+        _cl_x     = _left_x  + int(_arm_run * 0.28)
+        _cr_x     = _right_x - int(_arm_run * 0.28)
+        _span     = _cr_x - _cl_x
+        _cloth_w  = max(2, int(_arm_w * 0.55))
+        _ow       = max(1, _arm_w // 7)
+        _half_out = _cloth_w // 2 + _ow
+        _half_in  = _cloth_w // 2
+        _tby      = _arm_bot + int((_bot_y - _arm_bot) * 0.68)
+        _sag_d    = int((_tby - _arm_top) * 0.48)
+        _ts       = int(_arm_run * 0.28)
+
+        # Cross
+        draw.rectangle([cx - _arm_w // 2, _top_y, cx + _arm_w // 2, _bot_y], fill=color)
+        draw.rectangle([_left_x, _arm_top, _right_x, _arm_bot], fill=color)
+
+        def _cloth_poly(pts: list) -> None:
+            """Render cloth strip as two filled polygons (black outer, white inner)
+            using perpendicular offsets for accurate, dither-stable edges."""
+            n = len(pts)
+            if n < 2:
+                return
+            def _perp(i: int):
+                if i == 0:
+                    dx, dy = pts[1][0] - pts[0][0], pts[1][1] - pts[0][1]
+                elif i == n - 1:
+                    dx, dy = pts[-1][0] - pts[-2][0], pts[-1][1] - pts[-2][1]
+                else:
+                    dx, dy = pts[i+1][0] - pts[i-1][0], pts[i+1][1] - pts[i-1][1]
+                L = math.sqrt(dx * dx + dy * dy) or 1.0
+                return dy / L, -dx / L           # unit rightward perpendicular
+            def _ip(p):
+                return int(round(p[0])), int(round(p[1]))
+            perps = [_perp(i) for i in range(n)]
+            top_o = [_ip((pts[i][0] - perps[i][0] * _half_out,
+                          pts[i][1] - perps[i][1] * _half_out)) for i in range(n)]
+            bot_o = [_ip((pts[i][0] + perps[i][0] * _half_out,
+                          pts[i][1] + perps[i][1] * _half_out)) for i in range(n)]
+            draw.polygon(top_o + bot_o[::-1], fill=color)
+            top_i = [_ip((pts[i][0] - perps[i][0] * _half_in,
+                          pts[i][1] - perps[i][1] * _half_in)) for i in range(n)]
+            bot_i = [_ip((pts[i][0] + perps[i][0] * _half_in,
+                          pts[i][1] + perps[i][1] * _half_in)) for i in range(n)]
+            draw.polygon(top_i + bot_i[::-1], fill=background)
+
+        # Sag: parabola from (cl_x, arm_top) sagging down to (cr_x, arm_top)
+        _cloth_poly([(_cl_x + _span * i / 24,
+                      _arm_top + _sag_d * 4 * (i / 24) * (1 - i / 24))
+                     for i in range(25)])
+        # Left tail: from (cl_x, arm_bot) down-outward to tail bottom
+        _cloth_poly([(_cl_x + (_cl_x - _ts - _cl_x) * i / 8,
+                      _arm_bot + (_tby - _arm_bot) * i / 8)
+                     for i in range(9)])
+        # Right tail: from (cr_x, arm_bot) down-outward to tail bottom
+        _cloth_poly([(_cr_x + _ts * i / 8,
+                      _arm_bot + (_tby - _arm_bot) * i / 8)
+                     for i in range(9)])
 
     elif "pentecost" in s:
         # ── Three tongues of fire ─────────────────────────────────────────────
