@@ -319,33 +319,73 @@ def _draw_season_symbol(
     lw = max(1, arm_w // 2)
 
     if "before advent" in s:
-        # ── Crown: three-tined with solid body ────────────────────────────────
-        # Checked before "advent" so "before advent" doesn't hit the candle branch.
-        crown_bot = cy + r // 2
-        crown_mid = cy - r // 5      # top of solid body / base of tines
-        tine_h = r * 4 // 5
-        draw.rectangle([cx - r, crown_mid, cx + r, crown_bot], fill=color)
-        draw.rectangle([cx - r, crown_bot - lw * 2, cx + r, crown_bot], fill=color)
-        tine_hw = r // 3
-        for tx, th in [(cx - r * 2 // 3, tine_h * 3 // 4),
-                       (cx,               tine_h),
-                       (cx + r * 2 // 3, tine_h * 3 // 4)]:
-            draw.polygon([(tx, crown_mid - th), (tx - tine_hw, crown_mid), (tx + tine_hw, crown_mid)], fill=color)
+        # ── Crown: three triangular tines + solid band + jewel circles ───────
+        # Checked before "advent" so substring match doesn't hit candle branch.
+        pad_w   = max(2, w // 22)
+        pad_bot = max(4, h // 14)
+        x0 = x + pad_w;  x1 = x + w - pad_w;  bw = x1 - x0
+        crown_h = min(h, w) * 76 // 100
+        band_h  = crown_h * 60 // 100
+        cbot    = y + h - pad_bot
+        btop    = cbot - band_h
+        tine_w  = bw // 4
+        lt_l = x0;               lt_r = x0 + tine_w
+        ct_l = cx - tine_w // 2; ct_r = cx + tine_w // 2
+        rt_l = x1 - tine_w;     rt_r = x1
+        tine_h_side = crown_h - band_h
+        tine_h_mid  = tine_h_side + tine_h_side // 3
+        # Band
+        draw.rectangle([x0, btop, x1, cbot], fill=color)
+        # Three triangular tines (centre tallest)
+        draw.polygon([(lt_l, btop), (lt_r, btop), ((lt_l+lt_r)//2, btop-tine_h_side)], fill=color)
+        draw.polygon([(ct_l, btop), (ct_r, btop), (cx, btop-tine_h_mid)], fill=color)
+        draw.polygon([(rt_l, btop), (rt_r, btop), ((rt_l+rt_r)//2, btop-tine_h_side)], fill=color)
+        # Jewel dots (white circles) on band
+        jy = btop + band_h // 2;  jd = max(2, band_h // 5)
+        for jx in [(lt_l+lt_r)//2, cx, (rt_l+rt_r)//2]:
+            draw.ellipse([jx-jd, jy-jd, jx+jd, jy+jd], fill=background)
 
     elif "advent" in s:
-        # ── Candle: rectangular body + triangular flame ──────────────────────
-        # Uses full w × h: candle fills the height, flame tip at top.
-        # bw uses w//4 (not //5) so the candle reads as a candle, not a pillar.
-        bw = max(3, w // 4)
-        pad_h = max(1, h // 10)
-        flame_h = max(3, (h - 2 * pad_h) // 3)
-        candle_top = y + pad_h + flame_h
-        candle_bot = y + h - pad_h
-        draw.rectangle([cx - bw // 2, candle_top, cx + bw // 2, candle_bot], fill=color)
-        draw.polygon(
-            [(cx, y + pad_h), (cx - bw // 2, candle_top), (cx + bw // 2, candle_top)],
-            fill=color,
-        )
+        # ── Single candle: outlined body + visible wick line + teardrop flame ─
+        # Layout (top → bottom): flame | wick gap | candle body.
+        # The wick is drawn LAST so it's on top of both flame base and body top,
+        # guaranteeing it's always visible as a thin dark separator.
+        pad_h        = max(2, h // 12)
+        body_bot_hw  = max(4, w // 5)
+        body_top_hw  = max(2, w // 6)
+        wick_gap     = max(8, h // 9)          # clear gap between flame and body
+        flame_h      = max(10, h * 2 // 7)
+        flame_hw     = max(3, body_top_hw - 1)
+        flame_base_hw = max(2, w // 14)        # narrow at wick, wider than wick_hw
+        # y coordinates (top → bottom)
+        flame_tip_y  = y + pad_h
+        flame_base_y = flame_tip_y + flame_h   # flame ends here
+        body_top_y   = flame_base_y + wick_gap # body starts here (gap = wick zone)
+        body_bot_y   = y + h - pad_h
+        # (1) Candle body: outlined trapezoid, white fill
+        draw.polygon([
+            (cx - body_top_hw, body_top_y),
+            (cx + body_top_hw, body_top_y),
+            (cx + body_bot_hw, body_bot_y),
+            (cx - body_bot_hw, body_bot_y),
+        ], fill=background, outline=color)
+        # (2) Flame: 7-point rounded teardrop in warm yellow-orange.
+        # At actual resolution the dithering pipeline converts this to a
+        # red+white mix that reads as a warm flame on the BWR display.
+        flame_upper_y = flame_tip_y + int(flame_h * 0.22)   # narrow upper shoulder
+        flame_mid_y   = flame_tip_y + int(flame_h * 0.55)   # widest point
+        flame_color   = (255, 180, 0)   # yellow-orange → dithers to red+white
+        draw.polygon([
+            (cx,                            flame_tip_y),
+            (cx + flame_hw * 55 // 100,     flame_upper_y),
+            (cx + flame_hw,                 flame_mid_y),
+            (cx + flame_base_hw,            flame_base_y),
+            (cx - flame_base_hw,            flame_base_y),
+            (cx - flame_hw,                 flame_mid_y),
+            (cx - flame_hw * 55 // 100,     flame_upper_y),
+        ], fill=flame_color)
+        # (3) Wick: 1 px line through the gap — drawn LAST for guaranteed visibility
+        draw.line([(cx, flame_base_y), (cx, body_top_y)], fill=color, width=1)
 
     elif "christmas" in s:
         # ── Christmas tree: two-tier triangle + small star at apex ───────────
@@ -388,47 +428,107 @@ def _draw_season_symbol(
         draw.polygon(pts, fill=color)
 
     elif "before lent" in s:
-        # ── Celtic cross: equal-arm cross with a ring at the centre ──────────
+        # ── Celtic cross: equal-width arms inside a ring ─────────────────────
+        # Classic Celtic cross: standard-width straight arms with an overlaid
+        # circle (ring) where they intersect.  Straight (non-flared) arms so
+        # there are no "triangular" shapes at the ends at all.
         cross_r = r
-        ring_r  = r * 5 // 9
-        # Arms: equal length, centred on canvas
-        arm_cy = cy     # centre of cross (not 2/5 offset — this is a Greek cross)
-        draw.rectangle([cx - arm_w // 2, cy - cross_r, cx + arm_w // 2, cy + cross_r], fill=color)
-        draw.rectangle([cx - cross_r, arm_cy - arm_w // 2, cx + cross_r, arm_cy + arm_w // 2], fill=color)
-        # Ring overlay: background fill inside the circle outline erases the cross
-        # so the ring appears to "interrupt" the arms, Celtic-cross style
-        draw.ellipse([cx - ring_r, arm_cy - ring_r, cx + ring_r, arm_cy + ring_r],
+        ring_r  = r * 55 // 100
+        # Thinner arms: half-width = arm_w//4 ≈ 2 px → 4 px total stroke
+        arm_narrow = max(1, arm_w // 4)
+        arm_wide   = arm_narrow
+        cross_lw   = arm_narrow            # ring outline matches arm thickness
+        # Four arms (rectangles) outside the ring
+        draw.polygon([(cx - arm_narrow, cy - ring_r), (cx + arm_narrow, cy - ring_r),
+                      (cx + arm_wide,   cy - cross_r), (cx - arm_wide,   cy - cross_r)], fill=color)
+        draw.polygon([(cx - arm_narrow, cy + ring_r), (cx + arm_narrow, cy + ring_r),
+                      (cx + arm_wide,   cy + cross_r), (cx - arm_wide,   cy + cross_r)], fill=color)
+        draw.polygon([(cx - ring_r, cy - arm_narrow), (cx - ring_r, cy + arm_narrow),
+                      (cx - cross_r, cy + arm_wide),  (cx - cross_r, cy - arm_wide)], fill=color)
+        draw.polygon([(cx + ring_r, cy - arm_narrow), (cx + ring_r, cy + arm_narrow),
+                      (cx + cross_r, cy + arm_wide),  (cx + cross_r, cy - arm_wide)], fill=color)
+        # Ring: background fill + bolder outline (use global lw, not thin cross_lw)
+        draw.ellipse([cx - ring_r, cy - ring_r, cx + ring_r, cy + ring_r],
                      fill=background, outline=color, width=lw)
-        # Restore cross inside the ring (the four inner arm stubs)
-        inner = ring_r - lw
-        draw.rectangle([cx - arm_w // 2, arm_cy - inner, cx + arm_w // 2, arm_cy + inner], fill=color)
-        draw.rectangle([cx - inner, arm_cy - arm_w // 2, cx + inner, arm_cy + arm_w // 2], fill=color)
+        # Restore inner arm stubs inside the ring
+        inner = ring_r - cross_lw
+        draw.rectangle([cx - arm_narrow, cy - inner, cx + arm_narrow, cy + inner], fill=color)
+        draw.rectangle([cx - inner, cy - arm_narrow, cx + inner, cy + arm_narrow], fill=color)
 
     elif "lent" in s:
-        # ── Tau cross: T-shape (horizontal + lower vertical arm only) ────────
-        # Uses full w × h: crossbar at 2/5 of height, drop arm to bottom.
-        hy = y + pad + (h - 2 * pad) * 2 // 5   # crossbar y
-        draw.rectangle([cx - arm_w // 2, hy, cx + arm_w // 2, y + h - pad], fill=color)
-        draw.rectangle([x + pad, hy - arm_w // 2, x + w - pad, hy + arm_w // 2], fill=color)
+        # ── Ichthus outline (Christian fish symbol) ───────────────────────────
+        # Horizontal fish facing right (rounded nose right, forked tail left).
+        # Drawn as outline (not solid fill) — fill=background, outline=color.
+        # Body: lens shape from two sine arcs. Uses full slot width.
+        fish_w   = w * 5 // 7                   # total width (body + tail) ≈ 71%
+        fish_hh  = max(4, fish_w // 5)           # half-height (≈5:1 aspect)
+        tail_len = max(4, fish_hh * 4 // 3)
+        fish_lw  = max(2, side // 20)            # outline stroke width
+        body_left  = cx - fish_w // 2 + tail_len
+        body_right = cx + fish_w // 2
+        n = 24
+        pts_top = [(body_left + (body_right - body_left) * i / n,
+                    cy - fish_hh * math.sin(math.pi * i / n)) for i in range(n + 1)]
+        pts_bot = [(body_left + (body_right - body_left) * i / n,
+                    cy + fish_hh * math.sin(math.pi * i / n)) for i in range(n, -1, -1)]
+        draw.polygon(pts_top + pts_bot[1:-1], fill=background, outline=color, width=fish_lw)
+        # Forked tail: V-shape to the left of body_left — also outlined
+        tail_x  = cx - fish_w // 2
+        notch_x = tail_x + tail_len * 2 // 5
+        draw.polygon([
+            (int(body_left), int(cy)),
+            (int(tail_x),    int(cy - fish_hh)),
+            (int(notch_x),   int(cy)),
+            (int(tail_x),    int(cy + fish_hh)),
+        ], fill=background, outline=color, width=fish_lw)
 
     elif "holy week" in s or "holy_week" in s:
-        # ── Palm frond: diagonal stem + opposing leaflet pairs ────────────────
-        sx0, sy0 = cx - r // 4, cy + r       # base (lower left)
-        sx1, sy1 = cx + r // 3, cy - r       # tip (upper right)
-        stem_w = max(2, arm_w // 2)
-        draw.line([(sx0, sy0), (sx1, sy1)], fill=color, width=stem_w)
-        stem_angle = math.atan2(sy1 - sy0, sx1 - sx0)
-        perp = stem_angle + math.pi / 2
-        n = 4
-        for i in range(n):
-            t = (i + 1.5) / (n + 1.5)           # progress along stem (tip end)
-            px = sx0 + t * (sx1 - sx0)
-            py = sy0 + t * (sy1 - sy0)
-            leaf_len = int(r * (0.5 - t * 0.15))
-            for sign in (1, -1):
-                ex = px + sign * leaf_len * math.cos(perp)
-                ey = py + sign * leaf_len * math.sin(perp)
-                draw.line([(int(px), int(py)), (int(ex), int(ey))], fill=color, width=stem_w)
+        # ── Palm frond: quadratic-Bézier rachis + 14 leaflet pairs ───────────
+        # Approved design (preview v27+). Rachis curves from lower-right (base)
+        # to upper-left (tip).  Each leaflet is a filled lozenge polygon;
+        # a spine line from base→tip guarantees full length at actual resolution.
+        # hw/mhw clamped to ≥1 so short leaflets never collapse to zero width.
+        def _b2(p0, p1, p2, t):
+            return ((1-t)**2*p0[0]+2*t*(1-t)*p1[0]+t**2*p2[0],
+                    (1-t)**2*p0[1]+2*t*(1-t)*p1[1]+t**2*p2[1])
+        def _b2t(p0, p1, p2, t):
+            dx = 2*(1-t)*(p1[0]-p0[0])+2*t*(p2[0]-p1[0])
+            dy = 2*(1-t)*(p1[1]-p0[1])+2*t*(p2[1]-p1[1])
+            ln = math.hypot(dx, dy); return dx/ln, dy/ln
+        P0 = (x + w*46//64, y + h*76//84)
+        P1 = (x + w*22//64, y + h*38//84)
+        P2 = (x + w*16//64, y + h*6//84)
+        MAX_LEN = w*30//64
+        rachis_lw = max(1, w*2//64)
+        for j in range(30):
+            a = _b2(P0, P1, P2, j/30); b = _b2(P0, P1, P2, (j+1)/30)
+            draw.line([(int(a[0]),int(a[1])),(int(b[0]),int(b[1]))],
+                      fill=color, width=rachis_lw)
+        cos60 = 0.5; sin60 = 0.866; N_LF = 14
+        for i in range(N_LF):
+            t = 0.06 + i*(0.91/(N_LF-1))
+            ix, iy = _b2(P0, P1, P2, t)
+            ux, uy = _b2t(P0, P1, P2, t)
+            r_dx = ux*cos60 - uy*sin60; r_dy = ux*sin60 + uy*cos60
+            rl = math.hypot(r_dx, r_dy); r_dx /= rl; r_dy /= rl
+            l_dx = ux*cos60 + uy*sin60; l_dy = -ux*sin60 + uy*cos60
+            ll2 = math.hypot(l_dx, l_dy); l_dx /= ll2; l_dy /= ll2
+            llen = max(4, int(MAX_LEN*(1.0-0.65*t)))
+            hw = max(1, llen//12); C = 2
+            for (ldx, ldy) in [(r_dx, r_dy), (l_dx, l_dy)]:
+                tip_x = ix + llen*ldx; tip_y = iy + llen*ldy
+                mx = ix + 0.5*llen*ldx + C*ux; my = iy + 0.5*llen*ldy + C*uy
+                ppx = -ldy; ppy = ldx; mhw = max(1, hw*2//3)
+                draw.polygon([
+                    (int(ix+hw*ppx), int(iy+hw*ppy)),
+                    (int(mx+mhw*ppx), int(my+mhw*ppy)),
+                    (int(tip_x), int(tip_y)),
+                    (int(mx-mhw*ppx), int(my-mhw*ppy)),
+                    (int(ix-hw*ppx), int(iy-hw*ppy)),
+                ], fill=color)
+                # Spine line guarantees full leaflet length at actual resolution
+                draw.line([(int(ix), int(iy)), (int(tip_x), int(tip_y))],
+                          fill=color, width=1)
 
     elif "easter" in s:
         # ── Latin cross with draped cloth over the crossbar ───────────────────
@@ -506,37 +606,64 @@ def _draw_season_symbol(
                      for i in range(9)])
 
     elif "pentecost" in s:
-        # ── Three tongues of fire ─────────────────────────────────────────────
-        n_flames = 3
-        fw = max(3, r * 2 // (n_flames * 2 + 1))   # flame half-width
-        spacing = fw * 2 + max(2, fw // 3)
-        base_y = cy + r // 3
-        for i in range(n_flames):
-            fx = cx + (i - 1) * spacing
-            tip_y = cy - r
-            fh = base_y - tip_y
-            # Teardrop: ellipse body + triangular tip
-            draw.ellipse([fx - fw, tip_y + fh // 3, fx + fw, base_y], fill=color)
-            draw.polygon([(fx, tip_y), (fx - fw, tip_y + fh // 3), (fx + fw, tip_y + fh // 3)],
-                         fill=color)
+        # ── Dove descending into flame — approved design (preview v63) ────────
+        # The outer flame is always drawn red regardless of the color param.
+        # The dove (body, wings, beak, halo) uses background (white).
+        # All offsets are for the canonical 64×84 slot; sw/sh adapt to other sizes.
+        _flame_red = (210, 0, 0)
+        sw = w / 64; sh = h / 84
+        def _p(dx, dy):   # scale offset and return absolute point
+            return (int(cx + dx*sw), int(y + dy*sh))
+        # Outer flame (two-tongued teardrop, fills slot) — always red
+        draw.polygon([
+            _p( 4,  2), _p(12, 10), _p(20, 20), _p(25, 32), _p(27, 44),
+            _p(26, 54), _p(22, 63), _p(16, 71), _p( 8, 77), _p( 3, 80),
+            _p(-3, 80), _p(-8, 77), _p(-16,71), _p(-22,63), _p(-26,54),
+            _p(-27,44), _p(-25,32), _p(-20,22), _p(-22,16), _p(-16, 6),
+            _p(-8, 14), _p(-2, 22), _p( 1, 14),
+        ], fill=_flame_red)
+        # Body + oval head (white dove, tail-notch at top)
+        draw.polygon([
+            _p( 7, 24), _p( 4, 32), _p( 4, 60),
+            _p( 6, 63), _p( 6, 66), _p( 4, 69),
+            _p( 2, 71), _p(-2, 71), _p(-4, 69),
+            _p(-6, 66), _p(-6, 63), _p(-4, 60),
+            _p(-4, 32), _p(-7, 24), _p( 0, 28),   # (0,28) = tail-notch vertex
+        ], fill=background)
+        # Beak: small downward triangle
+        draw.polygon([_p(-3, 69), _p(3, 69), _p(0, 75)], fill=background)
+        # Right wing — swept-back sickle
+        draw.polygon([
+            _p( 4, 36), _p(16, 28), _p(19, 40), _p(13, 54), _p(4, 56),
+        ], fill=background)
+        # Left wing — mirror
+        draw.polygon([
+            _p(-4, 36), _p(-16,28), _p(-19,40), _p(-13,54), _p(-4,56),
+        ], fill=background)
+        # Halo — thin white circle around head (drawn last, on top of wings)
+        hcx = int(cx); hcy = int(y + 65*sh); hr2 = max(1, int(9*sw))
+        draw.ellipse([hcx-hr2, hcy-hr2, hcx+hr2, hcy+hr2],
+                     outline=background, width=1)
 
     elif "trinity" in s:
-        # ── Triquetra: three 300° arcs at 120° rotations ─────────────────────
-        # Each circle passes through the other two circles' centres.
-        # d = distance of arc-centre from main centre; arc_r = arc circle radius.
-        d = r / (1 + math.sqrt(3))
-        arc_r = d * math.sqrt(3)
-        sq3h = math.sqrt(3) / 2
-        centres = [
-            (cx,               cy - d),           # top
-            (cx + d * sq3h,    cy + d / 2),        # lower-right
-            (cx - d * sq3h,    cy + d / 2),        # lower-left
-        ]
-        # (start, end) in Pillow's clockwise convention; each arc is 300°
-        arcs = [(120, 60), (240, 180), (0, 300)]
-        for (px, py), (start, end) in zip(centres, arcs):
-            bbox = [px - arc_r, py - arc_r, px + arc_r, py + arc_r]
-            draw.arc(bbox, start=start, end=end, fill=color, width=lw)
+        # ── Triquetra: three inner interlocked arcs, full-slot scale ─────────
+        # Uses tri_r = side//2 - small_pad so arcs fill the slot width.
+        sq3h    = math.sqrt(3) / 2
+        tri_pad = 0
+        tri_r   = side // 2 - tri_pad
+        d       = tri_r * 407 // 1000   # d=13 at side=64; arcs fill slot width
+        arc_r   = int(d * math.sqrt(3))
+        tri_lw  = max(2, tri_r // 7)    # slightly thicker for visual weight
+        c1 = (cx,                  cy - d)
+        c2 = (cx + int(d * sq3h), cy + d // 2)
+        c3 = (cx - int(d * sq3h), cy + d // 2)
+        def _tarc(centre, start, end):
+            px, py = centre
+            bb = [px - arc_r, py - arc_r, px + arc_r, py + arc_r]
+            draw.arc(bb, start=start, end=end, fill=color, width=tri_lw)
+        _tarc(c1,   3, 177)
+        _tarc(c2, 118, 303)
+        _tarc(c3, 237,  62)
 
     else:
         # ── Fallback: plain Latin cross ───────────────────────────────────────
