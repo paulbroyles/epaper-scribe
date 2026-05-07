@@ -25,6 +25,7 @@ from .liturgical_calendar import (
     CombinedResult,
     fetch_catholic_year,
     get_catholic_feasts,
+    get_catholic_season,
     get_combined_result,
 )
 
@@ -74,6 +75,12 @@ SEASON_DESCRIPTIONS: dict[str, str] = {
         "It begins with the palms and acclamations of Palm Sunday and moves through the Last Supper, "
         "the crucifixion on Good Friday, and the long vigil of Holy Saturday."
     ),
+    "Paschal Triduum": (
+        "The Paschal Triduum is the heart of the liturgical year — three days treated as one great vigil. "
+        "It begins at the Mass of the Lord's Supper on Holy Thursday evening, continues through "
+        "the Passion on Good Friday and the silence of Holy Saturday, "
+        "and reaches its climax at the Easter Vigil."
+    ),
     "Easter": (
         "The Great Fifty Days of Easter are the chief festival of the Christian year. "
         "The Church celebrates the resurrection of Jesus from the dead — death defeated, new life poured out. "
@@ -94,6 +101,12 @@ SEASON_DESCRIPTIONS: dict[str, str] = {
         "All Saints, All Souls, and the feast of Christ the King mark this season. "
         "The Church looks beyond the present toward the Kingdom that is coming — "
         "the final restoration of all things."
+    ),
+    "Ordinary": (
+        "Ordinary Time is the season of daily faithfulness — the Church living out "
+        "in the world what it has celebrated at the font and table. "
+        "Green vestments mark a season of growth: hearing the Word, practising charity, "
+        "and being formed week by week into the Body of Christ."
     ),
 }
 
@@ -374,15 +387,17 @@ class SaintsDayProvider(ContentProvider):
             rank_label = _CAT_RANK_LABELS.get(primary.rank.lower(), primary.rank.title())
             calendar_tag = f"Catholic {rank_label}"
 
+        season = await self.hass.async_add_executor_job(get_catholic_season, today)
+        season_desc = _get_season_description(season)
+
         font_path = self.config.get(CONF_FONT_PATH)
         name_font_path = self.config.get(CONF_NAME_FONT_PATH)
-        season_desc = ""  # Catholic mode has no Anglican season framework
         composed = await self.hass.async_add_executor_job(
             _compose_image,
             size,
             parsed,
-            "",   # season — not available without Anglican data
-            "",   # week
+            season,
+            "",   # week — not available from romcal
             description if saint_name else season_desc,
             image_bytes,
             font_path,
@@ -401,10 +416,10 @@ class SaintsDayProvider(ContentProvider):
         return {
             "saint_name": saint_name,
             "saint_role": saint_role,
-            "season": "",
+            "season": season,
             "week": "",
             "description": description,
-            "season_description": "",
+            "season_description": season_desc,
             "has_saint": bool(saint_name),
             "calendar_source": "catholic",
             "calendar_flag": False,

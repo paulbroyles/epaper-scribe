@@ -108,6 +108,18 @@ class CombinedResult:
 
 _romcal = Romcal(localized_calendar=GeneralRoman_En)
 _year_cache: dict[int, dict[str, list[CatholicFeast]]] = {}
+_season_cache: dict[int, dict[str, str]] = {}  # {year: {iso_date: display_season}}
+
+# romcal Season enum values to include (others, e.g. sub-period strings, are ignored).
+_ROMCAL_SEASONS: frozenset[str] = frozenset({
+    "ADVENT", "CHRISTMAS_TIME", "ORDINARY_TIME",
+    "LENT", "PASCHAL_TRIDUUM", "EASTER_TIME",
+})
+
+
+def _romcal_season_display(s: str) -> str:
+    """Convert 'EASTER_TIME' → 'Easter Time', 'ADVENT' → 'Advent', etc."""
+    return s.replace("_", " ").title()
 
 
 # ---------------------------------------------------------------------------
@@ -115,12 +127,21 @@ _year_cache: dict[int, dict[str, list[CatholicFeast]]] = {}
 # ---------------------------------------------------------------------------
 
 
-def _build_year_calendar(year: int) -> dict[str, list[CatholicFeast]]:
-    """Generate the full Roman Catholic calendar for *year* via python-romcal."""
+def _build_year_calendar(year: int) -> None:
+    """Generate the full Roman Catholic calendar for *year* and populate caches."""
     raw = _romcal.generate_calendar(year)
 
     calendar: dict[str, list[CatholicFeast]] = {}
+    seasons: dict[str, str] = {}
     for date_str, days in raw.items():
+        # Season: take the first day's seasons list (highest-precedence entry).
+        # days[0].seasons is a list like ["LENT"] or ["EASTER_TIME"].
+        if days:
+            for s in days[0].seasons:
+                if s in _ROMCAL_SEASONS:
+                    seasons[date_str] = _romcal_season_display(s)
+                    break
+
         feasts: list[CatholicFeast] = []
         for day in days:
             rank = _RANK_MAP.get(day.rank)
@@ -135,7 +156,13 @@ def _build_year_calendar(year: int) -> dict[str, list[CatholicFeast]]:
         if feasts:
             calendar[date_str] = feasts
 
-    return calendar
+    _year_cache[year] = calendar
+    _season_cache[year] = seasons
+
+
+def _ensure_year(year: int) -> None:
+    if year not in _year_cache:
+        _build_year_calendar(year)
 
 
 def get_catholic_feasts(d: date) -> list[CatholicFeast]:
@@ -146,10 +173,18 @@ def get_catholic_feasts(d: date) -> list[CatholicFeast]:
     date). ProperOfTime entries are included; callers in combined mode
     should apply _filter_proper_of_time() before further processing.
     """
-    year = d.year
-    if year not in _year_cache:
-        _year_cache[year] = _build_year_calendar(year)
-    return _year_cache[year].get(d.isoformat(), [])
+    _ensure_year(d.year)
+    return _year_cache[d.year].get(d.isoformat(), [])
+
+
+def get_catholic_season(d: date) -> str:
+    """Return the display season string for *d* in the Roman Catholic calendar.
+
+    Returns one of: "Advent", "Christmas", "Ordinary", "Lent", "Holy Week",
+    "Easter" — or "" if romcal has no season data for the date.
+    """
+    _ensure_year(d.year)
+    return _season_cache[d.year].get(d.isoformat(), "")
 
 
 def fetch_catholic_year(year: int) -> dict[str, list[CatholicFeast]]:
@@ -157,8 +192,7 @@ def fetch_catholic_year(year: int) -> dict[str, list[CatholicFeast]]:
 
     Runs synchronously; intended to be called via async_add_executor_job.
     """
-    if year not in _year_cache:
-        _year_cache[year] = _build_year_calendar(year)
+    _ensure_year(year)
     return dict(_year_cache[year])
 
 

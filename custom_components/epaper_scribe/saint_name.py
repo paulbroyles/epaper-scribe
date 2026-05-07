@@ -482,7 +482,7 @@ def _draw_season_symbol(
             (int(tail_x),    int(cy + fish_hh)),
         ], fill=background, outline=color, width=fish_lw)
 
-    elif "holy week" in s or "holy_week" in s:
+    elif "holy week" in s or "holy_week" in s or "triduum" in s:
         # ── Palm frond: quadratic-Bézier rachis + 14 leaflet pairs ───────────
         # Approved design (preview v27+). Rachis curves from lower-right (base)
         # to upper-left (tip).  Each leaflet is a filled lozenge polygon;
