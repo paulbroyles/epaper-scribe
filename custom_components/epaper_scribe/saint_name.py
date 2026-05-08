@@ -738,8 +738,6 @@ def render_saints_day_image(
 
     role_pt = max(9, H // 11)
     desc_pt_min = max(10, H // 12)    # display floor — nothing rendered below this
-    desc_budget_pt = max(9, H // 14)  # budget floor — used only to compute how much
-                                       # text to extract; may be < desc_pt_min
     role_font = _load_body(role_pt)
 
     # ---- Portrait slot width ------------------------------------------------
@@ -816,12 +814,11 @@ def render_saints_day_image(
         return _wrap_lines(text, text_w, probe_draw, f), mx
 
     # Step 1: compute display text
-    # Use desc_budget_pt (can be smaller than the display floor) to measure the
-    # maximum capacity of the panel, so we extract as much content as possible
-    # before the enlargement step scales the font back up.
+    # Wrap at desc_pt_min (the display floor) to find the maximum content that
+    # will fit at the smallest acceptable size, then trim to a sentence boundary.
     display_text = description
     if description and text_w > 0 and avail_h > 0:
-        floor_lines, max_lines_floor = _wrap_for_pt(desc_budget_pt, description)
+        floor_lines, max_lines_floor = _wrap_for_pt(desc_pt_min, description)
         candidate = " ".join(floor_lines[:max_lines_floor])
         last_end = max(candidate.rfind("."), candidate.rfind("!"), candidate.rfind("?"))
         display_text = candidate[: last_end + 1] if last_end >= 0 else candidate
