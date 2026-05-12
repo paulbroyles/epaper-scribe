@@ -738,53 +738,36 @@ class SaintsDayProvider(ContentProvider):
 
         Strategy
         ────────
-        1. Fetch all article-namespace links on the disambiguation page whose
-           title contains *first_name*.
-        2. For each candidate, fetch the REST summary and score it:
-               +10  if the article text contains the known death year
-               +5   if the article text mentions today's feast date
-        3. Return the highest-scoring candidate that has score > 0 (at least
-           one signal matched).  Returns ("", "") when no candidate scores.
+        1. Fetch the disambiguation page wikitext and parse section headers.
+           Only collect article links from sections whose header contains
+           "people", "saints", "religious", etc.  If no such sections exist,
+           fall back to every link whose title contains *first_name*.
+
+        2. For each candidate article, fetch its wikitext and inspect the
+           infobox fields ``feast_day`` and ``death_date`` directly:
+               +20  infobox death_date contains the known death year
+               +15  infobox feast_day contains today's feast date
+
+        3. Also score the REST summary text as a lower-confidence fallback:
+               +5   article text mentions the death year
+               +3   article text mentions today's feast date
+
+        4. Return the highest-scoring candidate that has score > 0.
+           Returns ("", "") when no candidate passes the threshold.
 
         This deliberately requires a positive signal — it never guesses.
+        Multi-line infobox templates (e.g. ``{{indented plainlist}}``) are
+        handled by scanning the following lines after the field declaration.
         """
         import calendar as _cal
+        import re as _re
 
-        # ── 1. Get candidate article titles from the disambiguation page ──────
-        try:
-            session = async_get_clientsession(self.hass)
-            headers = {"User-Agent": "HomeAssistantDisplay/1.0 epaper-scribe"}
-            url = (
-                WIKIPEDIA_MW_API
-                + "?action=query&prop=links&pllimit=50&plnamespace=0"
-                + "&format=json&redirects=1&titles=" + quote(dis_title)
-            )
-            async with session.get(url, headers=headers) as resp:
-                if resp.status != 200:
-                    return "", ""
-                data = await resp.json()
-            pages = data.get("query", {}).get("pages", {})
-            fn_lower = first_name.lower()
-            candidates: list[str] = [
-                link["title"]
-                for page in pages.values()
-                for link in page.get("links", [])
-                if fn_lower in link.get("title", "").lower()
-            ]
-        except Exception as exc:
-            _LOGGER.debug("Disambiguation links fetch failed for %r: %s", dis_title, exc)
-            return "", ""
+        session = async_get_clientsession(self.hass)
+        headers = {"User-Agent": "HomeAssistantDisplay/1.0 epaper-scribe"}
+        fn_lower = first_name.lower()
+        year_str = str(hint_year) if hint_year is not None else ""
 
-        if not candidates:
-            _LOGGER.debug("Disambiguation %r: no candidates matching %r", dis_title, first_name)
-            return "", ""
-
-        _LOGGER.debug(
-            "Disambiguation %r: %d candidate(s): %s",
-            dis_title, len(candidates), candidates,
-        )
-
-        # ── 2. Build feast-date match patterns ────────────────────────────────
+        # ── Build feast-date match patterns ───────────────────────────────────
         feast_patterns: list[str] = []
         if hint_mmdd:
             try:
@@ -798,28 +781,137 @@ class SaintsDayProvider(ContentProvider):
             except (ValueError, IndexError):
                 pass
 
+        # ── 1. Fetch disambiguation page wikitext ─────────────────────────────
+        try:
+            url = (
+                WIKIPEDIA_MW_API
+                + "?action=query&prop=revisions&rvprop=content&rvslots=main"
+                + "&format=json&redirects=1&titles=" + quote(dis_title)
+            )
+            async with session.get(url, headers=headers) as resp:
+                if resp.status != 200:
+                    return "", ""
+                data = await resp.json()
+            pages = data.get("query", {}).get("pages", {})
+            dis_wikitext = ""
+            for page in pages.values():
+                rev = (page.get("revisions") or [{}])[0]
+                dis_wikitext = (
+                    rev.get("slots", {}).get("main", {}).get("*", "")
+                    or rev.get("*", "")
+                )
+                break
+        except Exception as exc:
+            _LOGGER.debug("Disambiguation wikitext fetch failed for %r: %s", dis_title, exc)
+            return "", ""
+
+        # ── 2. Parse wikitext — section-filtered candidate links ──────────────
+        PERSON_KEYWORDS = {
+            "people", "person", "persons", "saints", "saint",
+            "religious", "clergy", "christian", "christians",
+            "martyr", "martyrs", "biography", "biographies",
+        }
+
+        in_person_section = False
+        has_person_sections = False
+        person_links: list[str] = []   # links from person-type sections
+        all_name_links: list[str] = [] # all links matching first_name
+
+        for line in dis_wikitext.split("\n"):
+            hdr_m = _re.match(r'^={2,}\s*(.+?)\s*={2,}\s*$', line)
+            if hdr_m:
+                words = set(hdr_m.group(1).lower().split())
+                in_person_section = bool(words & PERSON_KEYWORDS)
+                if in_person_section:
+                    has_person_sections = True
+                continue
+            for lm in _re.finditer(r'\[\[([^\]|#]+)(?:\|[^\]]*)?\]\]', line):
+                title = lm.group(1).strip()
+                if fn_lower in title.lower():
+                    all_name_links.append(title)
+                    if in_person_section:
+                        person_links.append(title)
+
+        # Prefer section-filtered list; fall back to all-name list when no
+        # person sections were found or (safety) when section list is empty.
+        raw_candidates = (
+            person_links
+            if has_person_sections and person_links
+            else all_name_links
+        )
+        # Deduplicate while preserving order
+        seen_c: set[str] = set()
+        candidates: list[str] = []
+        for t in raw_candidates:
+            if t not in seen_c:
+                seen_c.add(t)
+                candidates.append(t)
+
+        if not candidates:
+            _LOGGER.debug("Disambiguation %r: no candidates matching %r", dis_title, first_name)
+            return "", ""
+
+        _LOGGER.debug(
+            "Disambiguation %r: %d candidate(s) (person_sections=%s): %s",
+            dis_title, len(candidates), has_person_sections, candidates,
+        )
+
         # ── 3. Score each candidate ───────────────────────────────────────────
         best_ex = ""
         best_img = ""
         best_score = -1
 
         for title in candidates:
+            infobox_score = 0
+
+            # 3a. Fetch candidate wikitext for infobox field scoring
+            try:
+                url = (
+                    WIKIPEDIA_MW_API
+                    + "?action=query&prop=revisions&rvprop=content&rvslots=main"
+                    + "&format=json&redirects=1&titles=" + quote(title)
+                )
+                async with session.get(url, headers=headers) as resp:
+                    if resp.status == 200:
+                        art_data = await resp.json()
+                        art_pages = art_data.get("query", {}).get("pages", {})
+                        art_wikitext = ""
+                        for art_page in art_pages.values():
+                            rev = (art_page.get("revisions") or [{}])[0]
+                            art_wikitext = (
+                                rev.get("slots", {}).get("main", {}).get("*", "")
+                                or rev.get("*", "")
+                            )
+                            break
+                        if art_wikitext:
+                            death_val = _extract_infobox_field(art_wikitext, "death_date")
+                            feast_val = _extract_infobox_field(art_wikitext, "feast_day")
+                            if year_str and death_val and year_str in death_val:
+                                infobox_score += 20
+                            if feast_patterns and feast_val:
+                                fv_lower = feast_val.lower()
+                                if any(p in fv_lower for p in feast_patterns):
+                                    infobox_score += 15
+            except Exception as exc:
+                _LOGGER.debug("Wikitext fetch failed for candidate %r: %s", title, exc)
+
+            # 3b. Fetch REST summary for extract text + image
             ex, img, dis = await self._fetch_wikipedia_one_full(title)
             if not ex or dis:
                 continue   # skip failed fetches and nested disambiguations
 
-            score = 0
+            text_score = 0
             text_lower = ex.lower()
+            if year_str and year_str in ex:
+                text_score += 5
+            if feast_patterns and any(p in text_lower for p in feast_patterns):
+                text_score += 3
 
-            if hint_year is not None and str(hint_year) in ex:
-                score += 10
-
-            for pat in feast_patterns:
-                if pat in text_lower:
-                    score += 5
-                    break
-
-            _LOGGER.debug("Disambiguation candidate %r: score=%d", title, score)
+            score = infobox_score + text_score
+            _LOGGER.debug(
+                "Disambiguation candidate %r: infobox=%d text=%d total=%d",
+                title, infobox_score, text_score, score,
+            )
 
             if score > best_score:
                 best_score = score
@@ -1264,6 +1356,42 @@ def _compute_calendar_tag(
         return _CAT_RANK_LABELS.get(cat_key, cat_rank_str.title())
     ang_label = _ANG_TYPE_LABELS.get(ang_key, "")
     return ang_label
+
+
+# ---------------------------------------------------------------------------
+# Wikipedia wikitext helpers
+# ---------------------------------------------------------------------------
+
+def _extract_infobox_field(wikitext: str, field_name: str) -> str:
+    """Extract a named field's raw value from a Wikipedia infobox.
+
+    Handles both single-line values and multi-line values produced by
+    templates such as ``{{indented plainlist}}``.  Returns a string
+    containing the field declaration line plus up to four following lines,
+    which is sufficient for the date patterns we check.
+
+    Example inputs handled:
+      ``| death_date = 12 May 303 or 304``          → one-line
+      ``| feast_day = {{indented plainlist           → multi-line
+           | 23 April
+           | 3 November (Eastern)
+        }}``
+    """
+    import re as _re
+
+    pattern = _re.compile(
+        r'^\|\s*' + _re.escape(field_name) + r'\s*=',
+        _re.IGNORECASE | _re.MULTILINE,
+    )
+    m = pattern.search(wikitext)
+    if not m:
+        return ""
+    # Return the field declaration line plus up to 4 subsequent lines so
+    # that multi-line template bodies are included in the search window.
+    start = wikitext.rfind("\n", 0, m.start()) + 1   # start of that line
+    segment = wikitext[start:]
+    lines = segment.split("\n", 5)[:5]               # field line + 4 more
+    return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
