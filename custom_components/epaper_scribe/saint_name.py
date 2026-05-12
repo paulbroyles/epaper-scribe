@@ -720,7 +720,7 @@ def render_saints_day_image(
             except Exception:
                 pass
         try:
-            return ImageFont.load_default(size=round(pt))
+            return ImageFont.load_default(size=pt)   # Pillow ≥10 accepts floats
         except TypeError:
             return ImageFont.load_default()
 
@@ -785,21 +785,27 @@ def render_saints_day_image(
     portrait_y = header_h + subtitle_h
     slot_w = portrait_side
     slot_h = H - portrait_y
-    text_x = portrait_side + PAD
+    # For saint days without a portrait image, use the full panel width for
+    # text — the left column would otherwise be empty wasted space.
+    # Ferial days always keep the left column for the season symbol.
+    use_full_width = has_saint and not saint_image_bytes
+    text_x = PAD if use_full_width else portrait_side + PAD
     text_w = W - text_x - PAD
     text_y = portrait_y + PAD
     avail_h = H - text_y - PAD     # full available height; float handles tag clearance
 
     # ---- Determine display text and font size --------------------------------
     #
-    # Step 1 — content budget: wrap the full description at the legibility
-    #   floor font, take however many lines fit in avail_h, then trim back to
-    #   the last sentence boundary.  This is the fixed display text — as much
-    #   content as the panel can ever show at the smallest acceptable size.
+    # Step 1 — content selection: wrap the full description at desc_pt_min,
+    #   take as many lines as fit in avail_h, trim to the last genuine sentence
+    #   boundary.  "Genuine" means . ! ? followed by a capital letter or
+    #   end-of-string — this skips abbreviation periods like "c." or "St."
+    #   This gives display_text: the maximum complete sentences the panel can
+    #   ever show, regardless of font size.
     #
-    # Step 2 — enlarge: find the largest font at which all of that display text
-    #   still fits.  The text is already correctly sized; we just scale the font
-    #   up as far as the layout allows.
+    # Step 2 — font scaling: find the largest font at which all of display_text
+    #   still fits within avail_h.  The text content is now fixed; we only
+    #   scale the font up as far as the layout allows.
 
     def _wrap_for_pt(pt: float, text: str):
         """Return (lines, max_lines) using float-aware wrapping at *pt*."""
@@ -813,23 +819,19 @@ def render_saints_day_image(
             return _wrap_lines_float(text, text_w, rw, fs, probe_draw, f), mx
         return _wrap_lines(text, text_w, probe_draw, f), mx
 
-    # Step 1: compute display text
-    # Wrap at desc_pt_min (the display floor) to find the maximum content that
-    # will fit at the smallest acceptable size, then trim to a sentence boundary.
+    # Step 1: compute display_text
     display_text = description
     if description and text_w > 0 and avail_h > 0:
         floor_lines, max_lines_floor = _wrap_for_pt(desc_pt_min, description)
         candidate = " ".join(floor_lines[:max_lines_floor])
-        last_end = max(candidate.rfind("."), candidate.rfind("!"), candidate.rfind("?"))
+        last_end = _last_sentence_end(candidate)
         display_text = candidate[: last_end + 1] if last_end >= 0 else candidate
 
-    # Step 2: find largest font where display_text fits.
-    # Step by 0.1pt when a TrueType path is available (truetype() accepts floats);
-    # fall back to 1pt integer steps for the bitmap default font.
+    # Step 2: find the largest font where display_text fits.
     desc_pt: float = desc_pt_min
     if display_text and text_w > 0 and avail_h > 0:
         max_desc_pt = max(desc_pt_min, min(H // 2, 80))
-        step = 0.1 if font_path else 1.0   # body font governs stepping
+        step = 0.1   # load_default(size=float) works in Pillow ≥10
         pt = float(max_desc_pt)
         while pt >= desc_pt_min:
             lines, max_lines = _wrap_for_pt(pt, display_text)
@@ -921,6 +923,24 @@ def render_saints_day_image(
     buf = BytesIO()
     img.save(buf, format="PNG")
     return buf.getvalue()
+
+
+def _last_sentence_end(text: str) -> int:
+    """Return the index of the last genuine sentence-ending character in *text*.
+
+    Only counts `.`, `!`, or `?` that are followed by a capital letter
+    (possibly after whitespace) or that occur at the end of the string.
+    Abbreviation periods like "c." or "St." — which are followed by a
+    lowercase letter or digit — are ignored.
+
+    Returns -1 if no genuine sentence boundary is found.
+    """
+    last = -1
+    for m in re.finditer(r'[.!?]', text):
+        after = text[m.end():].lstrip()
+        if not after or after[0].isupper():
+            last = m.start()
+    return last
 
 
 def _wrap_lines_float(
