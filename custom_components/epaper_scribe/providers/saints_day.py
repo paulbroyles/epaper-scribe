@@ -110,6 +110,28 @@ SEASON_DESCRIPTIONS: dict[str, str] = {
     ),
 }
 
+def _martyrology_death_year(martyrology: tuple) -> int | None:
+    """Return the earliest numeric death year from a martyrology tuple, or None.
+
+    Only integer years and ISO-date strings are considered — dict forms
+    (century, or, between) are too vague to be useful as a disambiguation signal.
+    """
+    result: int | None = None
+    for item in martyrology:
+        dod = item.date_of_death
+        if isinstance(dod, int):
+            if result is None or dod < result:
+                result = dod
+        elif isinstance(dod, str):
+            try:
+                y = int(dod[:4])
+                if result is None or y < result:
+                    result = y
+            except (ValueError, TypeError):
+                pass
+    return result
+
+
 def _compose_martyrology_description(martyrology: tuple) -> str:
     """Build a brief fallback prose description from martyrology items.
 
@@ -418,6 +440,10 @@ class SaintsDayProvider(ContentProvider):
         description = ""
         image_bytes: bytes | None = None
 
+        # Fetch Catholic feasts early so we can extract the death-year hint
+        # for Wikipedia disambiguation resolution before the Wikipedia fetch.
+        cat_feasts_today = await self.hass.async_add_executor_job(get_catholic_feasts, today)
+
         parsed = None
         if result.source != "none" and result.display_name:
             from ..saint_name import parse_saint_name
@@ -428,7 +454,23 @@ class SaintsDayProvider(ContentProvider):
 
             names = [s.name for s in parsed.segments] if parsed.segments else [result.display_name]
             descs = [s.descriptor for s in parsed.segments] if parsed.segments else []
-            description, image_url = await self._fetch_wikipedia(names, result.wiki_url, descs)
+
+            # Derive death-year hint from the matching Catholic feast (if the
+            # winner is Catholic-sourced).  Anglican-sourced saints rely on
+            # wiki_url (step 0) so hint_year is less important for them.
+            hint_year: int | None = None
+            if result.source == "catholic" and cat_feasts_today:
+                cat_feast_hint = next(
+                    (f for f in cat_feasts_today if f.name == result.display_name),
+                    cat_feasts_today[0],
+                )
+                hint_year = _martyrology_death_year(cat_feast_hint.martyrology)
+
+            description, image_url = await self._fetch_wikipedia(
+                names, result.wiki_url, descs,
+                hint_year=hint_year,
+                hint_mmdd=today.strftime("%m-%d"),
+            )
             if image_url:
                 image_bytes = await self._fetch_image(image_url)
 
@@ -436,7 +478,6 @@ class SaintsDayProvider(ContentProvider):
         name_font_path = self.config.get(CONF_NAME_FONT_PATH)
         season_desc = _get_season_description(result.season)
         ang_type = result.anglican.type_ if result.anglican else ""
-        cat_feasts_today = await self.hass.async_add_executor_job(get_catholic_feasts, today)
 
         # Martyrology fallback for Catholic-sourced saints when Wikipedia fails.
         # Find the matching CatholicFeast by name (fall back to first if no exact match).
@@ -589,7 +630,11 @@ class SaintsDayProvider(ContentProvider):
 
             names = [s.name for s in parsed.segments] if parsed.segments else [primary.name]
             descs = [s.descriptor for s in parsed.segments] if parsed.segments else []
-            description, image_url = await self._fetch_wikipedia(names, "", descs)
+            description, image_url = await self._fetch_wikipedia(
+                names, "", descs,
+                hint_year=_martyrology_death_year(primary.martyrology),
+                hint_mmdd=today.strftime("%m-%d"),
+            )
             if image_url:
                 image_bytes = await self._fetch_image(image_url)
 
@@ -644,11 +689,23 @@ class SaintsDayProvider(ContentProvider):
     # ------------------------------------------------------------------
 
     async def _fetch_wikipedia_one(self, search_term: str) -> tuple[str, str]:
-        """Fetch the Wikipedia REST summary for *search_term* (a page title).
+        """Fetch the Wikipedia REST summary for *search_term*.
 
-        Wikipedia follows redirects.  Disambiguation pages are treated as
-        failures (returns ("", "")) so the caller can try the next candidate.
-        Returns ("", "") on any non-200 status or exception.
+        Thin wrapper around _fetch_wikipedia_one_full; hides the disambiguation
+        title from callers that don't need it.  Returns ("", "") on
+        disambiguation, non-200 status, or exception.
+        """
+        ex, img, _ = await self._fetch_wikipedia_one_full(search_term)
+        return ex, img
+
+    async def _fetch_wikipedia_one_full(
+        self, search_term: str
+    ) -> tuple[str, str, str]:
+        """Fetch Wikipedia REST summary, surfacing disambiguation page titles.
+
+        Returns (extract, image_url, dis_title) where dis_title is the
+        canonical Wikipedia page title when the result is a disambiguation page,
+        and "" otherwise.  extract and image_url are "" on disambiguation.
         """
         try:
             session = async_get_clientsession(self.hass)
@@ -656,17 +713,125 @@ class SaintsDayProvider(ContentProvider):
             url = WIKIPEDIA_API + quote(search_term)
             async with session.get(url, headers=headers) as resp:
                 if resp.status != 200:
-                    return "", ""
+                    return "", "", ""
                 data = await resp.json()
             if data.get("type") == "disambiguation":
-                return "", ""
+                # Return the canonical title so the caller can resolve it.
+                return "", "", data.get("title", search_term)
             return (
                 data.get("extract", ""),
                 data.get("thumbnail", {}).get("source", ""),
+                "",
             )
         except Exception as exc:
             _LOGGER.warning("Wikipedia fetch failed for %r: %s", search_term, exc)
+            return "", "", ""
+
+    async def _resolve_from_disambiguation(
+        self,
+        dis_title: str,
+        first_name: str,
+        hint_year: int | None,
+        hint_mmdd: str,
+    ) -> tuple[str, str]:
+        """Identify the correct saint article from a Wikipedia disambiguation page.
+
+        Strategy
+        ────────
+        1. Fetch all article-namespace links on the disambiguation page whose
+           title contains *first_name*.
+        2. For each candidate, fetch the REST summary and score it:
+               +10  if the article text contains the known death year
+               +5   if the article text mentions today's feast date
+        3. Return the highest-scoring candidate that has score > 0 (at least
+           one signal matched).  Returns ("", "") when no candidate scores.
+
+        This deliberately requires a positive signal — it never guesses.
+        """
+        import calendar as _cal
+
+        # ── 1. Get candidate article titles from the disambiguation page ──────
+        try:
+            session = async_get_clientsession(self.hass)
+            headers = {"User-Agent": "HomeAssistantDisplay/1.0 epaper-scribe"}
+            url = (
+                WIKIPEDIA_MW_API
+                + "?action=query&prop=links&pllimit=50&plnamespace=0"
+                + "&format=json&redirects=1&titles=" + quote(dis_title)
+            )
+            async with session.get(url, headers=headers) as resp:
+                if resp.status != 200:
+                    return "", ""
+                data = await resp.json()
+            pages = data.get("query", {}).get("pages", {})
+            fn_lower = first_name.lower()
+            candidates: list[str] = [
+                link["title"]
+                for page in pages.values()
+                for link in page.get("links", [])
+                if fn_lower in link.get("title", "").lower()
+            ]
+        except Exception as exc:
+            _LOGGER.debug("Disambiguation links fetch failed for %r: %s", dis_title, exc)
             return "", ""
+
+        if not candidates:
+            _LOGGER.debug("Disambiguation %r: no candidates matching %r", dis_title, first_name)
+            return "", ""
+
+        _LOGGER.debug(
+            "Disambiguation %r: %d candidate(s): %s",
+            dis_title, len(candidates), candidates,
+        )
+
+        # ── 2. Build feast-date match patterns ────────────────────────────────
+        feast_patterns: list[str] = []
+        if hint_mmdd:
+            try:
+                month_num = int(hint_mmdd.split("-")[0])
+                day_num   = int(hint_mmdd.split("-")[1])
+                month_name = _cal.month_name[month_num].lower()
+                feast_patterns = [
+                    f"{month_name} {day_num}",   # "may 12"
+                    f"{day_num} {month_name}",    # "12 may"
+                ]
+            except (ValueError, IndexError):
+                pass
+
+        # ── 3. Score each candidate ───────────────────────────────────────────
+        best_ex = ""
+        best_img = ""
+        best_score = -1
+
+        for title in candidates:
+            ex, img, dis = await self._fetch_wikipedia_one_full(title)
+            if not ex or dis:
+                continue   # skip failed fetches and nested disambiguations
+
+            score = 0
+            text_lower = ex.lower()
+
+            if hint_year is not None and str(hint_year) in ex:
+                score += 10
+
+            for pat in feast_patterns:
+                if pat in text_lower:
+                    score += 5
+                    break
+
+            _LOGGER.debug("Disambiguation candidate %r: score=%d", title, score)
+
+            if score > best_score:
+                best_score = score
+                best_ex = ex
+                best_img = img
+
+        if best_score > 0:
+            _LOGGER.debug("Disambiguation resolved %r → score=%d", dis_title, best_score)
+            return best_ex, best_img
+
+        _LOGGER.debug("Disambiguation %r: no candidate had a positive score", dis_title)
+        return "", ""
 
     async def _fetch_wikipedia_url(self, wiki_url: str) -> tuple[str, str]:
         """Fetch Wikipedia summary from a known /wiki/… URL."""
@@ -681,12 +846,19 @@ class SaintsDayProvider(ContentProvider):
         names: list[str],
         wiki_url: str = "",
         descriptors: list[str] | None = None,
+        hint_year: int | None = None,
+        hint_mmdd: str = "",
     ) -> tuple[str, str]:
         """Fetch a Wikipedia description for one or more saints.
 
         *names* may include compound entries like "Philip and James"; these are
         expanded into individual people.  *descriptors* are the corresponding
         role words per name segment ("Apostles", "Monk", …).
+
+        *hint_year* (death year from martyrology) and *hint_mmdd* ("MM-DD"
+        today's feast date) are used to resolve disambiguation pages: when all
+        direct searches fail because a title is a disambiguation page, we scan
+        that page's linked articles and score them against the hints.
 
         Search cascade
         ──────────────
@@ -699,12 +871,18 @@ class SaintsDayProvider(ContentProvider):
 
         For each individual (once joint searches fail):
           2a. "Saint {name}, {descriptor}"  (e.g. "Saint Philip, Apostle")
-          2b. "Saint {name}"
-          2c. "{name}"
+          2b. "Saint {name} the {descriptor}"
+          2c. "{name} the {descriptor}"
+          2d. "Saint {name}"
+          2e. "{name}"
           First sentences are combined; first image is used.
 
+          If every candidate returns ("","") and at least one was a
+          disambiguation page, _resolve_from_disambiguation is called with the
+          death-year and feast-date hints before moving on.
+
         For a *single* name with no expansion:
-          Same individual cascade (2a–2c).
+          Same individual cascade (2a–2e).
 
         The authoritative *wiki_url* (from the Anglican calendar) is tried
         before any search, but only accepted if it covers all individuals.
@@ -791,11 +969,23 @@ class SaintsDayProvider(ContentProvider):
 
             ex = im = ""
             successful_q = ""
+            first_dis_title = ""   # canonical title of first disambiguation hit
             for q in candidates:
-                ex, im = await self._fetch_wikipedia_one(q)
+                ex, im, dis_title = await self._fetch_wikipedia_one_full(q)
                 if ex:
                     successful_q = q
                     break
+                if dis_title and not first_dis_title:
+                    first_dis_title = dis_title
+
+            # Disambiguation fallback: all direct queries failed; if any hit a
+            # disambiguation page, try to resolve using death year / feast date.
+            if not ex and first_dis_title and (hint_year is not None or hint_mmdd):
+                ex, im = await self._resolve_from_disambiguation(
+                    first_dis_title, name.split()[0], hint_year, hint_mmdd
+                )
+                if ex:
+                    successful_q = first_dis_title
 
             if ex:
                 first = ex.split(". ")[0].strip()
