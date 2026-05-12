@@ -114,7 +114,8 @@ def _compose_martyrology_description(martyrology: tuple) -> str:
     """Build a brief fallback prose description from martyrology items.
 
     Used when Wikipedia search returns nothing.  Produces a short sentence
-    drawn purely from the structured martyrology data (titles, death year).
+    drawn from structured martyrology data: titles, birth/death/beatification/
+    canonization dates, and canonization level (Saint vs. Blessed).
     """
     if not martyrology:
         return ""
@@ -139,6 +140,15 @@ def _compose_martyrology_description(martyrology: tuple) -> str:
         "HERMIT": "hermit",
         "KING": "king",
         "QUEEN": "queen",
+        "EVANGELIST": "evangelist",
+        "ARCHANGEL": "archangel",
+        "EMPRESS": "empress",
+        "PROPHET": "prophet",
+        "PILGRIM": "pilgrim",
+        "THE_FIRST_MARTYR": "first martyr",
+        "SPOUSE_OF_THE_BLESSED_VIRGIN_MARY": "spouse of the Blessed Virgin Mary",
+        "PARENTS_OF_THE_BLESSED_VIRGIN_MARY": "parents of the Blessed Virgin Mary",
+        "QUEEN_OF_POLAND": "Queen of Poland",
     }
     _PLURALS: dict[str, str] = {
         "martyr": "martyrs", "bishop": "bishops", "priest": "priests",
@@ -147,15 +157,84 @@ def _compose_martyrology_description(martyrology: tuple) -> str:
         "abbess": "abbesses", "monk": "monks", "nun": "nuns",
         "religious": "religious", "pope": "popes", "confessor": "confessors",
         "widow": "widows", "missionary": "missionaries", "hermit": "hermits",
-        "king": "kings", "queen": "queens",
+        "king": "kings", "queen": "queens", "evangelist": "evangelists",
+        "archangel": "archangels", "empress": "empresses",
+        "prophet": "prophets", "pilgrim": "pilgrims",
+        "first martyr": "first martyrs",
     }
 
+    def _date_display(value) -> str:
+        """Convert a martyrology date field (int, str, or dict) to a display string."""
+        if value is None:
+            return ""
+        if isinstance(value, int):
+            return f"around {value}" if value < 1000 else str(value)
+        if isinstance(value, str):
+            try:
+                y = int(value[:4])
+                return f"around {y}" if y < 1000 else str(y)
+            except (ValueError, TypeError):
+                return ""
+        if isinstance(value, dict):
+            if "century" in value:
+                c = int(value["century"])
+                sfx = "th" if 11 <= c % 100 <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(c % 10, "th")
+                return f"the {c}{sfx} century"
+            if "or" in value:
+                years = sorted(y for y in value["or"] if isinstance(y, int))
+                if years:
+                    return f"around {years[0]}" if years[0] < 1000 else str(years[0])
+            if "between" in value:
+                vals = value["between"]
+                years = []
+                for v in vals:
+                    if isinstance(v, int):
+                        years.append(v)
+                    elif isinstance(v, str):
+                        try:
+                            years.append(int(v[:4]))
+                        except (ValueError, TypeError):
+                            pass
+                if len(years) >= 2:
+                    return f"between {min(years)} and {max(years)}"
+                if years:
+                    return f"around {years[0]}" if years[0] < 1000 else str(years[0])
+        return ""
+
+    def _earliest_date_display(items, attr: str) -> str:
+        """Return the display string for the earliest numeric value of *attr* across items.
+
+        Dict-form dates (century, or, between) are used as fallback only if no
+        numeric year is found.
+        """
+        numeric: list[tuple[int, object]] = []
+        dict_fallback = ""
+        for item in items:
+            val = getattr(item, attr, None)
+            if val is None:
+                continue
+            if isinstance(val, int):
+                numeric.append((val, val))
+            elif isinstance(val, str):
+                try:
+                    numeric.append((int(val[:4]), val))
+                except (ValueError, TypeError):
+                    pass
+            elif isinstance(val, dict):
+                if not dict_fallback:
+                    dict_fallback = _date_display(val)
+        if numeric:
+            numeric.sort()
+            return _date_display(numeric[0][1])
+        return dict_fallback
+
+    # ── Plurality ────────────────────────────────────────────────────────────
     group_count = next((item.count for item in martyrology if item.count is not None), None)
     plural = len(martyrology) > 1 or (
         group_count is not None and group_count not in (1, "1")
     )
 
-    # Unique ordered title labels
+    # ── Titles ───────────────────────────────────────────────────────────────
     seen: set[str] = set()
     title_labels: list[str] = []
     for item in martyrology:
@@ -167,24 +246,31 @@ def _compose_martyrology_description(martyrology: tuple) -> str:
     if plural:
         title_labels = [_PLURALS.get(t, t) for t in title_labels]
 
-    # Earliest known death year
-    death_year: int | None = None
-    for item in martyrology:
-        dod = item.date_of_death
-        if dod is not None:
-            try:
-                y = int(str(dod).split("-")[0])
-                if death_year is None or y < death_year:
-                    death_year = y
-            except (ValueError, TypeError):
-                pass
+    # ── Dates ────────────────────────────────────────────────────────────────
+    dob_str   = _earliest_date_display(martyrology, "date_of_birth")
+    dod_str   = _earliest_date_display(martyrology, "date_of_death")
+    beat_str  = _earliest_date_display(martyrology, "date_of_beatification")
+    canon_str = _earliest_date_display(martyrology, "date_of_canonization")
 
-    year_str = (
-        f" around {death_year}" if death_year and death_year < 1000
-        else (f" in {death_year}" if death_year else "")
-    )
+    # ── Canonization level ───────────────────────────────────────────────────
+    levels = {item.canonization_level for item in martyrology if item.canonization_level}
+    is_blessed_only = "BLESSED" in levels and "SAINT" not in levels
+    hide_level = all(getattr(item, "hide_canonization_level", False) for item in martyrology)
+    blessed_prefix = "Blessed " if is_blessed_only and not hide_level else ""
 
-    # Title phrase
+    # ── Fact clauses (born …, died …, beatified …, canonized …) ─────────────
+    facts: list[str] = []
+    if dob_str:
+        facts.append(f"born {dob_str}")
+    if dod_str:
+        facts.append(f"died {dod_str}")
+    if beat_str:
+        facts.append(f"beatified {beat_str}")
+    if canon_str:
+        facts.append(f"canonized {canon_str}")
+    facts_str = ", ".join(facts)
+
+    # ── Title phrase ─────────────────────────────────────────────────────────
     if len(title_labels) == 0:
         title_phrase = ""
     elif len(title_labels) == 1:
@@ -194,25 +280,30 @@ def _compose_martyrology_description(martyrology: tuple) -> str:
     else:
         title_phrase = ", ".join(title_labels[:-1]) + ", and " + title_labels[-1]
 
-    # Martyr special case — more evocative phrasing
-    martyr_labels = {"martyr", "martyrs"}
-    is_martyr = bool(set(t.lower() for t in title_labels) & martyr_labels)
+    # ── Compose ──────────────────────────────────────────────────────────────
+    martyr_labels = {"martyr", "martyrs", "first martyr", "first martyrs"}
+    is_martyr = bool({t.lower() for t in title_labels} & martyr_labels)
+
     if is_martyr:
         non_martyr = [t for t in title_labels if t.lower() not in martyr_labels]
-        role = ("martyrs" if plural else "martyr")
+        role = "martyrs" if plural else "martyr"
         if non_martyr:
             role += " and " + " and ".join(non_martyr)
-        prefix = "Christian " if plural else ""
-        if year_str:
-            return f"{prefix}{role}, died{year_str}.".capitalize()
-        return f"{prefix}{role}.".capitalize()
+        prefix = blessed_prefix or ("Christian " if plural else "")
+        sentence = f"{prefix}{role}"
+        if facts_str:
+            sentence += f", {facts_str}"
+        return (sentence + ".").capitalize()
 
     if title_phrase:
-        phrase = title_phrase[0].upper() + title_phrase[1:]
-        return f"{phrase}, died{year_str}." if year_str else f"{phrase}."
+        phrase = blessed_prefix + title_phrase[0].lower() + title_phrase[1:]
+        sentence = phrase[0].upper() + phrase[1:]
+        if facts_str:
+            return f"{sentence}, {facts_str}."
+        return f"{sentence}."
 
-    if death_year:
-        return f"Died{year_str}."
+    if facts_str:
+        return facts_str[0].upper() + facts_str[1:] + "."
 
     return "Commemorated in the Roman Catholic calendar."
 
