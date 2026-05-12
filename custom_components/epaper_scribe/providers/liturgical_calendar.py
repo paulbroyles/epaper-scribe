@@ -59,6 +59,7 @@ class CatholicFeast:
     rank: str          # "SOLEMNITY" | "FEAST" | "MEMORIAL" | "OPT_MEMORIAL"
     from_calendar: str = ""  # romcal fromCalendarId: "ProperOfTime" | "me" | ...
     feast_id: str = ""       # romcal day id, e.g. "sacred_heart_of_jesus"
+    martyrology: tuple = ()  # tuple of MartyrologyItem for this celebration
 
     @property
     def rank_value(self) -> int:
@@ -152,6 +153,7 @@ def _build_year_calendar(year: int) -> None:
                 rank=rank,
                 from_calendar=day.from_calendar_id,
                 feast_id=day.id,
+                martyrology=tuple(day.martyrology),
             ))
         if feasts:
             calendar[date_str] = feasts

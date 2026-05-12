@@ -110,6 +110,113 @@ SEASON_DESCRIPTIONS: dict[str, str] = {
     ),
 }
 
+def _compose_martyrology_description(martyrology: tuple) -> str:
+    """Build a brief fallback prose description from martyrology items.
+
+    Used when Wikipedia search returns nothing.  Produces a short sentence
+    drawn purely from the structured martyrology data (titles, death year).
+    """
+    if not martyrology:
+        return ""
+
+    _LABELS: dict[str, str] = {
+        "MARTYR": "martyr",
+        "BISHOP": "bishop",
+        "PRIEST": "priest",
+        "DEACON": "deacon",
+        "DOCTOR_OF_THE_CHURCH": "Doctor of the Church",
+        "APOSTLE": "apostle",
+        "VIRGIN": "virgin",
+        "ABBOT": "abbot",
+        "ABBESS": "abbess",
+        "MONK": "monk",
+        "NUN": "nun",
+        "RELIGIOUS": "religious",
+        "POPE": "pope",
+        "CONFESSOR": "confessor",
+        "WIDOW": "widow",
+        "MISSIONARY": "missionary",
+        "HERMIT": "hermit",
+        "KING": "king",
+        "QUEEN": "queen",
+    }
+    _PLURALS: dict[str, str] = {
+        "martyr": "martyrs", "bishop": "bishops", "priest": "priests",
+        "deacon": "deacons", "Doctor of the Church": "Doctors of the Church",
+        "apostle": "apostles", "virgin": "virgins", "abbot": "abbots",
+        "abbess": "abbesses", "monk": "monks", "nun": "nuns",
+        "religious": "religious", "pope": "popes", "confessor": "confessors",
+        "widow": "widows", "missionary": "missionaries", "hermit": "hermits",
+        "king": "kings", "queen": "queens",
+    }
+
+    group_count = next((item.count for item in martyrology if item.count is not None), None)
+    plural = len(martyrology) > 1 or (
+        group_count is not None and group_count not in (1, "1")
+    )
+
+    # Unique ordered title labels
+    seen: set[str] = set()
+    title_labels: list[str] = []
+    for item in martyrology:
+        for t in (item.titles or []):
+            lbl = _LABELS.get(t, t.replace("_", " ").lower())
+            if lbl not in seen:
+                seen.add(lbl)
+                title_labels.append(lbl)
+    if plural:
+        title_labels = [_PLURALS.get(t, t) for t in title_labels]
+
+    # Earliest known death year
+    death_year: int | None = None
+    for item in martyrology:
+        dod = item.date_of_death
+        if dod is not None:
+            try:
+                y = int(str(dod).split("-")[0])
+                if death_year is None or y < death_year:
+                    death_year = y
+            except (ValueError, TypeError):
+                pass
+
+    year_str = (
+        f" around {death_year}" if death_year and death_year < 1000
+        else (f" in {death_year}" if death_year else "")
+    )
+
+    # Title phrase
+    if len(title_labels) == 0:
+        title_phrase = ""
+    elif len(title_labels) == 1:
+        title_phrase = title_labels[0]
+    elif len(title_labels) == 2:
+        title_phrase = f"{title_labels[0]} and {title_labels[1]}"
+    else:
+        title_phrase = ", ".join(title_labels[:-1]) + ", and " + title_labels[-1]
+
+    # Martyr special case — more evocative phrasing
+    martyr_labels = {"martyr", "martyrs"}
+    is_martyr = bool(set(t.lower() for t in title_labels) & martyr_labels)
+    if is_martyr:
+        non_martyr = [t for t in title_labels if t.lower() not in martyr_labels]
+        role = ("martyrs" if plural else "martyr")
+        if non_martyr:
+            role += " and " + " and ".join(non_martyr)
+        prefix = "Christian " if plural else ""
+        if year_str:
+            return f"{prefix}{role}, died{year_str}.".capitalize()
+        return f"{prefix}{role}.".capitalize()
+
+    if title_phrase:
+        phrase = title_phrase[0].upper() + title_phrase[1:]
+        return f"{phrase}, died{year_str}." if year_str else f"{phrase}."
+
+    if death_year:
+        return f"Died{year_str}."
+
+    return "Commemorated in the Roman Catholic calendar."
+
+
 SENSORS = [
     SensorDescription("saint_name", "Saint Name", "mdi:account-star"),
     SensorDescription("saint_role", "Saint Role", "mdi:account-badge"),
@@ -239,6 +346,17 @@ class SaintsDayProvider(ContentProvider):
         season_desc = _get_season_description(result.season)
         ang_type = result.anglican.type_ if result.anglican else ""
         cat_feasts_today = await self.hass.async_add_executor_job(get_catholic_feasts, today)
+
+        # Martyrology fallback for Catholic-sourced saints when Wikipedia fails.
+        # Find the matching CatholicFeast by name (fall back to first if no exact match).
+        if not description and result.source == "catholic" and result.display_name and cat_feasts_today:
+            cat_feast = next(
+                (f for f in cat_feasts_today if f.name == result.display_name),
+                cat_feasts_today[0],
+            )
+            if cat_feast.martyrology:
+                description = _compose_martyrology_description(cat_feast.martyrology)
+
         calendar_tag = _compute_calendar_tag(result, cat_feasts_today, ang_type) if saint_name else ""
         composed = await self.hass.async_add_executor_job(
             _compose_image,
@@ -383,6 +501,11 @@ class SaintsDayProvider(ContentProvider):
             description, image_url = await self._fetch_wikipedia(names, "", descs)
             if image_url:
                 image_bytes = await self._fetch_image(image_url)
+
+            # Martyrology fallback: compose a brief prose description from
+            # structured data when Wikipedia search returns nothing.
+            if not description and primary.martyrology:
+                description = _compose_martyrology_description(primary.martyrology)
 
             rank_label = _CAT_RANK_LABELS.get(primary.rank.lower(), primary.rank.title())
             calendar_tag = f"Catholic {rank_label}"
