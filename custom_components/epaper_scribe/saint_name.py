@@ -772,9 +772,11 @@ def render_saints_day_image(
     box_pad = PAD                                        # inner padding around tag text
     # Width cleared for the tag box (tag text + padding on both sides + gap)
     tag_text_w = int(probe_draw.textlength(calendar_tag, font=tag_font_obj)) if calendar_tag else 0
-    tag_float_w = tag_text_w + 3 * box_pad if calendar_tag else 0   # column width to leave free
-    # Height of the float zone (tag box + gap above it)
-    tag_float_h = tag_h + 2 * box_pad if calendar_tag else 0
+    # Reserve exactly the tag's rendered footprint plus one PAD of clearance.
+    # The tag right-aligns to W-PAD, which is also the text column right edge,
+    # so it occupies exactly tag_text_w px at the right of the text column.
+    tag_float_w = tag_text_w + PAD if calendar_tag else 0
+    tag_float_h = tag_h + PAD if calendar_tag else 0
 
     # ---- Name / header font: shrink to fit full panel width -----------------
     if has_saint:
@@ -827,7 +829,14 @@ def render_saints_day_image(
     #   scale the font up as far as the layout allows.
 
     def _wrap_for_pt(pt: float, text: str):
-        """Return (lines, max_lines) using float-aware wrapping at *pt*."""
+        """Return (lines, max_lines) using float-aware wrapping at *pt*.
+
+        The calendar tag occupies exactly tag_float_w × tag_float_h pixels in
+        the bottom-right corner of the text column.  Lines that fall in that
+        vertical zone are wrapped at (text_w − tag_float_w) so text never
+        prints over the tag.  tag_float_w and tag_float_h reflect the actual
+        rendered tag size (plus one PAD of clearance), not inflated padding.
+        """
         f = _load_body(pt)
         _, _, _, lh = probe_draw.textbbox((0, 0), "Ag", font=f)
         lh_step = lh + 1
@@ -941,13 +950,16 @@ def render_saints_day_image(
     # ---- Text column: description at scaled-up font -------------------------
     if display_text and text_w > 0 and avail_h > 0:
         if calendar_tag and tag_float_w > 0:
-            _, _, _, lh = probe_draw.textbbox((0, 0), "Ag", font=desc_font)
-            float_start = max(0, (avail_h - tag_float_h) // (lh + 1))
-            reduced_w = max(1, text_w - tag_float_w)
+            # Recompute float parameters at the final desc_font size.
+            _, _, _, _lh = probe_draw.textbbox((0, 0), "Ag", font=desc_font)
+            _lh_step = _lh + 1
+            _fs = max(0, (avail_h - tag_float_h) // _lh_step)
+            _rw = max(1, text_w - tag_float_w)
             _draw_wrapped_float(
                 img, draw, display_text,
-                text_x, text_y, text_w, reduced_w, float_start, avail_h,
-                desc_font, foreground,
+                text_x, text_y,
+                text_w, _rw, _fs,
+                avail_h, desc_font, foreground,
             )
         else:
             _draw_wrapped(img, draw, display_text, text_x, text_y, text_w, avail_h, desc_font, foreground)
