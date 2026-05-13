@@ -24,7 +24,6 @@ liturgical-calendar package and romcal:
 """
 from __future__ import annotations
 
-import logging
 import re
 from dataclasses import dataclass, field
 from io import BytesIO
@@ -33,8 +32,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from PIL.ImageDraw import ImageDraw
     from PIL.ImageFont import FreeTypeFont
-
-_LOGGER = logging.getLogger(__name__)
 
 
 def _name_separators(n: int) -> list[str]:
@@ -854,12 +851,6 @@ def render_saints_day_image(
         candidate = " ".join(floor_lines[:max_lines_floor])
         last_end = _last_sentence_end(candidate)
         display_text = candidate[: last_end + 1] if last_end >= 0 else candidate
-        _LOGGER.warning(
-            "saints step1: input_len=%d floor_lines=%d max_lines_floor=%d "
-            "candidate_len=%d last_end=%d display_text_len=%d",
-            len(description), len(floor_lines), max_lines_floor,
-            len(candidate), last_end, len(display_text),
-        )
 
     # Step 2: find the largest font where display_text fits.
     desc_pt: float = desc_pt_min
@@ -875,19 +866,6 @@ def render_saints_day_image(
             pt = round(pt - step, 1)
 
     desc_font = _load_body(desc_pt)
-
-    _LOGGER.warning(
-        "saints render: size=%dx%d use_full_width=%s text_x=%d text_w=%d "
-        "avail_h=%d desc_pt_min=%d max_desc_pt=%d display_text_len=%d desc_pt=%.1f "
-        "has_portrait=%s calendar_tag=%r",
-        W, H, use_full_width, text_x, text_w,
-        avail_h, desc_pt_min,
-        max(desc_pt_min, min(H // 2, 80)) if (display_text and text_w > 0 and avail_h > 0) else 0,
-        len(display_text) if display_text else 0,
-        desc_pt,
-        bool(saint_image_bytes),
-        calendar_tag,
-    )
 
     # ---- Canvas -------------------------------------------------------------
     img = Image.new("RGB", size, background)

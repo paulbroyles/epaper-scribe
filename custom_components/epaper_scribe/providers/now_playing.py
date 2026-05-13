@@ -125,12 +125,11 @@ async def _fetch_media_image(hass, entity_id: str) -> bytes | None:
 
         state = hass.states.get(entity_id)
         if state is None:
-            _LOGGER.warning("Media player entity %s not found in state machine", entity_id)
             return None
 
         entity_picture = state.attributes.get("entity_picture")
         if not entity_picture:
-            _LOGGER.warning("No entity_picture for %s", entity_id)
+            _LOGGER.debug("No entity_picture for %s", entity_id)
             return None
 
         base_url = get_url(hass, allow_internal=True, allow_external=False)
