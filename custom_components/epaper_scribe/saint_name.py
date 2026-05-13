@@ -36,6 +36,7 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 
+
 def _name_separators(n: int) -> list[str]:
     """Return separator strings between *n* name segments.
 
@@ -721,22 +722,32 @@ def render_saints_day_image(
     # ---- Font loaders -------------------------------------------------------
     # _load_body — description text, role subtitle, calendar tag
     # _load_name — saint name header (uses name_font_path if set, else font_path)
+    #
+    # Bundled Atkinson Hyperlegible fonts are used as the default when no
+    # font path is configured.  Atkinson was designed by the Braille Institute
+    # for maximum legibility at small sizes — ideal for low-resolution e-paper.
+    # It covers Latin Extended (accented characters, em-dash, etc.).
+    import pathlib as _pathlib
+    _fonts_dir = _pathlib.Path(__file__).parent / "fonts"
+    _bundled_regular = str(_fonts_dir / "AtkinsonHyperlegible-Regular.ttf")
+    _bundled_bold    = str(_fonts_dir / "AtkinsonHyperlegible-Bold.ttf")
+
     def _load_body(pt: float) -> "FreeTypeFont":
-        if font_path:
+        for path in filter(None, [font_path, _bundled_regular]):
             try:
-                return ImageFont.truetype(font_path, pt)
+                return ImageFont.truetype(path, pt)
             except Exception:
                 pass
         try:
-            return ImageFont.load_default(size=pt)   # Pillow ≥10 accepts floats
+            return ImageFont.load_default(size=pt)
         except TypeError:
             return ImageFont.load_default()
 
     def _load_name(pt: float) -> "FreeTypeFont":
         _path = name_font_path or font_path
-        if _path:
+        for path in filter(None, [_path, _bundled_bold, _bundled_regular]):
             try:
-                return ImageFont.truetype(_path, pt)
+                return ImageFont.truetype(path, pt)
             except Exception:
                 pass
         try:
@@ -834,7 +845,7 @@ def render_saints_day_image(
         candidate = " ".join(floor_lines[:max_lines_floor])
         last_end = _last_sentence_end(candidate)
         display_text = candidate[: last_end + 1] if last_end >= 0 else candidate
-        _LOGGER.info(
+        _LOGGER.warning(
             "saints step1: input_len=%d floor_lines=%d max_lines_floor=%d "
             "candidate_len=%d last_end=%d display_text_len=%d",
             len(description), len(floor_lines), max_lines_floor,
@@ -856,7 +867,7 @@ def render_saints_day_image(
 
     desc_font = _load_body(desc_pt)
 
-    _LOGGER.info(
+    _LOGGER.warning(
         "saints render: size=%dx%d use_full_width=%s text_x=%d text_w=%d "
         "avail_h=%d desc_pt_min=%d max_desc_pt=%d display_text_len=%d desc_pt=%.1f "
         "has_portrait=%s calendar_tag=%r",
