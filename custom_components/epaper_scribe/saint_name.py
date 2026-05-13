@@ -712,7 +712,7 @@ def render_saints_day_image(
     from PIL import Image, ImageDraw, ImageFont
 
     W, H = size
-    PAD = max(3, W // 80)
+    PAD = max(2, W // 100)
     has_saint = bool(parsed and parsed.segments)
     has_descriptors = has_saint and any(seg.descriptor for seg in parsed.segments)
 
