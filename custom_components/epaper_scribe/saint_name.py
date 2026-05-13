@@ -84,8 +84,13 @@ _DESCRIPTOR_WORDS: frozenset[str] = frozenset({
 })
 
 _NAME_PREFIXES: tuple[str, ...] = (
-    "Saints ", "Saint ", "Blessed ", "Venerable ", "Our Lady of ",
+    "Saints ", "Saint ", "Blessed ", "Venerable ",
 )
+# NOTE: "Our Lady of " is intentionally NOT in this list.
+# "Our Lady of Fatima", "Our Lady of Guadalupe", etc. are complete feast titles
+# that must be kept intact for both correct display and Wikipedia search.
+# Stripping "Our Lady of " leaves only "Fatima" or "Guadalupe", which Wikipedia
+# resolves to completely wrong articles.
 
 
 @dataclass
