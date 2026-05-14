@@ -33,7 +33,7 @@ blueprint:
       description: >
         Seconds to wait after the media player pauses before switching to the
         fallback view.
-      default: 120
+      default: 15
       selector:
         number:
           min: 10
