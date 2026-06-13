@@ -981,6 +981,23 @@ class SaintsDayProvider(ContentProvider):
         """
         import re as _re
 
+        # ── Title feasts of the Lord / Christ / Mary ───────────────────────
+        # Handled before compound expansion: some titles contain "and"
+        # ("...Body and Blood of Christ") which the expansion would wrongly
+        # split into two people.  Skipped when an authoritative wiki_url is
+        # available (the Anglican calendar supplies a direct article link).
+        if not wiki_url and len(names) == 1:
+            title_terms = _title_feast_search_terms(names[0])
+            if title_terms:
+                for q in title_terms:
+                    ex, img = await self._fetch_wikipedia_one(q)
+                    if ex:
+                        first = ex.split(". ")[0].strip()
+                        if not first.endswith("."):
+                            first += "."
+                        return first, img
+                return "", ""
+
         def _singularize(word: str) -> str:
             """'Apostles' → 'Apostle', 'Bishops' → 'Bishop', etc."""
             skip = {"jesus", "lazarus", "thomas", "status"}
@@ -1356,6 +1373,73 @@ def _compute_calendar_tag(
         return _CAT_RANK_LABELS.get(cat_key, cat_rank_str.title())
     ang_label = _ANG_TYPE_LABELS.get(ang_key, "")
     return ang_label
+
+
+# ---------------------------------------------------------------------------
+# Title-feast normalization (feasts of the Lord / Christ / Mary)
+# ---------------------------------------------------------------------------
+#
+# Devotional / festal titles such as "The Most Sacred Heart of Jesus" or
+# "The Immaculate Heart of the Blessed Virgin Mary" are NOT personal saints:
+# they never take a "Saint " prefix, and their ornate romcal names do not match
+# a Wikipedia article verbatim (the REST summary endpoint errors on them).
+# Stripping "The "/"Most " and reducing "the Blessed Virgin Mary" → "Mary"
+# yields titles that resolve directly (e.g. "Sacred Heart of Jesus" → Sacred
+# Heart; "Immaculate Heart of Mary" → Immaculate Heart of Mary).
+#
+# Detection is by specific feast-noun keywords rather than a blanket "of Jesus"
+# test, so personal saints like "Teresa of Jesus" are never misclassified.
+
+_TITLE_FEAST_KEYWORDS: tuple[str, ...] = (
+    "sacred heart", "immaculate heart", "holy trinity", "holy cross",
+    "holy name", "holy face", "holy family", "body and blood",
+    "precious blood", "transfiguration", "exaltation", "presentation of",
+    "annunciation", "assumption", "visitation", "immaculate conception",
+    "queenship", "nativity of", "dedication of", "baptism of the lord",
+    "divine mercy", "christ the king", "king of the universe",
+)
+
+# Normalized (lowercased) title → explicit Wikipedia article when the
+# stripped form does not itself resolve.
+_TITLE_FEAST_ALIASES: dict[str, str] = {
+    "holy body and blood of christ": "Corpus Christi (feast)",
+    "body and blood of christ": "Corpus Christi (feast)",
+}
+
+
+def _normalize_title_feast(name: str) -> str:
+    """Reduce an ornate title-feast name to its plain Wikipedia-searchable form."""
+    import re as _re
+
+    n = name.strip()
+    n = _re.sub(r'^[Tt]he\s+', '', n)
+    n = _re.sub(r'^Most\s+(?=Holy\b)', '', n)   # "Most Holy X" → "Holy X"
+    n = _re.sub(r'^Most\s+', '', n)             # "Most Sacred X" → "Sacred X"
+    n = _re.sub(
+        r'(?:the\s+)?Blessed\s+Virgin\s+Mary', 'Mary', n, flags=_re.IGNORECASE
+    )
+    return n.strip()
+
+
+def _title_feast_search_terms(name: str) -> list[str]:
+    """Return ordered Wikipedia search candidates if *name* is a title feast.
+
+    Returns [] for ordinary personal-saint names so the caller falls through
+    to the regular "Saint X" cascade.
+    """
+    low = name.lower()
+    if not (low.startswith("our lady") or any(k in low for k in _TITLE_FEAST_KEYWORDS)):
+        return []
+    norm = _normalize_title_feast(name)
+    terms: list[str] = []
+    alias = _TITLE_FEAST_ALIASES.get(norm.lower())
+    if alias:
+        terms.append(alias)
+    if norm and norm not in terms:
+        terms.append(norm)
+    if name not in terms:
+        terms.append(name)
+    return terms
 
 
 # ---------------------------------------------------------------------------
