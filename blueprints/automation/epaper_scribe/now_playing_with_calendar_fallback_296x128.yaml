@@ -5,7 +5,8 @@ blueprint:
 
     - When the media player starts playing: renders dithered album art (128×128)
       on the left, with creator/title/container text on the right.
-    - When paused for longer than the timeout, or idle/off: renders the
+    - When the player has been anything other than "playing" (paused, idle,
+      standby, off, unavailable) for longer than the timeout: renders the
       configured fallback mode (Liturgical Calendar, Word of the Day, or
       Today in History).
     - Midnight refresh: updates the fallback display for the new date.
@@ -29,10 +30,11 @@ blueprint:
       selector:
         device:
     paused_timeout:
-      name: Paused Timeout
+      name: Stopped Timeout
       description: >
-        Seconds to wait after the media player pauses before switching to the
-        fallback view.
+        Seconds to wait after the media player stops playing (paused, idle,
+        standby, or off) before switching to the fallback view. The timer is
+        robust to players that flap between paused/standby/idle.
       default: 15
       selector:
         number:
@@ -92,6 +94,10 @@ variables:
   tih_entry: !input today_in_history_entry_id
   fallback_mode: !input fallback_mode
 
+# Expose the media-player input to the template trigger below.
+trigger_variables:
+  mp_entity: !input media_player_entity
+
 trigger:
   - id: playing
     platform: state
@@ -103,20 +109,18 @@ trigger:
     entity_id: !input media_player_entity
     attribute: media_title
 
-  - id: paused_timeout
-    platform: state
-    entity_id: !input media_player_entity
-    to: "paused"
+  # Switch away once the player has been anything other than "playing"
+  # (paused, idle, standby, off, unavailable) continuously for the timeout.
+  # A template trigger is used deliberately: players like the Apple TV flap
+  # between paused/standby/idle when you stop watching, and a plain state
+  # trigger's "for:" timer resets on every one of those changes — so it would
+  # never accumulate the full timeout. The template result stays True across
+  # all non-playing states, so the timer only resets when playback resumes.
+  - id: not_playing
+    platform: template
+    value_template: "{{ states(mp_entity) != 'playing' }}"
     for:
       seconds: !input paused_timeout
-
-  - id: idle_or_off
-    platform: state
-    entity_id: !input media_player_entity
-    to:
-      - "idle"
-      - "off"
-      - "unavailable"
 
   - id: midnight
     platform: time
@@ -201,12 +205,11 @@ action:
                   max_width: 153
                   spacing: 2
 
-      # --- Fallback (paused timeout / idle / off / midnight) ---
+      # --- Fallback (not-playing timeout / midnight) ---
       - conditions:
           - condition: trigger
             id:
-              - paused_timeout
-              - idle_or_off
+              - not_playing
               - midnight
         sequence:
           - choose:
