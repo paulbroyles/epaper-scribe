@@ -24,7 +24,10 @@ liturgical-calendar package and romcal:
 """
 from __future__ import annotations
 
+import functools
+import pathlib
 import re
+import struct
 from dataclasses import dataclass, field
 from io import BytesIO
 from typing import TYPE_CHECKING
@@ -84,6 +87,11 @@ _DESCRIPTOR_WORDS: frozenset[str] = frozenset({
 _NAME_PREFIXES: tuple[str, ...] = (
     "Saints ", "Saint ", "Blessed ", "Venerable ",
 )
+# NOTE: "Our Lady of " is intentionally NOT in this list.
+# "Our Lady of Fatima", "Our Lady of Guadalupe", etc. are complete feast titles
+# that must be kept intact for both correct display and Wikipedia search.
+# Stripping "Our Lady of " leaves only "Fatima" or "Guadalupe", which Wikipedia
+# resolves to completely wrong articles.
 
 # Plural role words romcal uses after a list of people ("…, Martyrs") and the
 # singular form shown under each individual name.
@@ -92,11 +100,6 @@ _ROLE_SINGULAR: dict[str, str] = {
     "deacons": "Deacon", "doctors": "Doctor", "martyrs": "Martyr",
     "monks": "Monk", "popes": "Pope", "priests": "Priest", "virgins": "Virgin",
 }
-# NOTE: "Our Lady of " is intentionally NOT in this list.
-# "Our Lady of Fatima", "Our Lady of Guadalupe", etc. are complete feast titles
-# that must be kept intact for both correct display and Wikipedia search.
-# Stripping "Our Lady of " leaves only "Fatima" or "Guadalupe", which Wikipedia
-# resolves to completely wrong articles.
 
 
 @dataclass
@@ -261,6 +264,133 @@ def _parse_saints_list(display: str) -> list[NameSegment]:
 # Rendering
 # ---------------------------------------------------------------------------
 
+# Characters the display font lacks (ŏ in "Tae-gŏn", ạ in "Dũng-Lạc", Greek,
+# Cyrillic…) are drawn from a fallback font matched to the display font's
+# x-height and baseline, instead of rendering as missing-glyph boxes.
+#
+# The fallback differs by weight, chosen by how each renders once text is
+# thresholded to pure black and white for e-paper:
+#   bold (the header band): Noto Sans Bold, whose even shapes match Atkinson's
+#     at header sizes; trimmed to Latin, Greek, Cyrillic and punctuation.
+#   regular (subtitles, body): Andika, whose heavier accents and dot-below
+#     survive at 10–12 pt, where Noto's thin marks disappear. Shipped unmodified
+#     (its license reserves the name, so it can't be trimmed).
+_FONTS_DIR = pathlib.Path(__file__).resolve().parent / "fonts"
+_FALLBACK_FONTS = {
+    "regular": _FONTS_DIR / "Andika-Regular.ttf",
+    "bold": _FONTS_DIR / "NotoSans-Fallback-Bold.ttf",
+}
+
+
+@functools.lru_cache(maxsize=16)
+def _font_facts(path: str) -> tuple[frozenset[int], float]:
+    """(code points with a glyph, x-height as a fraction of the em) for a TrueType file.
+
+    Reads the 'cmap' (formats 4 and 12) and 'OS/2' tables directly, so no font
+    library beyond Pillow is needed. Returns an empty set when unreadable,
+    which disables fallback for that font rather than failing the render.
+    """
+    try:
+        data = pathlib.Path(path).read_bytes()
+        tables = {}
+        for i in range(struct.unpack(">H", data[4:6])[0]):
+            tag, _, offset, length = struct.unpack(">4sLLL", data[12 + 16 * i:28 + 16 * i])
+            tables[tag] = (offset, length)
+        upm = struct.unpack(">H", data[tables[b"head"][0] + 18:tables[b"head"][0] + 20])[0]
+        x_height = 0.5
+        if b"OS/2" in tables:
+            os2 = tables[b"OS/2"][0]
+            if struct.unpack(">H", data[os2:os2 + 2])[0] >= 2:
+                x_height = struct.unpack(">h", data[os2 + 86:os2 + 88])[0] / upm
+
+        cmap = tables[b"cmap"][0]
+        subtables = []
+        for i in range(struct.unpack(">H", data[cmap + 2:cmap + 4])[0]):
+            platform, encoding, off = struct.unpack(">HHL", data[cmap + 4 + 8 * i:cmap + 12 + 8 * i])
+            fmt = struct.unpack(">H", data[cmap + off:cmap + off + 2])[0]
+            if (platform, encoding) in ((3, 10), (0, 4), (0, 6)) and fmt == 12:
+                subtables.insert(0, (fmt, cmap + off))
+            elif (platform, encoding) in ((3, 1), (0, 3)) and fmt == 4:
+                subtables.append((fmt, cmap + off))
+        if not subtables:
+            return frozenset(), x_height
+        fmt, at = subtables[0]
+        points: set[int] = set()
+        if fmt == 12:
+            for g in range(struct.unpack(">L", data[at + 12:at + 16])[0]):
+                start, end, _ = struct.unpack(">LLL", data[at + 16 + 12 * g:at + 28 + 12 * g])
+                points.update(range(start, end + 1))
+        else:
+            segs = struct.unpack(">H", data[at + 6:at + 8])[0] // 2
+            ends = struct.unpack(f">{segs}H", data[at + 14:at + 14 + 2 * segs])
+            base = at + 16 + 2 * segs
+            starts = struct.unpack(f">{segs}H", data[base:base + 2 * segs])
+            deltas = struct.unpack(f">{segs}h", data[base + 2 * segs:base + 4 * segs])
+            ranges_at = base + 4 * segs
+            range_offsets = struct.unpack(f">{segs}H", data[ranges_at:ranges_at + 2 * segs])
+            for k in range(segs):
+                for cp in range(starts[k], ends[k] + 1):
+                    if cp == 0xFFFF:
+                        continue
+                    if range_offsets[k] == 0:
+                        glyph = (cp + deltas[k]) & 0xFFFF
+                    else:
+                        idx = ranges_at + 2 * k + range_offsets[k] + 2 * (cp - starts[k])
+                        glyph = struct.unpack(">H", data[idx:idx + 2])[0]
+                        glyph = (glyph + deltas[k]) & 0xFFFF if glyph else 0
+                    if glyph:
+                        points.add(cp)
+        return frozenset(points), x_height
+    except (OSError, KeyError, struct.error):
+        return frozenset(), 0.5
+
+
+def _font_path(font: "FreeTypeFont") -> str | None:
+    path = getattr(font, "path", None)
+    return str(path) if isinstance(path, (str, pathlib.Path)) else None
+
+
+@functools.lru_cache(maxsize=64)
+def _fallback_font(primary_path: str, size: float) -> "FreeTypeFont | None":
+    """The fallback font sized so its x-height matches the display font's."""
+    from PIL import ImageFont
+
+    weight = "bold" if "bold" in pathlib.Path(primary_path).name.lower() else "regular"
+    fallback = _FALLBACK_FONTS[weight]
+    if not fallback.exists():
+        return None
+    primary_x = _font_facts(primary_path)[1]
+    fallback_x = _font_facts(str(fallback))[1] or primary_x
+    try:
+        return ImageFont.truetype(str(fallback), size * primary_x / fallback_x)
+    except OSError:
+        return None
+
+
+def _text_runs(text: str, font: "FreeTypeFont") -> list[tuple[str, "FreeTypeFont"]]:
+    """Split *text* into runs drawable by *font* and runs needing the fallback."""
+    path = _font_path(font)
+    if not path or text.isascii():
+        return [(text, font)]
+    covered = _font_facts(path)[0]
+    if not covered:
+        return [(text, font)]
+    fallback = _fallback_font(path, font.size)
+    runs: list[tuple[str, "FreeTypeFont"]] = []
+    for ch in text:
+        use = font if (ord(ch) in covered or ch.isspace() or fallback is None) else fallback
+        if runs and runs[-1][1] is use:
+            runs[-1] = (runs[-1][0] + ch, use)
+        else:
+            runs.append((ch, use))
+    return runs
+
+
+def _text_length(draw: "ImageDraw", text: str, font: "FreeTypeFont") -> float:
+    """Width of *text*, measuring any fallback-font runs with the fallback font."""
+    return sum(draw.textlength(run, font=f) for run, f in _text_runs(text, font))
+
+
 def _text(
     img: "Image.Image",
     draw: "ImageDraw",
@@ -275,11 +405,23 @@ def _text(
     Steinberg dithering as noise fringe.  We eliminate this by rendering into
     a temporary L-mode image, thresholding to pure black/white, then pasting
     the target *color* through the resulting mask.
+
+    Characters the font lacks are drawn from the fallback font, aligned on the
+    same baseline.
     """
     from PIL import Image as _Image, ImageDraw as _ImageDraw
 
     tmp = _Image.new("L", img.size, 255)
-    _ImageDraw.Draw(tmp).text(xy, text, font=font, fill=0)
+    tmp_draw = _ImageDraw.Draw(tmp)
+    runs = _text_runs(text, font)
+    if len(runs) == 1 and runs[0][1] is font:
+        tmp_draw.text(xy, text, font=font, fill=0)
+    else:
+        x = float(xy[0])
+        baseline = xy[1] + font.getmetrics()[0]
+        for run, run_font in runs:
+            tmp_draw.text((x, baseline), run, font=run_font, fill=0, anchor="ls")
+            x += tmp_draw.textlength(run, font=run_font)
     mask = tmp.point(lambda v: 255 if v < 128 else 0)
     img.paste(_Image.new("RGB", img.size, color), mask=mask)
 
@@ -292,13 +434,13 @@ def _plural_role(phrase: str) -> str:
 
 def _fit_label(text: str, font: "FreeTypeFont", draw: "ImageDraw", width: int) -> str:
     """Trim *text* at a word boundary, adding an ellipsis, until it fits *width*."""
-    if draw.textlength(text, font=font) <= width:
+    if _text_length(draw, text, font) <= width:
         return text
     words = text.split()
     while len(words) > 1:
         words.pop()
         candidate = " ".join(words).rstrip(",·") + "…"
-        if draw.textlength(candidate, font=font) <= width:
+        if _text_length(draw, candidate, font) <= width:
             return candidate
     return words[0] if words else ""
 
@@ -325,11 +467,11 @@ def _subtitle_layout(
     for i, seg in enumerate(segments):
         if seg.descriptor:
             placed.append((cur, seg.descriptor))
-        cur += int(draw.textlength(seg.name, font=name_font))
+        cur += int(_text_length(draw, seg.name, name_font))
         if i < len(segments) - 1:
-            cur += int(draw.textlength(seps[i], font=name_font))
+            cur += int(_text_length(draw, seps[i], name_font))
     fits = all(
-        x + draw.textlength(label, font=role_font) + (gap if j < len(placed) - 1 else 0)
+        x + _text_length(draw, label, role_font) + (gap if j < len(placed) - 1 else 0)
         <= (placed[j + 1][0] if j < len(placed) - 1 else max_x)
         for j, (x, label) in enumerate(placed)
     )
@@ -359,8 +501,8 @@ def _draw_name_line(
     if not segments:
         return
     seps = _name_separators(len(segments))
-    sep_widths = [int(draw.textlength(s, font=name_font)) for s in seps]
-    name_widths = [int(draw.textlength(seg.name, font=name_font)) for seg in segments]
+    sep_widths = [int(_text_length(draw, s, name_font)) for s in seps]
+    name_widths = [int(_text_length(draw, seg.name, name_font)) for seg in segments]
     cur = x
     for i, seg in enumerate(segments):
         _text(img, draw, (cur, y), seg.name, name_font, color)
@@ -393,8 +535,8 @@ def render_saint_name(
         return y
 
     seps = _name_separators(len(segments))
-    sep_widths = [int(draw.textlength(s, font=name_font)) for s in seps]
-    name_widths = [int(draw.textlength(seg.name, font=name_font)) for seg in segments]
+    sep_widths = [int(_text_length(draw, s, name_font)) for s in seps]
+    name_widths = [int(_text_length(draw, seg.name, name_font)) for seg in segments]
 
     # X offset for each segment's name start
     x_offsets: list[int] = []
@@ -918,7 +1060,7 @@ def render_saints_day_image(
     tag_pt = max(9, H // 12)   # ~10 pt at 128 px — comfortably legible
     tag_font_obj = _load_body(tag_pt)
     _, _, _, tag_h = probe_draw.textbbox((0, 0), "Ag", font=tag_font_obj)
-    tag_text_w = int(probe_draw.textlength(calendar_tag, font=tag_font_obj)) if calendar_tag else 0
+    tag_text_w = int(_text_length(probe_draw, calendar_tag, tag_font_obj)) if calendar_tag else 0
     # Reserve exactly the tag's rendered footprint plus one PAD of clearance.
     # The tag right-aligns to W-PAD, which is also the text column right edge,
     # so it occupies exactly tag_text_w px at the right of the text column.
@@ -931,10 +1073,10 @@ def render_saints_day_image(
         def _shrink(line: str) -> tuple[int, bool]:
             pt = max(role_pt + 2, H // 5)
             while pt > role_pt + 2:
-                if int(probe_draw.textlength(line, font=_load_name(pt))) <= W - 2 * PAD:
+                if int(_text_length(probe_draw, line, _load_name(pt))) <= W - 2 * PAD:
                     return pt, True
                 pt -= 1
-            return pt, int(probe_draw.textlength(line, font=_load_name(pt))) <= W - 2 * PAD
+            return pt, int(_text_length(probe_draw, line, _load_name(pt))) <= W - 2 * PAD
 
         name_pt, fits = _shrink(_join_names(parsed.segments))
         if not fits:
@@ -955,7 +1097,7 @@ def render_saints_day_image(
         ferial_text = week if week else (season or "")
         name_pt = max(9, H // 10)
         while name_pt > 9:
-            if int(probe_draw.textlength(ferial_text, font=_load_name(name_pt))) <= W - 2 * PAD:
+            if int(_text_length(probe_draw, ferial_text, _load_name(name_pt))) <= W - 2 * PAD:
                 break
             name_pt -= 1
 
@@ -1156,7 +1298,7 @@ def _wrap_lines_float(
     for word in text.split():
         max_w = full_width if len(lines) < float_start_line else reduced_width
         candidate = (line + " " + word).strip()
-        if int(draw.textlength(candidate, font=font)) <= max_w:
+        if int(_text_length(draw, candidate, font)) <= max_w:
             line = candidate
         else:
             if line:
@@ -1214,7 +1356,7 @@ def _wrap_lines(text: str, max_width: int, draw: "ImageDraw", font: "FreeTypeFon
     line = ""
     for word in text.split():
         candidate = (line + " " + word).strip()
-        if int(draw.textlength(candidate, font=font)) <= max_width:
+        if int(_text_length(draw, candidate, font)) <= max_width:
             line = candidate
         else:
             if line:
