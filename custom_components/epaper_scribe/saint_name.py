@@ -71,10 +71,10 @@ _DESCRIPTOR_WORDS: frozenset[str] = frozenset({
     "bishop", "bishops", "martyr", "martyrs", "apostle", "apostles",
     "priest", "priests", "pope", "popes", "virgin", "virgins",
     "deacon", "deacons", "monk", "monks", "abbot", "abbess",
-    "hermit", "confessor", "doctor", "religious", "evangelist",
-    "patron", "founder", "missionary",
+    "hermit", "confessor", "doctor", "doctors", "religious", "evangelist",
+    "patron", "founder", "missionary", "archangel", "archangels",
     # Relational descriptors ("Joseph, Husband of Mary")
-    "husband", "wife", "mother", "father",
+    "husband", "wife", "mother", "father", "spouse", "parents",
     # Secular titles
     "king", "queen", "emperor", "empress",
     # Article before a title phrase ("The First Martyr", "The Great")
@@ -84,6 +84,14 @@ _DESCRIPTOR_WORDS: frozenset[str] = frozenset({
 _NAME_PREFIXES: tuple[str, ...] = (
     "Saints ", "Saint ", "Blessed ", "Venerable ",
 )
+
+# Plural role words romcal uses after a list of people ("…, Martyrs") and the
+# singular form shown under each individual name.
+_ROLE_SINGULAR: dict[str, str] = {
+    "apostles": "Apostle", "archangels": "Archangel", "bishops": "Bishop",
+    "deacons": "Deacon", "doctors": "Doctor", "martyrs": "Martyr",
+    "monks": "Monk", "popes": "Pope", "priests": "Priest", "virgins": "Virgin",
+}
 # NOTE: "Our Lady of " is intentionally NOT in this list.
 # "Our Lady of Fatima", "Our Lady of Guadalupe", etc. are complete feast titles
 # that must be kept intact for both correct display and Wikipedia search.
@@ -121,6 +129,13 @@ def parse_saint_name(raw: str) -> ParsedSaintName:
             segments.extend(_parse_single(seg.strip()))
         return ParsedSaintName(segments=segments, transferred=transferred)
 
+    # romcal multi-person form: "Saints A, Role, and B, Role, Martyrs" or
+    # "Saint A, Role, and Companions, Martyrs"
+    if _is_saints_list(raw):
+        return ParsedSaintName(
+            segments=_parse_saints_list(_strip_prefix(raw)), transferred=transferred
+        )
+
     # "… and Saint/Saints Name" pattern ("Blase, Bishop Martyr and Saint Ansgar…")
     if re.search(r"\band\s+Saints?\s+\w", raw, re.IGNORECASE):
         parts = re.split(r"\s+and\s+(?=Saints?\s)", raw, flags=re.IGNORECASE)
@@ -133,6 +148,8 @@ def parse_saint_name(raw: str) -> ParsedSaintName:
 
 
 def _strip_prefix(s: str) -> str:
+    if s.startswith("Blessed Virgin Mary"):
+        return s  # a title of Mary, not a beatification prefix
     for prefix in _NAME_PREFIXES:
         if s.startswith(prefix):
             return s[len(prefix):]
@@ -151,7 +168,7 @@ def _parse_single(entry: str) -> list[NameSegment]:
     name_part = name_part.strip()
     rest = rest.strip()
 
-    first_word = rest.split()[0].lower() if rest.split() else ""
+    first_word = _first_word(rest)
 
     if first_word in _DESCRIPTOR_WORDS:
         # Check for embedded second person: "Role and ProperName[, Role]"
@@ -169,6 +186,75 @@ def _parse_single(entry: str) -> list[NameSegment]:
 
     # List comma — treat the whole display string as the undivided name
     return [NameSegment(name=display, descriptor="")]
+
+
+def _first_word(s: str) -> str:
+    """Lowercased first word with punctuation removed ("Monk," → "monk")."""
+    words = s.split()
+    return re.sub(r"[^\w]", "", words[0]).lower() if words else ""
+
+
+def _is_saints_list(raw: str) -> bool:
+    """True for romcal's multi-person feast names.
+
+    "Saints Cornelius, Pope, and Cyprian, Bishop, Martyrs" and
+    "Saint Paul Miki and Companions, Martyrs" both qualify. Anglican lists such
+    as "Mary, Martha and Lazarus" don't start with "Saints" and keep the simpler
+    single-segment parse, which already displays them correctly.
+    """
+    return raw.startswith("Saints ") or bool(re.search(r"\bCompanions\b", raw))
+
+
+def _singular_role(phrase: str) -> str:
+    """"Bishops and Doctors of the Church" → "Bishop and Doctor of the Church"."""
+    return re.sub(
+        r"[A-Za-z]+",
+        lambda m: _ROLE_SINGULAR.get(m.group(0).lower(), m.group(0)),
+        phrase,
+    )
+
+
+def _join_roles(roles: list[str]) -> str:
+    if len(roles) <= 1:
+        return roles[0] if roles else ""
+    if any(" and " in r for r in roles):
+        return ", ".join(roles)           # "Bishop, Martyr and Doctor of the Church"
+    return ", ".join(roles[:-1]) + " and " + roles[-1]   # "Pope and Martyr"
+
+
+def _parse_saints_list(display: str) -> list[NameSegment]:
+    """Parse romcal's comma-delimited multi-person names into one segment each.
+
+    Comma-separated tokens are either people ("Cornelius", "Mary and Lazarus",
+    "Companions") or roles ("Pope", "Bishops and Doctors of the Church"). A role
+    applies to the people named just before it; a plural role at the very end
+    applies to everyone ("…, Pope, and Cyprian, Bishop, Martyrs" makes both
+    martyrs). "Companions" is kept as its own segment so it reads naturally in
+    the header ("Paul Miki and Companions") and is never searched as a person.
+    """
+    tokens = [re.sub(r"^and\s+", "", t.strip()) for t in display.split(",")]
+    tokens = [t for t in tokens if t]
+    groups: list[list[dict]] = []
+    for i, tok in enumerate(tokens):
+        if groups and _first_word(tok) in _DESCRIPTOR_WORDS:
+            first = _first_word(tok)
+            plural = first in _ROLE_SINGULAR
+            if plural and i == len(tokens) - 1 and len(groups) > 1:
+                targets = [p for g in groups for p in g]
+            elif not plural and len(groups[-1]) > 1:
+                targets = groups[-1][:1]   # "Joachim and Anne, Parents of …"
+            else:
+                targets = groups[-1]
+            for person in targets:
+                is_group = person["name"].lower() == "companions"
+                person["roles"].append(tok if (is_group or not plural) else _singular_role(tok))
+            continue
+        names = [n.strip() for n in re.split(r"\s+and\s+", tok) if n.strip()]
+        groups.append([{"name": n, "roles": []} for n in names])
+    return [
+        NameSegment(name=p["name"], descriptor=_join_roles(p["roles"]))
+        for g in groups for p in g
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -196,6 +282,67 @@ def _text(
     _ImageDraw.Draw(tmp).text(xy, text, font=font, fill=0)
     mask = tmp.point(lambda v: 255 if v < 128 else 0)
     img.paste(_Image.new("RGB", img.size, color), mask=mask)
+
+
+def _plural_role(phrase: str) -> str:
+    """"Bishop and Doctor of the Church" → "Bishops and Doctors of the Church"."""
+    plural = {v.lower(): k.capitalize() for k, v in _ROLE_SINGULAR.items()}
+    return re.sub(r"[A-Za-z]+", lambda m: plural.get(m.group(0).lower(), m.group(0)), phrase)
+
+
+def _fit_label(text: str, font: "FreeTypeFont", draw: "ImageDraw", width: int) -> str:
+    """Trim *text* at a word boundary, adding an ellipsis, until it fits *width*."""
+    if draw.textlength(text, font=font) <= width:
+        return text
+    words = text.split()
+    while len(words) > 1:
+        words.pop()
+        candidate = " ".join(words).rstrip(",·") + "…"
+        if draw.textlength(candidate, font=font) <= width:
+            return candidate
+    return words[0] if words else ""
+
+
+def _subtitle_layout(
+    segments: list[NameSegment],
+    name_font: "FreeTypeFont",
+    role_font: "FreeTypeFont",
+    draw: "ImageDraw",
+    x0: int,
+    max_x: int,
+) -> list[tuple[int, str]]:
+    """Place descriptor labels for the subtitle band without collisions.
+
+    Preferred: each descriptor aligned under the start of its own name. When
+    labels would overlap (short names, long roles) fall back to a single label:
+    one shared role shown in plural ("Apostles"), otherwise the distinct roles
+    joined with " · " and trimmed to the panel width.
+    """
+    gap = 6
+    seps = _name_separators(len(segments))
+    placed: list[tuple[int, str]] = []
+    cur = x0
+    for i, seg in enumerate(segments):
+        if seg.descriptor:
+            placed.append((cur, seg.descriptor))
+        cur += int(draw.textlength(seg.name, font=name_font))
+        if i < len(segments) - 1:
+            cur += int(draw.textlength(seps[i], font=name_font))
+    fits = all(
+        x + draw.textlength(label, font=role_font) + (gap if j < len(placed) - 1 else 0)
+        <= (placed[j + 1][0] if j < len(placed) - 1 else max_x)
+        for j, (x, label) in enumerate(placed)
+    )
+    if fits:
+        return placed
+
+    people = [s for s in segments if s.name.lower() != "companions"]
+    roles = list(dict.fromkeys(s.descriptor for s in people if s.descriptor))
+    if len(roles) == 1 and len(people) > 1 and all(s.descriptor == roles[0] for s in people):
+        label = _plural_role(roles[0])
+    else:
+        label = " · ".join(dict.fromkeys(s.descriptor for s in segments if s.descriptor))
+    return [(x0, _fit_label(label, role_font, draw, max_x - x0))]
 
 
 def _draw_name_line(
@@ -696,8 +843,13 @@ def render_saints_day_image(
     foreground: tuple[int, int, int] = (0, 0, 0),
     calendar_tag: str = "",
     palette: str | None = None,
+    description_fallback: str = "",
 ) -> bytes:
     """Compose a complete saints-day panel and return PNG bytes at *size*.
+
+    *description_fallback* is a compact alternative for multi-person days: it is
+    used when *description* can't be shown in full, so a second or third saint
+    is never silently cut off at a sentence boundary.
 
     Saint day  — header (red):   name, white text
                  subtitle (black): descriptor(s) aligned under each name, white text
@@ -766,8 +918,6 @@ def render_saints_day_image(
     tag_pt = max(9, H // 12)   # ~10 pt at 128 px — comfortably legible
     tag_font_obj = _load_body(tag_pt)
     _, _, _, tag_h = probe_draw.textbbox((0, 0), "Ag", font=tag_font_obj)
-    box_pad = PAD                                        # inner padding around tag text
-    # Width cleared for the tag box (tag text + padding on both sides + gap)
     tag_text_w = int(probe_draw.textlength(calendar_tag, font=tag_font_obj)) if calendar_tag else 0
     # Reserve exactly the tag's rendered footprint plus one PAD of clearance.
     # The tag right-aligns to W-PAD, which is also the text column right edge,
@@ -776,13 +926,31 @@ def render_saints_day_image(
     tag_float_h = tag_h + PAD if calendar_tag else 0
 
     # ---- Name / header font: shrink to fit full panel width -----------------
+    name_override = ""   # set only when even the smallest header font can't fit
     if has_saint:
-        name_line = _join_names(parsed.segments)
-        name_pt = max(role_pt + 2, H // 5)
-        while name_pt > role_pt + 2:
-            if int(probe_draw.textlength(name_line, font=_load_name(name_pt))) <= W - 2 * PAD:
-                break
-            name_pt -= 1
+        def _shrink(line: str) -> tuple[int, bool]:
+            pt = max(role_pt + 2, H // 5)
+            while pt > role_pt + 2:
+                if int(probe_draw.textlength(line, font=_load_name(pt))) <= W - 2 * PAD:
+                    return pt, True
+                pt -= 1
+            return pt, int(probe_draw.textlength(line, font=_load_name(pt))) <= W - 2 * PAD
+
+        name_pt, fits = _shrink(_join_names(parsed.segments))
+        if not fits:
+            # Long group names: keep the lead saint and the group
+            # ("Andrew Kim Tae-gŏn and Companions").
+            companions = [s for s in parsed.segments if s.name.lower() == "companions"]
+            if companions and len(parsed.segments) > 2:
+                shorter = ParsedSaintName(
+                    segments=[parsed.segments[0], companions[0]], transferred=parsed.transferred
+                )
+                name_pt, fits = _shrink(_join_names(shorter.segments))
+                parsed = shorter
+        if not fits:
+            name_override = _fit_label(
+                _join_names(parsed.segments), _load_name(name_pt), probe_draw, W - 2 * PAD
+            )
     else:
         ferial_text = week if week else (season or "")
         name_pt = max(9, H // 10)
@@ -845,12 +1013,18 @@ def render_saints_day_image(
         return _wrap_lines(text, text_w, probe_draw, f), mx
 
     # Step 1: compute display_text
-    display_text = description
-    if description and text_w > 0 and avail_h > 0:
-        floor_lines, max_lines_floor = _wrap_for_pt(desc_pt_min, description)
+    def _select_sentences(text: str) -> str:
+        floor_lines, max_lines_floor = _wrap_for_pt(desc_pt_min, text)
         candidate = " ".join(floor_lines[:max_lines_floor])
         last_end = _last_sentence_end(candidate)
-        display_text = candidate[: last_end + 1] if last_end >= 0 else candidate
+        return candidate[: last_end + 1] if last_end >= 0 else candidate
+
+    display_text = description
+    if description and text_w > 0 and avail_h > 0:
+        display_text = _select_sentences(description)
+        if description_fallback and display_text.split() != description.split():
+            # The full text would lose someone; show everyone compactly instead.
+            display_text = _select_sentences(description_fallback)
 
     # Step 2: find the largest font where display_text fits.
     desc_pt: float = desc_pt_min
@@ -876,27 +1050,20 @@ def render_saints_day_image(
     draw.rectangle([0, 0, W - 1, header_h - 1], fill=header_color)
 
     if has_saint:
-        _draw_name_line(img, draw, parsed, PAD, PAD, name_font, (255, 255, 255))
+        if name_override:
+            _text(img, draw, (PAD, PAD), name_override, name_font, (255, 255, 255))
+        else:
+            _draw_name_line(img, draw, parsed, PAD, PAD, name_font, (255, 255, 255))
     else:
         _text(img, draw, (PAD, PAD), ferial_text, name_font, (255, 255, 255))
 
     # ---- Subtitle band (descriptors, black background, white text) ----------
     if subtitle_h:
         draw.rectangle([0, header_h, W - 1, header_h + subtitle_h - 1], fill=(0, 0, 0))
-        # Each descriptor aligned under its name's x offset in the header
-        seps_n = _name_separators(len(parsed.segments))
-        sep_ws_n = [int(probe_draw.textlength(s, font=name_font)) for s in seps_n]
-        name_widths_n = [
-            int(probe_draw.textlength(seg.name, font=name_font))
-            for seg in parsed.segments
-        ]
-        cur = PAD
-        for i, seg in enumerate(parsed.segments):
-            if seg.descriptor:
-                _text(img, draw, (cur, header_h + PAD), seg.descriptor, role_font, (255, 255, 255))
-            cur += name_widths_n[i]
-            if i < len(parsed.segments) - 1:
-                cur += sep_ws_n[i]
+        for x, label in _subtitle_layout(
+            parsed.segments, name_font, role_font, probe_draw, PAD, W - PAD
+        ):
+            _text(img, draw, (x, header_h + PAD), label, role_font, (255, 255, 255))
 
     # ---- Left column: portrait or season symbol -----------------------------
     if has_saint and saint_image_bytes:

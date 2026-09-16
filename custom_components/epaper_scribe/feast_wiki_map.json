@@ -1,0 +1,2779 @@
+{
+ "_about": "Verified Wikipedia targets for every observance in the General Roman Calendar (keyed by romcal feast id) and Common Worship (keyed by Anglican day name). Checked by scripts/check_feast_map.py. titles: articles whose first sentences describe the day. For several titles, the display falls back to 'Label: Wikipedia short description.' per person when the sentences don't all fit; labels default to the article titles. text: a written description for observances no article fits, with an optional image article.",
+ "catholic": {
+  "adalbert_of_prague_bishop": {
+   "titles": [
+    "Adalbert of Prague"
+   ],
+   "name": "Saint Adalbert, Bishop and Martyr"
+  },
+  "agatha_of_sicily_virgin": {
+   "titles": [
+    "Agatha of Sicily"
+   ],
+   "name": "Saint Agatha, Virgin and Martyr"
+  },
+  "agnes_of_rome_virgin": {
+   "titles": [
+    "Agnes of Rome"
+   ],
+   "name": "Saint Agnes, Virgin and Martyr"
+  },
+  "albert_the_great_bishop": {
+   "titles": [
+    "Albertus Magnus"
+   ],
+   "name": "Saint Albert the Great, Bishop and Doctor of the Church"
+  },
+  "all_saints": {
+   "titles": [
+    "All Saints' Day"
+   ],
+   "name": "All Saints"
+  },
+  "aloysius_gonzaga_religious": {
+   "titles": [
+    "Aloysius Gonzaga"
+   ],
+   "name": "Saint Aloysius Gonzaga, Religious"
+  },
+  "alphonsus_mary_liguori_bishop": {
+   "titles": [
+    "Alphonsus Liguori"
+   ],
+   "name": "Saint Alphonsus Mary Liguori, Bishop and Doctor of the Church"
+  },
+  "ambrose_of_milan_bishop": {
+   "titles": [
+    "Ambrose"
+   ],
+   "name": "Saint Ambrose, Bishop and Doctor of the Church"
+  },
+  "andrew_apostle": {
+   "titles": [
+    "Andrew the Apostle"
+   ],
+   "name": "Saint Andrew, Apostle"
+  },
+  "andrew_dung_lac_priest_and_companions_martyrs": {
+   "titles": [
+    "Vietnamese Martyrs"
+   ],
+   "name": "Saint Andrew Dũng-Lạc, Priest, and Companions, Martyrs"
+  },
+  "andrew_kim_tae_gon_priest_paul_chong_ha_sang_and_companions_martyrs": {
+   "titles": [
+    "Korean Martyrs"
+   ],
+   "name": "Saints Andrew Kim Tae-gŏn, Priest, Paul Chŏng Ha-sang and Companions, Martyrs"
+  },
+  "angela_merici_virgin": {
+   "titles": [
+    "Angela Merici"
+   ],
+   "name": "Saint Angela Merici, Virgin"
+  },
+  "annunciation_of_the_lord": {
+   "titles": [
+    "Feast of the Annunciation"
+   ],
+   "name": "The Annunciation of the Lord"
+  },
+  "anselm_of_canterbury_bishop": {
+   "titles": [
+    "Anselm of Canterbury"
+   ],
+   "name": "Saint Anselm, Bishop and Doctor of the Church"
+  },
+  "ansgar_of_hamburg_bishop": {
+   "titles": [
+    "Ansgar"
+   ],
+   "name": "Saint Ansgar, Bishop"
+  },
+  "anthony_mary_claret_bishop": {
+   "titles": [
+    "Anthony Mary Claret"
+   ],
+   "name": "Saint Anthony Mary Claret, Bishop"
+  },
+  "anthony_of_egypt_abbot": {
+   "titles": [
+    "Anthony the Great"
+   ],
+   "name": "Saint Anthony, Abbot"
+  },
+  "anthony_of_padua_priest": {
+   "titles": [
+    "Anthony of Padua"
+   ],
+   "name": "Saint Anthony of Padua, Priest and Doctor of the Church"
+  },
+  "anthony_zaccaria_priest": {
+   "titles": [
+    "Anthony Zaccaria"
+   ],
+   "name": "Saint Anthony Zaccaria, Priest"
+  },
+  "apollinaris_of_ravenna_bishop": {
+   "titles": [
+    "Apollinaris of Ravenna"
+   ],
+   "name": "Saint Apollinaris, Bishop and Martyr"
+  },
+  "ascension_of_the_lord": {
+   "titles": [
+    "Feast of the Ascension"
+   ],
+   "name": "The Ascension of the Lord"
+  },
+  "assumption_of_the_blessed_virgin_mary": {
+   "titles": [
+    "Assumption of Mary"
+   ],
+   "name": "The Assumption of the Blessed Virgin Mary"
+  },
+  "athanasius_of_alexandria_bishop": {
+   "titles": [
+    "Athanasius of Alexandria"
+   ],
+   "name": "Saint Athanasius, Bishop and Doctor of the Church"
+  },
+  "augustine_of_canterbury_bishop": {
+   "titles": [
+    "Augustine of Canterbury"
+   ],
+   "name": "Saint Augustine of Canterbury, Bishop"
+  },
+  "augustine_of_hippo_bishop": {
+   "titles": [
+    "Augustine of Hippo"
+   ],
+   "name": "Saint Augustine, Bishop and Doctor of the Church"
+  },
+  "augustine_zhao_rong_priest_and_companions_martyrs": {
+   "titles": [
+    "Martyr Saints of China"
+   ],
+   "name": "Saint Augustine Zhao Rong, Priest, and Companions, Martyrs"
+  },
+  "baptism_of_the_lord": {
+   "titles": [
+    "Feast of the Baptism of the Lord"
+   ],
+   "name": "The Baptism of the Lord"
+  },
+  "barnabas_apostle": {
+   "titles": [
+    "Barnabas"
+   ],
+   "name": "Saint Barnabas, Apostle"
+  },
+  "bartholomew_apostle": {
+   "titles": [
+    "Bartholomew the Apostle"
+   ],
+   "name": "Saint Bartholomew, Apostle"
+  },
+  "basil_the_great_and_gregory_nazianzen_bishops": {
+   "titles": [
+    "Basil of Caesarea",
+    "Gregory of Nazianzus"
+   ],
+   "name": "Saints Basil the Great and Gregory Nazianzen, Bishops and Doctors of the Church"
+  },
+  "bede_the_venerable_priest": {
+   "titles": [
+    "Bede"
+   ],
+   "name": "Saint Bede the Venerable, Priest and Doctor of the Church"
+  },
+  "benedict_of_nursia_abbot": {
+   "titles": [
+    "Benedict of Nursia"
+   ],
+   "name": "Saint Benedict, Abbot"
+  },
+  "bernard_of_clairvaux_abbot": {
+   "titles": [
+    "Bernard of Clairvaux"
+   ],
+   "name": "Saint Bernard, Abbot and Doctor of the Church"
+  },
+  "bernardine_of_siena_priest": {
+   "titles": [
+    "Bernardino of Siena"
+   ],
+   "name": "Saint Bernardine of Siena, Priest"
+  },
+  "blaise_of_sebaste_bishop": {
+   "titles": [
+    "Saint Blaise"
+   ],
+   "name": "Saint Blaise, Bishop and Martyr"
+  },
+  "bonaventure_of_bagnoregio_bishop": {
+   "titles": [
+    "Bonaventure"
+   ],
+   "name": "Saint Bonaventure, Bishop and Doctor of the Church"
+  },
+  "boniface_of_mainz_bishop": {
+   "titles": [
+    "Saint Boniface"
+   ],
+   "name": "Saint Boniface, Bishop and Martyr"
+  },
+  "bridget_of_sweden_religious": {
+   "titles": [
+    "Bridget of Sweden"
+   ],
+   "name": "Saint Bridget, Religious"
+  },
+  "bruno_of_cologne_priest": {
+   "titles": [
+    "Bruno of Cologne"
+   ],
+   "name": "Saint Bruno, Priest"
+  },
+  "cajetan_of_thiene_priest": {
+   "titles": [
+    "Saint Cajetan"
+   ],
+   "name": "Saint Cajetan, Priest"
+  },
+  "callistus_i_pope": {
+   "titles": [
+    "Pope Callixtus I"
+   ],
+   "name": "Saint Callistus I, Pope and Martyr"
+  },
+  "camillus_de_lellis_priest": {
+   "titles": [
+    "Camillus de Lellis"
+   ],
+   "name": "Saint Camillus de Lellis, Priest"
+  },
+  "casimir_of_poland": {
+   "titles": [
+    "Saint Casimir"
+   ],
+   "name": "Saint Casimir"
+  },
+  "catherine_of_alexandria_virgin": {
+   "titles": [
+    "Catherine of Alexandria"
+   ],
+   "name": "Saint Catherine of Alexandria, Virgin and Martyr"
+  },
+  "catherine_of_siena_virgin": {
+   "titles": [
+    "Catherine of Siena"
+   ],
+   "name": "Saint Catherine of Siena, Virgin and Doctor of the Church"
+  },
+  "cecilia_of_rome_virgin": {
+   "titles": [
+    "Cecilia of Rome"
+   ],
+   "name": "Saint Cecilia, Virgin and Martyr"
+  },
+  "chair_of_saint_peter_the_apostle": {
+   "titles": [
+    "Chair of Saint Peter"
+   ],
+   "name": "The Chair of Saint Peter the Apostle"
+  },
+  "charles_borromeo_bishop": {
+   "titles": [
+    "Charles Borromeo"
+   ],
+   "name": "Saint Charles Borromeo, Bishop"
+  },
+  "charles_lwanga_and_companions_martyrs": {
+   "titles": [
+    "Uganda Martyrs"
+   ],
+   "name": "Saints Charles Lwanga and Companions, Martyrs"
+  },
+  "christopher_magallanes_priest_and_companions_martyrs": {
+   "titles": [
+    "Saints of the Cristero War"
+   ],
+   "name": "Saint Christopher Magallanes, Priest, and Companions, Martyrs"
+  },
+  "clare_of_assisi_virgin": {
+   "titles": [
+    "Clare of Assisi"
+   ],
+   "name": "Saint Clare, Virgin"
+  },
+  "clement_i_pope": {
+   "titles": [
+    "Clement of Rome"
+   ],
+   "name": "Saint Clement I, Pope and Martyr"
+  },
+  "columban_of_luxeuil_abbot": {
+   "titles": [
+    "Columbanus"
+   ],
+   "name": "Saint Columban, Abbot"
+  },
+  "commemoration_of_all_the_faithful_departed": {
+   "titles": [
+    "All Souls' Day"
+   ],
+   "name": "The Commemoration of All the Faithful Departed (All Soul’s Day)"
+  },
+  "conversion_of_saint_paul_the_apostle": {
+   "titles": [
+    "Conversion of Paul the Apostle"
+   ],
+   "name": "The Conversion of Saint Paul the Apostle"
+  },
+  "cornelius_i_pope_and_cyprian_of_carthage_bishop_martyrs": {
+   "titles": [
+    "Pope Cornelius",
+    "Cyprian"
+   ],
+   "name": "Saints Cornelius, Pope, and Cyprian, Bishop, Martyrs"
+  },
+  "cosmas_of_cilicia_and_damian_of_cilicia_martyrs": {
+   "titles": [
+    "Cosmas and Damian"
+   ],
+   "name": "Saints Cosmas and Damian, Martyrs"
+  },
+  "cyril_constantine_the_philosopher_monk_and_methodius_michael_of_thessaloniki_bishop": {
+   "titles": [
+    "Cyril and Methodius"
+   ],
+   "name": "Saints Cyril, Monk, and Methodius, Bishop"
+  },
+  "cyril_of_alexandria_bishop": {
+   "titles": [
+    "Cyril of Alexandria"
+   ],
+   "name": "Saint Cyril of Alexandria, Bishop and Doctor of the Church"
+  },
+  "cyril_of_jerusalem_bishop": {
+   "titles": [
+    "Cyril of Jerusalem"
+   ],
+   "name": "Saint Cyril of Jerusalem, Bishop and Doctor of the Church"
+  },
+  "damasus_i_pope": {
+   "titles": [
+    "Pope Damasus I"
+   ],
+   "name": "Saint Damasus I, Pope"
+  },
+  "dedication_of_the_basilica_of_saint_mary_major": {
+   "titles": [
+    "Dedication of the Basilica of Saint Mary Major"
+   ],
+   "name": "The Dedication of the Basilica of Saint Mary Major"
+  },
+  "dedication_of_the_basilicas_of_saints_peter_and_paul_apostles": {
+   "text": "Commemorates the dedication of the papal basilicas of Saint Peter in the Vatican and Saint Paul Outside the Walls, built over the traditional burial places of the two apostles.",
+   "image": "St. Peter's Basilica",
+   "name": "The Dedication of the Basilicas of Saints Peter and Paul, Apostles"
+  },
+  "dedication_of_the_lateran_basilica": {
+   "titles": [
+    "Dedication of the Lateran Basilica"
+   ],
+   "name": "The Dedication of the Lateran Basilica"
+  },
+  "denis_of_paris_bishop_and_companions_martyrs": {
+   "titles": [
+    "Denis of Paris"
+   ],
+   "name": "Saint Denis, Bishop, and Companions, Martyrs"
+  },
+  "dominic_de_guzman_priest": {
+   "titles": [
+    "Dominic de Guzmán"
+   ],
+   "name": "Saint Dominic, Priest"
+  },
+  "easter_friday": {
+   "titles": [
+    "Octave of Easter"
+   ],
+   "name": "Friday within the Octave of Easter"
+  },
+  "easter_monday": {
+   "titles": [
+    "Octave of Easter"
+   ],
+   "name": "Monday within the Octave of Easter"
+  },
+  "easter_saturday": {
+   "titles": [
+    "Octave of Easter"
+   ],
+   "name": "Saturday within the Octave of Easter"
+  },
+  "easter_sunday": {
+   "titles": [
+    "Easter"
+   ],
+   "name": "Easter Sunday of the Resurrection of the Lord"
+  },
+  "easter_thursday": {
+   "titles": [
+    "Octave of Easter"
+   ],
+   "name": "Thursday within the Octave of Easter"
+  },
+  "easter_tuesday": {
+   "titles": [
+    "Octave of Easter"
+   ],
+   "name": "Tuesday within the Octave of Easter"
+  },
+  "easter_wednesday": {
+   "titles": [
+    "Octave of Easter"
+   ],
+   "name": "Wednesday within the Octave of Easter"
+  },
+  "elizabeth_of_hungary_religious": {
+   "titles": [
+    "Elizabeth of Hungary"
+   ],
+   "name": "Saint Elizabeth of Hungary, Religious"
+  },
+  "elizabeth_of_portugal": {
+   "titles": [
+    "Elizabeth of Portugal"
+   ],
+   "name": "Saint Elizabeth of Portugal"
+  },
+  "ephrem_the_syrian_deacon": {
+   "titles": [
+    "Ephrem the Syrian"
+   ],
+   "name": "Saint Ephrem, Deacon and Doctor of the Church"
+  },
+  "epiphany_of_the_lord": {
+   "titles": [
+    "Epiphany (holiday)"
+   ],
+   "name": "The Epiphany of the Lord"
+  },
+  "eusebius_of_vercelli_bishop": {
+   "titles": [
+    "Eusebius of Vercelli"
+   ],
+   "name": "Saint Eusebius of Vercelli, Bishop"
+  },
+  "exaltation_of_the_holy_cross": {
+   "titles": [
+    "Feast of the Cross"
+   ],
+   "name": "The Exaltation of the Holy Cross"
+  },
+  "fabian_i_pope": {
+   "titles": [
+    "Pope Fabian"
+   ],
+   "name": "Saint Fabian, Pope and Martyr"
+  },
+  "faustina_kowalska_virgin": {
+   "titles": [
+    "Faustina Kowalska"
+   ],
+   "name": "Saint Faustina Kowalska, Virgin"
+  },
+  "fidelis_of_sigmaringen_priest": {
+   "titles": [
+    "Fidelis of Sigmaringen"
+   ],
+   "name": "Saint Fidelis of Sigmaringen, Priest and Martyr"
+  },
+  "first_martyrs_of_the_holy_roman_church": {
+   "titles": [
+    "First Martyrs of the Church of Rome"
+   ],
+   "name": "The First Martyrs of the Holy Roman Church"
+  },
+  "frances_of_rome_religious": {
+   "titles": [
+    "Frances of Rome"
+   ],
+   "name": "Saint Frances of Rome, Religious"
+  },
+  "francis_de_sales_bishop": {
+   "titles": [
+    "Francis de Sales"
+   ],
+   "name": "Saint Francis de Sales, Bishop and Doctor of the Church"
+  },
+  "francis_of_assisi": {
+   "titles": [
+    "Francis of Assisi"
+   ],
+   "name": "Saint Francis of Assisi"
+  },
+  "francis_of_paola_hermit": {
+   "titles": [
+    "Francis of Paola"
+   ],
+   "name": "Saint Francis of Paola, Hermit"
+  },
+  "francis_xavier_priest": {
+   "titles": [
+    "Francis Xavier"
+   ],
+   "name": "Saint Francis Xavier, Priest"
+  },
+  "george_of_lydda_martyr": {
+   "titles": [
+    "Saint George"
+   ],
+   "name": "Saint George, Martyr"
+  },
+  "gertrude_the_great_virgin": {
+   "titles": [
+    "Gertrude the Great"
+   ],
+   "name": "Saint Gertrude, Virgin"
+  },
+  "gregory_i_the_great_pope": {
+   "titles": [
+    "Pope Gregory I"
+   ],
+   "name": "Saint Gregory the Great, Pope and Doctor of the Church"
+  },
+  "gregory_of_narek_abbot": {
+   "titles": [
+    "Gregory of Narek"
+   ],
+   "name": "Saint Gregory of Narek, Abbot and Doctor of the Church"
+  },
+  "gregory_vii_pope": {
+   "titles": [
+    "Pope Gregory VII"
+   ],
+   "name": "Saint Gregory VII, Pope"
+  },
+  "hedwig_of_silesia_religious": {
+   "titles": [
+    "Hedwig of Silesia"
+   ],
+   "name": "Saint Hedwig, Religious"
+  },
+  "henry_ii_emperor": {
+   "titles": [
+    "Henry II, Holy Roman Emperor"
+   ],
+   "name": "Saint Henry"
+  },
+  "hilary_of_poitiers_bishop": {
+   "titles": [
+    "Hilary of Poitiers"
+   ],
+   "name": "Saint Hilary, Bishop and Doctor of the Church"
+  },
+  "hildegard_of_bingen_abbess": {
+   "titles": [
+    "Hildegard of Bingen"
+   ],
+   "name": "Saint Hildegard of Bingen, Abbess and Doctor of the Church"
+  },
+  "holy_family_of_jesus_mary_and_joseph": {
+   "titles": [
+    "Holy Family"
+   ],
+   "name": "The Holy Family of Jesus, Mary and Joseph"
+  },
+  "holy_guardian_angels": {
+   "titles": [
+    "Memorial of the Holy Guardian Angels"
+   ],
+   "name": "The Holy Guardian Angels"
+  },
+  "holy_innocents_martyrs": {
+   "titles": [
+    "Massacre of the Innocents"
+   ],
+   "name": "The Holy Innocents, Martyrs"
+  },
+  "ignatius_of_antioch_bishop": {
+   "titles": [
+    "Ignatius of Antioch"
+   ],
+   "name": "Saint Ignatius of Antioch, Bishop and Martyr"
+  },
+  "ignatius_of_loyola_priest": {
+   "titles": [
+    "Ignatius of Loyola"
+   ],
+   "name": "Saint Ignatius of Loyola, Priest"
+  },
+  "immaculate_conception_of_the_blessed_virgin_mary": {
+   "titles": [
+    "Immaculate Conception"
+   ],
+   "name": "The Immaculate Conception of the Blessed Virgin Mary"
+  },
+  "immaculate_heart_of_mary": {
+   "titles": [
+    "Immaculate Heart of Mary"
+   ],
+   "name": "The Immaculate Heart of the Blessed Virgin Mary"
+  },
+  "irenaeus_of_lyon_bishop": {
+   "titles": [
+    "Irenaeus"
+   ],
+   "name": "Saint Irenaeus, Bishop, Martyr and Doctor of the Church"
+  },
+  "isidore_of_seville_bishop": {
+   "titles": [
+    "Isidore of Seville"
+   ],
+   "name": "Saint Isidore, Bishop and Doctor of the Church"
+  },
+  "james_apostle": {
+   "titles": [
+    "James the Great"
+   ],
+   "name": "Saint James, Apostle"
+  },
+  "jane_frances_de_chantal_religious": {
+   "titles": [
+    "Jane Frances de Chantal"
+   ],
+   "name": "Saint Jane Frances de Chantal, Religious"
+  },
+  "januarius_i_of_benevento_bishop": {
+   "titles": [
+    "Januarius"
+   ],
+   "name": "Saint Januarius, Bishop and Martyr"
+  },
+  "jerome_emiliani": {
+   "titles": [
+    "Gerolamo Emiliani"
+   ],
+   "name": "Saint Jerome Emiliani"
+  },
+  "jerome_of_stridon_priest": {
+   "titles": [
+    "Jerome"
+   ],
+   "name": "Saint Jerome, Priest and Doctor of the Church"
+  },
+  "joachim_and_anne_parents_of_mary": {
+   "titles": [
+    "Joachim",
+    "Saint Anne"
+   ],
+   "name": "Saints Joachim and Anne, Parents of the Blessed Virgin Mary"
+  },
+  "john_apostle": {
+   "titles": [
+    "John the Apostle"
+   ],
+   "name": "Saint John, Apostle and Evangelist"
+  },
+  "john_baptist_de_la_salle_priest": {
+   "titles": [
+    "Jean-Baptiste de La Salle"
+   ],
+   "name": "Saint John Baptist de la Salle, Priest"
+  },
+  "john_bosco_priest": {
+   "titles": [
+    "John Bosco"
+   ],
+   "name": "Saint John Bosco, Priest"
+  },
+  "john_chrysostom_bishop": {
+   "titles": [
+    "John Chrysostom"
+   ],
+   "name": "Saint John Chrysostom, Bishop and Doctor of the Church"
+  },
+  "john_damascene_priest": {
+   "titles": [
+    "John of Damascus"
+   ],
+   "name": "Saint John Damascene, Priest and Doctor of the Church"
+  },
+  "john_de_brebeuf_isaac_jogues_priests_and_companions_martyrs": {
+   "titles": [
+    "Canadian Martyrs"
+   ],
+   "name": "Saints John de Brébeuf and Isaac Jogues, Priests, and Companions, Martyrs"
+  },
+  "john_eudes_priest": {
+   "titles": [
+    "John Eudes"
+   ],
+   "name": "Saint John Eudes, Priest"
+  },
+  "john_fisher_bishop_and_thomas_more_martyrs": {
+   "titles": [
+    "John Fisher",
+    "Thomas More"
+   ],
+   "labels": [
+    "John Fisher",
+    "Thomas More"
+   ],
+   "name": "Saints John Fisher, Bishop, and Thomas More, Martyrs"
+  },
+  "john_i_pope": {
+   "titles": [
+    "Pope John I"
+   ],
+   "name": "Saint John I, Pope and Martyr"
+  },
+  "john_leonardi_priest": {
+   "titles": [
+    "John Leonardi"
+   ],
+   "name": "Saint John Leonardi, Priest"
+  },
+  "john_mary_vianney_priest": {
+   "titles": [
+    "John Vianney"
+   ],
+   "name": "Saint John Mary Vianney, Priest"
+  },
+  "john_of_avila_priest": {
+   "titles": [
+    "John of Ávila"
+   ],
+   "name": "Saint John of Ávila, Priest and Doctor of the Church"
+  },
+  "john_of_capistrano_priest": {
+   "titles": [
+    "John of Capistrano"
+   ],
+   "name": "Saint John of Capistrano, Priest"
+  },
+  "john_of_god_duarte_cidade_religious": {
+   "titles": [
+    "John of God"
+   ],
+   "name": "Saint John of God, Religious"
+  },
+  "john_of_kanty_priest": {
+   "titles": [
+    "John Cantius"
+   ],
+   "name": "Saint John of Kanty, Priest"
+  },
+  "john_of_the_cross_priest": {
+   "titles": [
+    "John of the Cross"
+   ],
+   "name": "Saint John of the Cross, Priest and Doctor of the Church"
+  },
+  "john_paul_ii_pope": {
+   "titles": [
+    "Pope John Paul II"
+   ],
+   "name": "Saint John Paul II, Pope"
+  },
+  "john_xxiii_pope": {
+   "titles": [
+    "Pope John XXIII"
+   ],
+   "name": "Saint John XXIII, Pope"
+  },
+  "josaphat_kuntsevych_bishop": {
+   "titles": [
+    "Josaphat Kuntsevych"
+   ],
+   "name": "Saint Josaphat, Bishop and Martyr"
+  },
+  "joseph_of_calasanz_priest": {
+   "titles": [
+    "Joseph Calasanz"
+   ],
+   "name": "Saint Joseph of Calasanz, Priest"
+  },
+  "joseph_spouse_of_mary": {
+   "titles": [
+    "Saint Joseph"
+   ],
+   "name": "Saint Joseph, Spouse of the Blessed Virgin Mary"
+  },
+  "joseph_the_worker": {
+   "titles": [
+    "Saint Joseph"
+   ],
+   "name": "Saint Joseph the Worker"
+  },
+  "josephine_bakhita_virgin": {
+   "titles": [
+    "Josephine Bakhita"
+   ],
+   "name": "Saint Josephine Bakhita, Virgin"
+  },
+  "juan_diego_cuauhtlatoatzin": {
+   "titles": [
+    "Juan Diego"
+   ],
+   "name": "Saint Juan Diego Cuauhtlatoatzin"
+  },
+  "justin_martyr": {
+   "titles": [
+    "Justin Martyr"
+   ],
+   "name": "Saint Justin, Martyr"
+  },
+  "lawrence_of_brindisi_priest": {
+   "titles": [
+    "Lawrence of Brindisi"
+   ],
+   "name": "Saint Lawrence of Brindisi, Priest and Doctor of the Church"
+  },
+  "lawrence_of_rome_deacon": {
+   "titles": [
+    "Saint Lawrence"
+   ],
+   "name": "Saint Lawrence, Deacon and Martyr"
+  },
+  "lawrence_ruiz_and_companions_martyrs": {
+   "titles": [
+    "Lorenzo Ruiz"
+   ],
+   "name": "Saint Lawrence Ruiz and Companions, Martyrs"
+  },
+  "leo_i_the_great_pope": {
+   "titles": [
+    "Pope Leo I"
+   ],
+   "name": "Saint Leo the Great, Pope and Doctor of the Church"
+  },
+  "louis_grignion_de_montfort_priest": {
+   "titles": [
+    "Louis de Montfort"
+   ],
+   "name": "Saint Louis Grignion de Montfort, Priest"
+  },
+  "louis_ix_of_france": {
+   "titles": [
+    "Louis IX of France"
+   ],
+   "name": "Saint Louis"
+  },
+  "lucy_of_syracuse_virgin": {
+   "titles": [
+    "Saint Lucy"
+   ],
+   "name": "Saint Lucy, Virgin and Martyr"
+  },
+  "luke_evangelist": {
+   "titles": [
+    "Luke the Evangelist"
+   ],
+   "name": "Saint Luke, Evangelist"
+  },
+  "marcellinus_of_rome_and_peter_the_exorcist_martyrs": {
+   "titles": [
+    "Marcellinus and Peter"
+   ],
+   "name": "Saints Marcellinus and Peter, Martyrs"
+  },
+  "margaret_mary_alacoque_virgin": {
+   "titles": [
+    "Margaret Mary Alacoque"
+   ],
+   "name": "Saint Margaret Mary Alacoque, Virgin"
+  },
+  "margaret_of_scotland": {
+   "titles": [
+    "Saint Margaret of Scotland"
+   ],
+   "name": "Saint Margaret of Scotland"
+  },
+  "maria_goretti_virgin": {
+   "titles": [
+    "Maria Goretti"
+   ],
+   "name": "Saint Maria Goretti, Virgin and Martyr"
+  },
+  "mark_evangelist": {
+   "titles": [
+    "Mark the Evangelist"
+   ],
+   "name": "Saint Mark, Evangelist"
+  },
+  "martha_of_bethany_mary_of_bethany_and_lazarus_of_bethany": {
+   "titles": [
+    "Martha",
+    "Mary of Bethany",
+    "Lazarus of Bethany"
+   ],
+   "labels": [
+    "Martha",
+    "Mary",
+    "Lazarus"
+   ],
+   "name": "Saints Martha, Mary and Lazarus"
+  },
+  "martin_de_porres_religious": {
+   "titles": [
+    "Martin de Porres"
+   ],
+   "name": "Saint Martin de Porres, Religious"
+  },
+  "martin_i_pope": {
+   "titles": [
+    "Pope Martin I"
+   ],
+   "name": "Saint Martin I, Pope and Martyr"
+  },
+  "martin_of_tours_bishop": {
+   "titles": [
+    "Martin of Tours"
+   ],
+   "name": "Saint Martin of Tours, Bishop"
+  },
+  "mary_magdalene": {
+   "titles": [
+    "Mary Magdalene"
+   ],
+   "name": "Saint Mary Magdalene"
+  },
+  "mary_magdalene_de_pazzi_virgin": {
+   "titles": [
+    "Mary Magdalene de' Pazzi"
+   ],
+   "name": "Saint Mary Magdalene de’ Pazzi, Virgin"
+  },
+  "mary_mother_of_god": {
+   "titles": [
+    "Solemnity of Mary, Mother of God"
+   ],
+   "name": "The Octave Day of the Nativity of the Lord: Solemnity of Mary, the Holy Mother of God"
+  },
+  "mary_mother_of_the_church": {
+   "titles": [
+    "Mother of the Church"
+   ],
+   "name": "Blessed Virgin Mary, Mother of the Church"
+  },
+  "matthew_apostle": {
+   "titles": [
+    "Matthew the Apostle"
+   ],
+   "name": "Saint Matthew, Apostle and Evangelist"
+  },
+  "matthias_apostle": {
+   "titles": [
+    "Matthias the Apostle"
+   ],
+   "name": "Saint Matthias, Apostle"
+  },
+  "maximilian_mary_raymund_kolbe_priest": {
+   "titles": [
+    "Maximilian Kolbe"
+   ],
+   "name": "Saint Maximilian Mary Kolbe, Priest and Martyr"
+  },
+  "michael_gabriel_and_raphael_archangels": {
+   "titles": [
+    "Michaelmas"
+   ],
+   "name": "Saints Michael, Gabriel and Raphael, Archangels"
+  },
+  "monica_of_hippo": {
+   "titles": [
+    "Saint Monica"
+   ],
+   "name": "Saint Monica"
+  },
+  "most_holy_body_and_blood_of_christ": {
+   "titles": [
+    "Feast of Corpus Christi"
+   ],
+   "name": "The Most Holy Body and Blood of Christ"
+  },
+  "most_holy_name_of_jesus": {
+   "titles": [
+    "Holy Name of Jesus"
+   ],
+   "name": "The Most Holy Name of Jesus"
+  },
+  "most_holy_name_of_mary": {
+   "titles": [
+    "Most Holy Name of the Blessed Virgin Mary"
+   ],
+   "name": "The Most Holy Name of Mary"
+  },
+  "most_holy_trinity": {
+   "titles": [
+    "Trinity Sunday"
+   ],
+   "name": "The Most Holy Trinity"
+  },
+  "most_sacred_heart_of_jesus": {
+   "titles": [
+    "Sacred Heart"
+   ],
+   "name": "The Most Sacred Heart of Jesus"
+  },
+  "nativity_of_john_the_baptist": {
+   "titles": [
+    "Nativity of John the Baptist"
+   ],
+   "name": "The Nativity of Saint John the Baptist"
+  },
+  "nativity_of_the_blessed_virgin_mary": {
+   "titles": [
+    "Nativity of Mary"
+   ],
+   "name": "The Nativity of the Blessed Virgin Mary"
+  },
+  "nativity_of_the_lord": {
+   "titles": [
+    "Christmas"
+   ],
+   "name": "The Nativity of the Lord (Christmas)"
+  },
+  "nereus_of_terracina_and_achilleus_of_terracina_martyrs": {
+   "titles": [
+    "Nereus and Achilleus"
+   ],
+   "name": "Saints Nereus and Achilleus, Martyrs"
+  },
+  "nicholas_of_myra_bishop": {
+   "titles": [
+    "Saint Nicholas"
+   ],
+   "name": "Saint Nicholas, Bishop"
+  },
+  "norbert_of_xanten_bishop": {
+   "titles": [
+    "Norbert of Xanten"
+   ],
+   "name": "Saint Norbert, Bishop"
+  },
+  "our_lady_of_fatima": {
+   "titles": [
+    "Our Lady of Fátima"
+   ],
+   "name": "Our Lady of Fatima"
+  },
+  "our_lady_of_guadalupe": {
+   "titles": [
+    "Our Lady of Guadalupe"
+   ],
+   "name": "Our Lady of Guadalupe"
+  },
+  "our_lady_of_loreto": {
+   "titles": [
+    "Basilica della Santa Casa"
+   ],
+   "name": "Our Lady of Loreto"
+  },
+  "our_lady_of_lourdes": {
+   "titles": [
+    "Our Lady of Lourdes"
+   ],
+   "name": "Our Lady of Lourdes"
+  },
+  "our_lady_of_mount_carmel": {
+   "titles": [
+    "Our Lady of Mount Carmel"
+   ],
+   "name": "Our Lady of Mount Carmel"
+  },
+  "our_lady_of_sorrows": {
+   "titles": [
+    "Our Lady of Sorrows"
+   ],
+   "name": "Our Lady of Sorrows"
+  },
+  "our_lady_of_the_rosary": {
+   "titles": [
+    "Our Lady of the Rosary"
+   ],
+   "name": "Our Lady of the Rosary"
+  },
+  "our_lord_jesus_christ_king_of_the_universe": {
+   "titles": [
+    "Feast of Christ the King"
+   ],
+   "name": "Our Lord Jesus Christ, King of the Universe"
+  },
+  "pancras_of_rome_martyr": {
+   "titles": [
+    "Pancras of Rome"
+   ],
+   "name": "Saint Pancras, Martyr"
+  },
+  "passion_of_saint_john_the_baptist": {
+   "titles": [
+    "Beheading of John the Baptist"
+   ],
+   "name": "The Passion of Saint John the Baptist"
+  },
+  "patrick_of_ireland_bishop": {
+   "titles": [
+    "Saint Patrick"
+   ],
+   "name": "Saint Patrick, Bishop"
+  },
+  "paul_miki_and_companions_martyrs": {
+   "titles": [
+    "26 Martyrs of Japan"
+   ],
+   "name": "Saint Paul Miki and Companions, Martyrs"
+  },
+  "paul_of_the_cross_priest": {
+   "titles": [
+    "Paul of the Cross"
+   ],
+   "name": "Saint Paul of the Cross, Priest"
+  },
+  "paul_vi_pope": {
+   "titles": [
+    "Pope Paul VI"
+   ],
+   "name": "Saint Paul VI, Pope"
+  },
+  "paulinus_of_nola_bishop": {
+   "titles": [
+    "Paulinus of Nola"
+   ],
+   "name": "Saint Paulinus of Nola, Bishop"
+  },
+  "pentecost_sunday": {
+   "titles": [
+    "Pentecost"
+   ],
+   "name": "Pentecost Sunday"
+  },
+  "perpetua_of_carthage_and_felicity_of_carthage_martyrs": {
+   "titles": [
+    "Perpetua and Felicity"
+   ],
+   "name": "Saints Perpetua and Felicity, Martyrs"
+  },
+  "peter_and_paul_apostles": {
+   "titles": [
+    "Feast of Saints Peter and Paul"
+   ],
+   "name": "Saints Peter and Paul, Apostles"
+  },
+  "peter_canisius_priest": {
+   "titles": [
+    "Peter Canisius"
+   ],
+   "name": "Saint Peter Canisius, Priest and Doctor of the Church"
+  },
+  "peter_chanel_priest": {
+   "titles": [
+    "Peter Chanel"
+   ],
+   "name": "Saint Peter Chanel, Priest and Martyr"
+  },
+  "peter_chrysologus_bishop": {
+   "titles": [
+    "Peter Chrysologus"
+   ],
+   "name": "Saint Peter Chrysologus, Bishop and Doctor of the Church"
+  },
+  "peter_claver_priest": {
+   "titles": [
+    "Peter Claver"
+   ],
+   "name": "Saint Peter Claver, Priest"
+  },
+  "peter_damian_bishop": {
+   "titles": [
+    "Peter Damian"
+   ],
+   "name": "Saint Peter Damian, Bishop and Doctor of the Church"
+  },
+  "peter_julian_eymard_priest": {
+   "titles": [
+    "Peter Julian Eymard"
+   ],
+   "name": "Saint Peter Julian Eymard, Priest"
+  },
+  "philip_and_james_apostles": {
+   "titles": [
+    "Philip the Apostle",
+    "James, son of Alphaeus"
+   ],
+   "name": "Saints Philip and James, Apostles"
+  },
+  "philip_neri_priest": {
+   "titles": [
+    "Philip Neri"
+   ],
+   "name": "Saint Philip Neri, Priest"
+  },
+  "pius_francesco_forgione_priest": {
+   "titles": [
+    "Padre Pio"
+   ],
+   "name": "Saint Pius of Pietrelcina, Priest"
+  },
+  "pius_v_pope": {
+   "titles": [
+    "Pope Pius V"
+   ],
+   "name": "Saint Pius V, Pope"
+  },
+  "pius_x_pope": {
+   "titles": [
+    "Pope Pius X"
+   ],
+   "name": "Saint Pius X, Pope"
+  },
+  "polycarp_of_smyrna_bishop": {
+   "titles": [
+    "Polycarp"
+   ],
+   "name": "Saint Polycarp, Bishop and Martyr"
+  },
+  "pontian_i_pope_and_hippolytus_of_rome_priest": {
+   "titles": [
+    "Pope Pontian",
+    "Hippolytus of Rome"
+   ],
+   "name": "Saints Pontian, Pope, and Hippolytus, Priest, Martyrs"
+  },
+  "presentation_of_the_blessed_virgin_mary": {
+   "titles": [
+    "Presentation of Mary"
+   ],
+   "name": "The Presentation of the Blessed Virgin Mary"
+  },
+  "presentation_of_the_lord": {
+   "titles": [
+    "Presentation of Jesus"
+   ],
+   "name": "The Presentation of the Lord"
+  },
+  "queenship_of_the_blessed_virgin_mary": {
+   "titles": [
+    "Queen of Heaven"
+   ],
+   "name": "The Queenship of the Blessed Virgin Mary"
+  },
+  "raymond_of_penyafort_priest": {
+   "titles": [
+    "Raymond of Peñafort"
+   ],
+   "name": "Saint Raymond of Penyafort, Priest"
+  },
+  "rita_of_cascia_religious": {
+   "titles": [
+    "Rita of Cascia"
+   ],
+   "name": "Saint Rita of Cascia, Religious"
+  },
+  "robert_bellarmine_bishop": {
+   "titles": [
+    "Robert Bellarmine"
+   ],
+   "name": "Saint Robert Bellarmine, Bishop and Doctor of the Church"
+  },
+  "romuald_of_ravenna_abbot": {
+   "titles": [
+    "Romuald"
+   ],
+   "name": "Saint Romuald, Abbot"
+  },
+  "rose_of_lima_virgin": {
+   "titles": [
+    "Rose of Lima"
+   ],
+   "name": "Saint Rose of Lima, Virgin"
+  },
+  "scholastica_of_nursia_virgin": {
+   "titles": [
+    "Scholastica"
+   ],
+   "name": "Saint Scholastica, Virgin"
+  },
+  "sebastian_of_milan_martyr": {
+   "titles": [
+    "Saint Sebastian"
+   ],
+   "name": "Saint Sebastian, Martyr"
+  },
+  "seven_holy_founders_of_the_servite_order": {
+   "titles": [
+    "Seven Holy Founders of the Servite Order"
+   ],
+   "name": "The Seven Holy Founders of the Servite Order"
+  },
+  "sharbel_makhluf_priest": {
+   "titles": [
+    "Charbel Makhlouf"
+   ],
+   "name": "Saint Sharbel Makhlūf, Priest"
+  },
+  "simon_and_jude_apostles": {
+   "titles": [
+    "Simon the Zealot",
+    "Jude the Apostle"
+   ],
+   "name": "Saints Simon and Jude, Apostles"
+  },
+  "sixtus_ii_pope_and_companions_martyrs": {
+   "titles": [
+    "Pope Sixtus II"
+   ],
+   "name": "Saint Sixtus II, Pope, and Companions, Martyrs"
+  },
+  "stanislaus_of_szczepanow_bishop": {
+   "titles": [
+    "Stanislaus of Szczepanów"
+   ],
+   "name": "Saint Stanislaus, Bishop and Martyr"
+  },
+  "stephen_i_of_hungary": {
+   "titles": [
+    "Stephen I of Hungary"
+   ],
+   "name": "Saint Stephen of Hungary"
+  },
+  "stephen_the_first_martyr": {
+   "titles": [
+    "Saint Stephen"
+   ],
+   "name": "Saint Stephen, the First Martyr"
+  },
+  "sylvester_i_pope": {
+   "titles": [
+    "Pope Sylvester I"
+   ],
+   "name": "Saint Sylvester I, Pope"
+  },
+  "teresa_benedicta_of_the_cross_stein_virgin": {
+   "titles": [
+    "Edith Stein"
+   ],
+   "name": "Saint Teresa Benedicta of the Cross Stein, Virgin and Martyr"
+  },
+  "teresa_of_calcutta_virgin": {
+   "titles": [
+    "Mother Teresa"
+   ],
+   "name": "Saint Teresa of Calcutta, Virgin"
+  },
+  "teresa_of_jesus_of_avila_virgin": {
+   "titles": [
+    "Teresa of Ávila"
+   ],
+   "name": "Saint Teresa of Jesus, Virgin and Doctor of the Church"
+  },
+  "therese_of_the_child_jesus_and_the_holy_face_of_lisieux_virgin": {
+   "titles": [
+    "Thérèse of Lisieux"
+   ],
+   "name": "Saint Thérèse of the Child Jesus, Virgin and Doctor of the Church"
+  },
+  "thomas_apostle": {
+   "titles": [
+    "Thomas the Apostle"
+   ],
+   "name": "Saint Thomas, Apostle"
+  },
+  "thomas_aquinas_priest": {
+   "titles": [
+    "Thomas Aquinas"
+   ],
+   "name": "Saint Thomas Aquinas, Priest and Doctor of the Church"
+  },
+  "thomas_becket_bishop": {
+   "titles": [
+    "Thomas Becket"
+   ],
+   "name": "Saint Thomas Becket, Bishop and Martyr"
+  },
+  "timothy_of_ephesus_and_titus_of_crete_bishops": {
+   "titles": [
+    "Saint Timothy",
+    "Saint Titus"
+   ],
+   "labels": [
+    "Timothy",
+    "Titus"
+   ],
+   "name": "Saints Timothy and Titus, Bishops"
+  },
+  "transfiguration_of_the_lord": {
+   "titles": [
+    "Transfiguration of Jesus"
+   ],
+   "name": "The Transfiguration of the Lord"
+  },
+  "turibius_of_mogrovejo_bishop": {
+   "titles": [
+    "Turibius of Mogrovejo"
+   ],
+   "name": "Saint Turibius of Mogrovejo, Bishop"
+  },
+  "vincent_de_paul_priest": {
+   "titles": [
+    "Vincent de Paul"
+   ],
+   "name": "Saint Vincent de Paul, Priest"
+  },
+  "vincent_ferrer_priest": {
+   "titles": [
+    "Vincent Ferrer"
+   ],
+   "name": "Saint Vincent Ferrer, Priest"
+  },
+  "vincent_of_saragossa_deacon": {
+   "titles": [
+    "Vincent of Saragossa"
+   ],
+   "name": "Saint Vincent, Deacon and Martyr"
+  },
+  "visitation_of_mary": {
+   "titles": [
+    "Visitation (Christianity)"
+   ],
+   "name": "The Visitation of the Blessed Virgin Mary"
+  },
+  "wenceslaus_i_of_bohemia_martyr": {
+   "titles": [
+    "Wenceslaus I, Duke of Bohemia"
+   ],
+   "name": "Saint Wenceslaus, Martyr"
+  }
+ },
+ "anglican": {
+  "Aelred of Hexham": {
+   "titles": [
+    "Aelred of Rievaulx"
+   ],
+   "name": "Aelred of Hexham"
+  },
+  "Agnes": {
+   "titles": [
+    "Agnes of Rome"
+   ],
+   "name": "Agnes"
+  },
+  "Aidan": {
+   "titles": [
+    "Aidan of Lindisfarne"
+   ],
+   "name": "Aidan"
+  },
+  "Alban": {
+   "titles": [
+    "Saint Alban"
+   ],
+   "name": "Alban"
+  },
+  "Alcuin": {
+   "titles": [
+    "Alcuin"
+   ],
+   "name": "Alcuin"
+  },
+  "Alfred the Great": {
+   "titles": [
+    "Alfred the Great"
+   ],
+   "name": "Alfred the Great"
+  },
+  "All Saints": {
+   "titles": [
+    "All Saints' Day"
+   ],
+   "name": "All Saints"
+  },
+  "All Souls": {
+   "titles": [
+    "All Souls' Day"
+   ],
+   "name": "All Souls"
+  },
+  "Allen Gardiner": {
+   "titles": [
+    "Allen Francis Gardiner"
+   ],
+   "name": "Allen Gardiner"
+  },
+  "Alphege": {
+   "titles": [
+    "Ælfheah of Canterbury"
+   ],
+   "name": "Alphege"
+  },
+  "Ambrose": {
+   "titles": [
+    "Ambrose"
+   ],
+   "name": "Ambrose"
+  },
+  "Amy Carmichael": {
+   "titles": [
+    "Amy Carmichael"
+   ],
+   "name": "Amy Carmichael"
+  },
+  "Andrew the Apostle": {
+   "titles": [
+    "Andrew the Apostle"
+   ],
+   "name": "Andrew the Apostle"
+  },
+  "Anselm": {
+   "titles": [
+    "Anselm of Canterbury"
+   ],
+   "name": "Anselm"
+  },
+  "Anskar": {
+   "titles": [
+    "Ansgar"
+   ],
+   "name": "Anskar"
+  },
+  "Antony of Egypt": {
+   "titles": [
+    "Anthony the Great"
+   ],
+   "name": "Antony of Egypt"
+  },
+  "Ascension": {
+   "titles": [
+    "Feast of the Ascension"
+   ],
+   "name": "Ascension"
+  },
+  "Ash Wednesday": {
+   "titles": [
+    "Ash Wednesday"
+   ],
+   "name": "Ash Wednesday"
+  },
+  "Athanasius": {
+   "titles": [
+    "Athanasius of Alexandria"
+   ],
+   "name": "Athanasius"
+  },
+  "Augustine": {
+   "titles": [
+    "Augustine of Hippo"
+   ],
+   "name": "Augustine"
+  },
+  "Augustine of Canterbury": {
+   "titles": [
+    "Augustine of Canterbury"
+   ],
+   "name": "Augustine of Canterbury"
+  },
+  "Barnabas the Apostle": {
+   "titles": [
+    "Barnabas"
+   ],
+   "name": "Barnabas the Apostle"
+  },
+  "Bartholomew the Apostle": {
+   "titles": [
+    "Bartholomew the Apostle"
+   ],
+   "name": "Bartholomew the Apostle"
+  },
+  "Basil the Great and Gregory of Nazianzus": {
+   "titles": [
+    "Basil of Caesarea",
+    "Gregory of Nazianzus"
+   ],
+   "name": "Basil the Great and Gregory of Nazianzus"
+  },
+  "Benedict": {
+   "titles": [
+    "Benedict of Nursia"
+   ],
+   "name": "Benedict"
+  },
+  "Bernard": {
+   "titles": [
+    "Bernard of Clairvaux"
+   ],
+   "name": "Bernard"
+  },
+  "Bernard Mizeki": {
+   "titles": [
+    "Bernard Mizeki"
+   ],
+   "name": "Bernard Mizeki"
+  },
+  "Birinus": {
+   "titles": [
+    "Birinus"
+   ],
+   "name": "Birinus"
+  },
+  "Boniface": {
+   "titles": [
+    "Saint Boniface"
+   ],
+   "name": "Boniface"
+  },
+  "Bridget": {
+   "titles": [
+    "Bridget of Sweden"
+   ],
+   "name": "Bridget"
+  },
+  "Brigid of Kildare": {
+   "titles": [
+    "Brigid of Kildare"
+   ],
+   "name": "Brigid of Kildare"
+  },
+  "Brooke Foss Westcott": {
+   "titles": [
+    "Brooke Foss Westcott"
+   ],
+   "name": "Brooke Foss Westcott"
+  },
+  "Caroline Chisholm": {
+   "titles": [
+    "Caroline Chisholm"
+   ],
+   "name": "Caroline Chisholm"
+  },
+  "Catherine": {
+   "titles": [
+    "Catherine of Alexandria"
+   ],
+   "name": "Catherine"
+  },
+  "Catherine of Siena": {
+   "titles": [
+    "Catherine of Siena"
+   ],
+   "name": "Catherine of Siena"
+  },
+  "Cecilia": {
+   "titles": [
+    "Cecilia of Rome"
+   ],
+   "name": "Cecilia"
+  },
+  "Chad": {
+   "titles": [
+    "Chad of Mercia"
+   ],
+   "name": "Chad"
+  },
+  "Charles Fuge Lowder": {
+   "titles": [
+    "Charles Lowder"
+   ],
+   "name": "Charles Fuge Lowder"
+  },
+  "Charles Simeon": {
+   "titles": [
+    "Charles Simeon"
+   ],
+   "name": "Charles Simeon"
+  },
+  "Charles de Foucauld": {
+   "titles": [
+    "Charles de Foucauld"
+   ],
+   "name": "Charles de Foucauld"
+  },
+  "Charles, king and martyr": {
+   "titles": [
+    "King Charles the Martyr"
+   ],
+   "name": "Charles, king and martyr"
+  },
+  "Christ the King": {
+   "titles": [
+    "Feast of Christ the King"
+   ],
+   "name": "Christ the King"
+  },
+  "Christina Rossetti": {
+   "titles": [
+    "Christina Rossetti"
+   ],
+   "name": "Christina Rossetti"
+  },
+  "Christmas Eve": {
+   "titles": [
+    "Christmas Eve"
+   ],
+   "name": "Christmas Eve"
+  },
+  "Clare": {
+   "titles": [
+    "Clare of Assisi"
+   ],
+   "name": "Clare"
+  },
+  "Clement": {
+   "titles": [
+    "Clement of Rome"
+   ],
+   "name": "Clement"
+  },
+  "Columba": {
+   "titles": [
+    "Columba"
+   ],
+   "name": "Columba"
+  },
+  "Corpus Christi": {
+   "titles": [
+    "Feast of Corpus Christi"
+   ],
+   "name": "Corpus Christi"
+  },
+  "Crispin and Crispinian": {
+   "titles": [
+    "Crispin and Crispinian"
+   ],
+   "name": "Crispin and Crispinian"
+  },
+  "Cuthbert": {
+   "titles": [
+    "Cuthbert"
+   ],
+   "name": "Cuthbert"
+  },
+  "Cyprian, Bishop of Carthage": {
+   "titles": [
+    "Cyprian"
+   ],
+   "name": "Cyprian, Bishop of Carthage"
+  },
+  "Cyril": {
+   "titles": [
+    "Cyril of Alexandria"
+   ],
+   "name": "Cyril"
+  },
+  "David": {
+   "titles": [
+    "Saint David"
+   ],
+   "name": "David"
+  },
+  "Dietrich Bonhoeffer": {
+   "titles": [
+    "Dietrich Bonhoeffer"
+   ],
+   "name": "Dietrich Bonhoeffer"
+  },
+  "Dominic": {
+   "titles": [
+    "Dominic de Guzmán"
+   ],
+   "name": "Dominic"
+  },
+  "Dunstan": {
+   "titles": [
+    "Dunstan"
+   ],
+   "name": "Dunstan"
+  },
+  "Edmund": {
+   "titles": [
+    "Edmund the Martyr"
+   ],
+   "name": "Edmund"
+  },
+  "Edward King": {
+   "titles": [
+    "Edward King (bishop of Lincoln)"
+   ],
+   "name": "Edward King"
+  },
+  "Edward the Confessor": {
+   "titles": [
+    "Edward the Confessor"
+   ],
+   "name": "Edward the Confessor"
+  },
+  "Eglantine Jebb": {
+   "titles": [
+    "Eglantyne Jebb"
+   ],
+   "name": "Eglantine Jebb"
+  },
+  "Elizabeth": {
+   "titles": [
+    "Elizabeth of Hungary"
+   ],
+   "name": "Elizabeth"
+  },
+  "Elizabeth Ferard": {
+   "titles": [
+    "Elizabeth Ferard"
+   ],
+   "name": "Elizabeth Ferard"
+  },
+  "English Saints and Martyrs of the Reformation Era": {
+   "text": "A commemoration of English men and women, Catholic and Protestant alike, who died for their faith amid the upheavals of the sixteenth-century Reformation.",
+   "name": "English Saints and Martyrs of the Reformation Era"
+  },
+  "Ephrem of Syria": {
+   "titles": [
+    "Ephrem the Syrian"
+   ],
+   "name": "Ephrem of Syria"
+  },
+  "Epiphany": {
+   "titles": [
+    "Epiphany (holiday)"
+   ],
+   "name": "Epiphany"
+  },
+  "Ethelburga": {
+   "titles": [
+    "Æthelburh of Barking"
+   ],
+   "name": "Ethelburga"
+  },
+  "Etheldreda": {
+   "titles": [
+    "Æthelthryth"
+   ],
+   "name": "Etheldreda"
+  },
+  "Evelyn Underhill": {
+   "titles": [
+    "Evelyn Underhill"
+   ],
+   "name": "Evelyn Underhill"
+  },
+  "Francis Xavier": {
+   "titles": [
+    "Francis Xavier"
+   ],
+   "name": "Francis Xavier"
+  },
+  "Francis de Sales": {
+   "titles": [
+    "Francis de Sales"
+   ],
+   "name": "Francis de Sales"
+  },
+  "Francis of Assisi": {
+   "titles": [
+    "Francis of Assisi"
+   ],
+   "name": "Francis of Assisi"
+  },
+  "Frederick Denison Maurice": {
+   "titles": [
+    "F. D. Maurice"
+   ],
+   "name": "Frederick Denison Maurice"
+  },
+  "George": {
+   "titles": [
+    "Saint George"
+   ],
+   "name": "George"
+  },
+  "George Bell": {
+   "titles": [
+    "George Bell (bishop)"
+   ],
+   "name": "George Bell"
+  },
+  "George Herbert": {
+   "titles": [
+    "George Herbert"
+   ],
+   "name": "George Herbert"
+  },
+  "George Selwyn": {
+   "titles": [
+    "George Selwyn (bishop of New Zealand)"
+   ],
+   "name": "George Selwyn"
+  },
+  "Gilbert of Sempringham": {
+   "titles": [
+    "Gilbert of Sempringham"
+   ],
+   "name": "Gilbert of Sempringham"
+  },
+  "Giles of Provence": {
+   "titles": [
+    "Saint Giles"
+   ],
+   "name": "Giles of Provence"
+  },
+  "Good Friday": {
+   "titles": [
+    "Good Friday"
+   ],
+   "name": "Good Friday"
+  },
+  "Gregory Dix": {
+   "titles": [
+    "Gregory Dix"
+   ],
+   "name": "Gregory Dix"
+  },
+  "Gregory the Great": {
+   "titles": [
+    "Pope Gregory I"
+   ],
+   "name": "Gregory the Great"
+  },
+  "Gregory, and his sister Macrina": {
+   "titles": [
+    "Gregory of Nyssa",
+    "Macrina the Younger"
+   ],
+   "name": "Gregory, and his sister Macrina"
+  },
+  "Harriet Monsell": {
+   "titles": [
+    "Harriet Monsell"
+   ],
+   "name": "Harriet Monsell"
+  },
+  "Helena": {
+   "titles": [
+    "Helena, mother of Constantine I"
+   ],
+   "name": "Helena"
+  },
+  "Henry Martyn": {
+   "titles": [
+    "Henry Martyn"
+   ],
+   "name": "Henry Martyn"
+  },
+  "Henry, John, and Henry Venn": {
+   "titles": [
+    "Henry Venn (Clapham Sect)",
+    "John Venn (priest)",
+    "Henry Venn (Church Missionary Society)"
+   ],
+   "labels": [
+    "Henry Venn the elder",
+    "John Venn",
+    "Henry Venn the younger"
+   ],
+   "name": "Henry, John, and Henry Venn"
+  },
+  "Hilary": {
+   "titles": [
+    "Hilary of Poitiers"
+   ],
+   "name": "Hilary"
+  },
+  "Hilda": {
+   "titles": [
+    "Hilda of Whitby"
+   ],
+   "name": "Hilda"
+  },
+  "Hildegard": {
+   "titles": [
+    "Hildegard of Bingen"
+   ],
+   "name": "Hildegard"
+  },
+  "Holy Cross Day": {
+   "titles": [
+    "Feast of the Cross"
+   ],
+   "name": "Holy Cross Day"
+  },
+  "Holy Monday": {
+   "titles": [
+    "Holy Monday"
+   ],
+   "name": "Holy Monday"
+  },
+  "Holy Saturday": {
+   "titles": [
+    "Holy Saturday"
+   ],
+   "name": "Holy Saturday"
+  },
+  "Holy Tuesday": {
+   "titles": [
+    "Holy Tuesday"
+   ],
+   "name": "Holy Tuesday"
+  },
+  "Holy Wednesday": {
+   "titles": [
+    "Holy Wednesday"
+   ],
+   "name": "Holy Wednesday"
+  },
+  "Hugh": {
+   "titles": [
+    "Hugh of Lincoln"
+   ],
+   "name": "Hugh"
+  },
+  "Ignatius": {
+   "titles": [
+    "Ignatius of Antioch"
+   ],
+   "name": "Ignatius"
+  },
+  "Ignatius of Loyola": {
+   "titles": [
+    "Ignatius of Loyola"
+   ],
+   "name": "Ignatius of Loyola"
+  },
+  "Ini Kopuria": {
+   "titles": [
+    "Ini Kopuria"
+   ],
+   "name": "Ini Kopuria"
+  },
+  "Irenaeus": {
+   "titles": [
+    "Irenaeus"
+   ],
+   "name": "Irenaeus"
+  },
+  "Isabella Gilmore": {
+   "titles": [
+    "Isabella Gilmore"
+   ],
+   "name": "Isabella Gilmore"
+  },
+  "James Hannington": {
+   "titles": [
+    "James Hannington"
+   ],
+   "name": "James Hannington"
+  },
+  "James the Apostle": {
+   "titles": [
+    "James the Great"
+   ],
+   "name": "James the Apostle"
+  },
+  "Janani Luwum": {
+   "titles": [
+    "Janani Luwum"
+   ],
+   "name": "Janani Luwum"
+  },
+  "Jean-Baptiste Vianney": {
+   "titles": [
+    "John Vianney"
+   ],
+   "name": "Jean-Baptiste Vianney"
+  },
+  "Jeremy Taylor": {
+   "titles": [
+    "Jeremy Taylor"
+   ],
+   "name": "Jeremy Taylor"
+  },
+  "Jerome": {
+   "titles": [
+    "Jerome"
+   ],
+   "name": "Jerome"
+  },
+  "John Bosco": {
+   "titles": [
+    "John Bosco"
+   ],
+   "name": "John Bosco"
+  },
+  "John Bunyan": {
+   "titles": [
+    "John Bunyan"
+   ],
+   "name": "John Bunyan"
+  },
+  "John Chrysostom": {
+   "titles": [
+    "John Chrysostom"
+   ],
+   "name": "John Chrysostom"
+  },
+  "John Coleridge Patteson and companions": {
+   "titles": [
+    "John Patteson (bishop)"
+   ],
+   "name": "John Coleridge Patteson and companions"
+  },
+  "John Donne": {
+   "titles": [
+    "John Donne"
+   ],
+   "name": "John Donne"
+  },
+  "John Keble": {
+   "titles": [
+    "John Keble"
+   ],
+   "name": "John Keble"
+  },
+  "John Mason Neale": {
+   "titles": [
+    "John Mason Neale"
+   ],
+   "name": "John Mason Neale"
+  },
+  "John Wyclif": {
+   "titles": [
+    "John Wycliffe"
+   ],
+   "name": "John Wyclif"
+  },
+  "John and Charles Wesley": {
+   "titles": [
+    "John Wesley",
+    "Charles Wesley"
+   ],
+   "name": "John and Charles Wesley"
+  },
+  "John of Damascus": {
+   "titles": [
+    "John of Damascus"
+   ],
+   "name": "John of Damascus"
+  },
+  "John of the Cross": {
+   "titles": [
+    "John of the Cross"
+   ],
+   "name": "John of the Cross"
+  },
+  "John the Apostle": {
+   "titles": [
+    "John the Apostle"
+   ],
+   "name": "John the Apostle"
+  },
+  "Joseph of Nazareth": {
+   "titles": [
+    "Saint Joseph"
+   ],
+   "name": "Joseph of Nazareth"
+  },
+  "Josephine Butler": {
+   "titles": [
+    "Josephine Butler"
+   ],
+   "name": "Josephine Butler"
+  },
+  "Julian of Norwich": {
+   "titles": [
+    "Julian of Norwich"
+   ],
+   "name": "Julian of Norwich"
+  },
+  "Justin": {
+   "titles": [
+    "Justin Martyr"
+   ],
+   "name": "Justin"
+  },
+  "Lancelot Andrewes": {
+   "titles": [
+    "Lancelot Andrewes"
+   ],
+   "name": "Lancelot Andrewes"
+  },
+  "Lanfranc": {
+   "titles": [
+    "Lanfranc"
+   ],
+   "name": "Lanfranc"
+  },
+  "Laurence": {
+   "titles": [
+    "Saint Lawrence"
+   ],
+   "name": "Laurence"
+  },
+  "Leo the Great": {
+   "titles": [
+    "Pope Leo I"
+   ],
+   "name": "Leo the Great"
+  },
+  "Leonard": {
+   "titles": [
+    "Leonard of Noblac"
+   ],
+   "name": "Leonard"
+  },
+  "Lucy": {
+   "titles": [
+    "Saint Lucy"
+   ],
+   "name": "Lucy"
+  },
+  "Luke the Evangelist": {
+   "titles": [
+    "Luke the Evangelist"
+   ],
+   "name": "Luke the Evangelist"
+  },
+  "Margaret": {
+   "titles": [
+    "Saint Margaret of Scotland"
+   ],
+   "name": "Margaret"
+  },
+  "Margaret of Antioch": {
+   "titles": [
+    "Margaret the Virgin"
+   ],
+   "name": "Margaret of Antioch"
+  },
+  "Margery Kempe": {
+   "titles": [
+    "Margery Kempe"
+   ],
+   "name": "Margery Kempe"
+  },
+  "Mark the Evangelist": {
+   "titles": [
+    "Mark the Evangelist"
+   ],
+   "name": "Mark the Evangelist"
+  },
+  "Martin": {
+   "titles": [
+    "Martin of Tours"
+   ],
+   "name": "Martin"
+  },
+  "Martin Luther": {
+   "titles": [
+    "Martin Luther"
+   ],
+   "name": "Martin Luther"
+  },
+  "Martyrs of Japan": {
+   "titles": [
+    "26 Martyrs of Japan"
+   ],
+   "name": "Martyrs of Japan"
+  },
+  "Martyrs of Uganda": {
+   "titles": [
+    "Uganda Martyrs"
+   ],
+   "name": "Martyrs of Uganda"
+  },
+  "Mary Magdalene": {
+   "titles": [
+    "Mary Magdalene"
+   ],
+   "name": "Mary Magdalene"
+  },
+  "Mary Slessor": {
+   "titles": [
+    "Mary Slessor"
+   ],
+   "name": "Mary Slessor"
+  },
+  "Mary Sumner": {
+   "titles": [
+    "Mary Sumner"
+   ],
+   "name": "Mary Sumner"
+  },
+  "Mary, Martha and Lazarus": {
+   "titles": [
+    "Mary of Bethany",
+    "Martha",
+    "Lazarus of Bethany"
+   ],
+   "labels": [
+    "Mary",
+    "Martha",
+    "Lazarus"
+   ],
+   "name": "Mary, Martha and Lazarus"
+  },
+  "Matthew the Evangelist": {
+   "titles": [
+    "Matthew the Apostle"
+   ],
+   "name": "Matthew the Evangelist"
+  },
+  "Matthias the Apostle": {
+   "titles": [
+    "Matthias the Apostle"
+   ],
+   "name": "Matthias the Apostle"
+  },
+  "Maundy Thursday": {
+   "titles": [
+    "Maundy Thursday"
+   ],
+   "name": "Maundy Thursday"
+  },
+  "Maximilian Kolbe": {
+   "titles": [
+    "Maximilian Kolbe"
+   ],
+   "name": "Maximilian Kolbe"
+  },
+  "Mellitus": {
+   "titles": [
+    "Mellitus"
+   ],
+   "name": "Mellitus"
+  },
+  "Michael and All Angels": {
+   "titles": [
+    "Michaelmas"
+   ],
+   "name": "Michael and All Angels"
+  },
+  "Monica": {
+   "titles": [
+    "Saint Monica"
+   ],
+   "name": "Monica"
+  },
+  "Nicholas": {
+   "titles": [
+    "Saint Nicholas"
+   ],
+   "name": "Nicholas"
+  },
+  "Nicholas Ridley and Hugh Latimer": {
+   "titles": [
+    "Nicholas Ridley (martyr)",
+    "Hugh Latimer"
+   ],
+   "name": "Nicholas Ridley and Hugh Latimer"
+  },
+  "Ninian": {
+   "titles": [
+    "Ninian"
+   ],
+   "name": "Ninian"
+  },
+  "Osmund": {
+   "titles": [
+    "Saint Osmund"
+   ],
+   "name": "Osmund"
+  },
+  "Oswald": {
+   "titles": [
+    "Oswald of Northumbria"
+   ],
+   "name": "Oswald"
+  },
+  "Pandita Mary Ramabai": {
+   "titles": [
+    "Pandita Ramabai"
+   ],
+   "name": "Pandita Mary Ramabai"
+  },
+  "Parents of the Blessed Virgin Mary": {
+   "titles": [
+    "Joachim",
+    "Saint Anne"
+   ],
+   "name": "Parents of the Blessed Virgin Mary"
+  },
+  "Patrick": {
+   "titles": [
+    "Saint Patrick"
+   ],
+   "name": "Patrick"
+  },
+  "Paulinus": {
+   "titles": [
+    "Paulinus of York"
+   ],
+   "name": "Paulinus"
+  },
+  "Perpetua, Felicity and companions": {
+   "titles": [
+    "Perpetua and Felicity"
+   ],
+   "name": "Perpetua, Felicity and companions"
+  },
+  "Peter Chanel": {
+   "titles": [
+    "Peter Chanel"
+   ],
+   "name": "Peter Chanel"
+  },
+  "Peter and Paul, Apostles": {
+   "titles": [
+    "Feast of Saints Peter and Paul"
+   ],
+   "name": "Peter and Paul, Apostles"
+  },
+  "Petroc": {
+   "titles": [
+    "Saint Petroc"
+   ],
+   "name": "Petroc"
+  },
+  "Philip and James, Apostles": {
+   "titles": [
+    "Philip the Apostle",
+    "James, son of Alphaeus"
+   ],
+   "name": "Philip and James, Apostles"
+  },
+  "Polycarp": {
+   "titles": [
+    "Polycarp"
+   ],
+   "name": "Polycarp"
+  },
+  "Presentation of Christ at the Temple": {
+   "titles": [
+    "Presentation of Jesus"
+   ],
+   "name": "Presentation of Christ at the Temple"
+  },
+  "Remigius": {
+   "titles": [
+    "Saint Remigius"
+   ],
+   "name": "Remigius"
+  },
+  "Richard Baxter": {
+   "titles": [
+    "Richard Baxter"
+   ],
+   "name": "Richard Baxter"
+  },
+  "Richard Hooker": {
+   "titles": [
+    "Richard Hooker"
+   ],
+   "name": "Richard Hooker"
+  },
+  "Richard Rolle": {
+   "titles": [
+    "Richard Rolle"
+   ],
+   "name": "Richard Rolle"
+  },
+  "Richard of Chichester": {
+   "titles": [
+    "Richard of Chichester"
+   ],
+   "name": "Richard of Chichester"
+  },
+  "Robert Grosseteste": {
+   "titles": [
+    "Robert Grosseteste"
+   ],
+   "name": "Robert Grosseteste"
+  },
+  "Samuel Seabury": {
+   "titles": [
+    "Samuel Seabury"
+   ],
+   "name": "Samuel Seabury"
+  },
+  "Samuel and Henrietta Barnett": {
+   "titles": [
+    "Samuel Barnett (reformer)",
+    "Henrietta Barnett"
+   ],
+   "labels": [
+    "Samuel Barnett",
+    "Henrietta Barnett"
+   ],
+   "name": "Samuel and Henrietta Barnett"
+  },
+  "Scholastica": {
+   "titles": [
+    "Scholastica"
+   ],
+   "name": "Scholastica"
+  },
+  "Shrove Tuesday": {
+   "titles": [
+    "Shrove Tuesday"
+   ],
+   "name": "Shrove Tuesday"
+  },
+  "Simon and Jude, Apostles": {
+   "titles": [
+    "Simon the Zealot",
+    "Jude the Apostle"
+   ],
+   "name": "Simon and Jude, Apostles"
+  },
+  "Stephen": {
+   "titles": [
+    "Saint Stephen"
+   ],
+   "name": "Stephen"
+  },
+  "Sundar Singh": {
+   "titles": [
+    "Sundar Singh"
+   ],
+   "name": "Sundar Singh"
+  },
+  "Swithun": {
+   "titles": [
+    "Swithun"
+   ],
+   "name": "Swithun"
+  },
+  "Teresa of Avila": {
+   "titles": [
+    "Teresa of Ávila"
+   ],
+   "name": "Teresa of Avila"
+  },
+  "The Annunciation of our Lord": {
+   "titles": [
+    "Annunciation"
+   ],
+   "name": "The Annunciation of our Lord"
+  },
+  "The Baptism of Christ": {
+   "titles": [
+    "Feast of the Baptism of the Lord"
+   ],
+   "name": "The Baptism of Christ"
+  },
+  "The Beheading of John the Baptist": {
+   "titles": [
+    "Beheading of John the Baptist"
+   ],
+   "name": "The Beheading of John the Baptist"
+  },
+  "The Birth of John the Baptist": {
+   "titles": [
+    "Nativity of John the Baptist"
+   ],
+   "name": "The Birth of John the Baptist"
+  },
+  "The Birth of the Blessed Virgin Mary": {
+   "titles": [
+    "Nativity of Mary"
+   ],
+   "name": "The Birth of the Blessed Virgin Mary"
+  },
+  "The Blessed Virgin Mary": {
+   "titles": [
+    "Mary, mother of Jesus"
+   ],
+   "name": "The Blessed Virgin Mary"
+  },
+  "The Conception of the Blessed Virgin Mary": {
+   "titles": [
+    "Feast of the Immaculate Conception"
+   ],
+   "name": "The Conception of the Blessed Virgin Mary"
+  },
+  "The Conversion of Paul": {
+   "titles": [
+    "Conversion of Paul the Apostle"
+   ],
+   "name": "The Conversion of Paul"
+  },
+  "The Holy Innocents": {
+   "titles": [
+    "Massacre of the Innocents"
+   ],
+   "name": "The Holy Innocents"
+  },
+  "The Martyrs of Papua New Guinea": {
+   "titles": [
+    "Martyrs of New Guinea"
+   ],
+   "name": "The Martyrs of Papua New Guinea"
+  },
+  "The Naming and Circumcision of Jesus": {
+   "titles": [
+    "Circumcision of Jesus"
+   ],
+   "name": "The Naming and Circumcision of Jesus"
+  },
+  "The Saints and Martyrs of England": {
+   "text": "A commemoration of the saints and martyrs of England, known and unknown, whose faith and witness shaped the Church in that land.",
+   "name": "The Saints and Martyrs of England"
+  },
+  "The Transfiguration of Our Lord": {
+   "titles": [
+    "Transfiguration of Jesus"
+   ],
+   "name": "The Transfiguration of Our Lord"
+  },
+  "The Venerable Bede": {
+   "titles": [
+    "Bede"
+   ],
+   "name": "The Venerable Bede"
+  },
+  "The Visit of the Blessed Virgin Mary to Elizabeth": {
+   "titles": [
+    "Visitation (Christianity)"
+   ],
+   "name": "The Visit of the Blessed Virgin Mary to Elizabeth"
+  },
+  "Theodore": {
+   "titles": [
+    "Theodore of Tarsus"
+   ],
+   "name": "Theodore"
+  },
+  "Thomas Aquinas": {
+   "titles": [
+    "Thomas Aquinas"
+   ],
+   "name": "Thomas Aquinas"
+  },
+  "Thomas Becket": {
+   "titles": [
+    "Thomas Becket"
+   ],
+   "name": "Thomas Becket"
+  },
+  "Thomas Bray": {
+   "titles": [
+    "Thomas Bray"
+   ],
+   "name": "Thomas Bray"
+  },
+  "Thomas Cranmer": {
+   "titles": [
+    "Thomas Cranmer"
+   ],
+   "name": "Thomas Cranmer"
+  },
+  "Thomas Ken": {
+   "titles": [
+    "Thomas Ken"
+   ],
+   "name": "Thomas Ken"
+  },
+  "Thomas More and John Fisher": {
+   "titles": [
+    "Thomas More",
+    "John Fisher"
+   ],
+   "labels": [
+    "Thomas More",
+    "John Fisher"
+   ],
+   "name": "Thomas More and John Fisher"
+  },
+  "Thomas the Apostle": {
+   "titles": [
+    "Thomas the Apostle"
+   ],
+   "name": "Thomas the Apostle"
+  },
+  "Timothy and Titus": {
+   "titles": [
+    "Saint Timothy",
+    "Saint Titus"
+   ],
+   "labels": [
+    "Timothy",
+    "Titus"
+   ],
+   "name": "Timothy and Titus"
+  },
+  "Valentine": {
+   "titles": [
+    "Saint Valentine"
+   ],
+   "name": "Valentine"
+  },
+  "Vincent de Paul": {
+   "titles": [
+    "Vincent de Paul"
+   ],
+   "name": "Vincent de Paul"
+  },
+  "Vincent of Saragossa": {
+   "titles": [
+    "Vincent of Saragossa"
+   ],
+   "name": "Vincent of Saragossa"
+  },
+  "Walter Hilton of Thurgarton": {
+   "titles": [
+    "Walter Hilton"
+   ],
+   "name": "Walter Hilton of Thurgarton"
+  },
+  "Wilfrid": {
+   "titles": [
+    "Wilfrid"
+   ],
+   "name": "Wilfrid"
+  },
+  "William Laud": {
+   "titles": [
+    "William Laud"
+   ],
+   "name": "William Laud"
+  },
+  "William Law": {
+   "titles": [
+    "William Law"
+   ],
+   "name": "William Law"
+  },
+  "William Tyndale": {
+   "titles": [
+    "William Tyndale"
+   ],
+   "name": "William Tyndale"
+  },
+  "William Wilberforce": {
+   "titles": [
+    "William Wilberforce"
+   ],
+   "name": "William Wilberforce"
+  },
+  "Willibrord": {
+   "titles": [
+    "Willibrord"
+   ],
+   "name": "Willibrord"
+  },
+  "Wilson Carlile": {
+   "titles": [
+    "Wilson Carlile"
+   ],
+   "name": "Wilson Carlile"
+  },
+  "Wulfstan": {
+   "titles": [
+    "Wulfstan (died 1095)"
+   ],
+   "name": "Wulfstan"
+  }
+ }
+}

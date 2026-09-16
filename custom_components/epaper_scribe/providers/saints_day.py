@@ -1,7 +1,11 @@
 """Liturgical Calendar / Saints Day content provider for E-Paper Scribe."""
 from __future__ import annotations
 
+import json
 import logging
+import pathlib
+import re
+import unicodedata
 from datetime import date, datetime
 from typing import Any
 from urllib.parse import quote, unquote
@@ -37,6 +41,29 @@ CALENDAR_COMBINED = "combined"
 
 WIKIPEDIA_API = "https://en.wikipedia.org/api/rest_v1/page/summary/"
 WIKIPEDIA_MW_API = "https://en.wikipedia.org/w/api.php"
+# Wikimedia asks API clients to identify themselves with a contact URL.
+_WIKI_HEADERS = {"User-Agent": "EPaperScribe/2.4 (https://github.com/paulbroyles/epaper-scribe)"}
+
+# Verified Wikipedia targets for every known observance (see scripts/check_feast_map.py).
+_FEAST_MAP_PATH = pathlib.Path(__file__).resolve().parent.parent / "feast_wiki_map.json"
+_feast_map: dict[str, Any] | None = None
+
+# Wikipedia short descriptions that mean "not the subject we want": given-name
+# lists, artworks, media. Saint names collide with all of these.
+_NON_SUBJECT_DESC = re.compile(
+    r"name list|given name|surname|family name|topics referred to|"
+    r"painting|sculpture|album|song\b|single by|film\b|novel\b|television",
+    re.IGNORECASE,
+)
+
+# Joint-name queries sometimes redirect to texts about the people, not the people.
+_NOT_PEOPLE_DESC = re.compile(r"\bbooks?\b|\bepistles?\b", re.IGNORECASE)
+
+# A sentence ends at ". " before a capital letter, except after abbreviations
+# ("St. Ursula", "c. 1300") and initials ("O.H. was").
+_SENTENCE_END = re.compile(
+    r"(?<!\bSt)(?<!\bSts)(?<!\bMt)(?<!\bDr)(?<!\bc)(?<!\bca)(?<![A-Z])\.\s+(?=[A-Z])"
+)
 
 ORDINALS: dict[str, str] = {
     "1": "First", "2": "Second", "3": "Third", "4": "Fourth",
@@ -110,6 +137,49 @@ SEASON_DESCRIPTIONS: dict[str, str] = {
     ),
 }
 
+def _martyrology_death_years(martyrology: tuple) -> list[int | None]:
+    """Death year per person in a martyrology tuple (group "companions" entries skipped).
+
+    Multi-saint feasts need one year per person: Cornelius (253) and Cyprian
+    (258) share a day but must each be matched against their own death year.
+    """
+    years: list[int | None] = []
+    for item in martyrology:
+        if str(getattr(item, "id", "")).startswith("companions"):
+            continue
+        years.append(_martyrology_death_year((item,)))
+    return years
+
+
+def _death_evidence(value: str, year: int) -> str:
+    """Compare a death-date string against a known death *year*.
+
+    Returns "match", "conflict", or "none" (no usable date in *value*).
+    Understands years ("1153", "c. 258") and centuries ("2nd century").
+    Early dates vary by source, so tolerance widens before AD 1000.
+    """
+    tolerance = 10 if year < 1000 else 2
+    years = [int(n) for n in re.findall(r"\b\d{2,4}\b", value) if int(n) > 31]  # skip day numbers
+    centuries = [int(c) for c in re.findall(r"\b(\d{1,2})(?:st|nd|rd|th)[\s-]+century", value, re.IGNORECASE)]
+    if not years and not centuries:
+        return "none"
+    if any(abs(y - year) <= tolerance for y in years):
+        return "match"
+    if any((c - 1) * 100 - tolerance <= year <= c * 100 + tolerance for c in centuries):
+        return "match"
+    return "conflict"
+
+
+def _infobox_value(wikitext: str, field_name: str) -> str:
+    """The value of one infobox field only — stops at the next "| field =" or "}}"."""
+    match = re.search(
+        r"^\|\s*" + re.escape(field_name) + r"\s*=(.*?)(?=^\s*\|\s*\w+\s*=|^\}\})",
+        wikitext,
+        re.IGNORECASE | re.MULTILINE | re.DOTALL,
+    )
+    return match.group(1).strip() if match else ""
+
+
 def _martyrology_death_year(martyrology: tuple) -> int | None:
     """Return the earliest numeric death year from a martyrology tuple, or None.
 
@@ -123,12 +193,13 @@ def _martyrology_death_year(martyrology: tuple) -> int | None:
             if result is None or dod < result:
                 result = dod
         elif isinstance(dod, str):
-            try:
-                y = int(dod[:4])
+            # ISO-style "1153-08-20" or "258-09-14": the year is the leading
+            # digits (early saints have fewer than four).
+            match = re.match(r"(\d{1,4})(?:-|$)", dod)
+            if match:
+                y = int(match.group(1))
                 if result is None or y < result:
                     result = y
-            except (ValueError, TypeError):
-                pass
     return result
 
 
@@ -438,6 +509,7 @@ class SaintsDayProvider(ContentProvider):
         saint_name = ""
         saint_role = ""
         description = ""
+        description_compact = ""
         image_bytes: bytes | None = None
 
         # Fetch Catholic feasts early so we can extract the death-year hint
@@ -458,18 +530,27 @@ class SaintsDayProvider(ContentProvider):
             # Derive death-year hint from the matching Catholic feast (if the
             # winner is Catholic-sourced).  Anglican-sourced saints rely on
             # wiki_url (step 0) so hint_year is less important for them.
-            hint_year: int | None = None
+            hint_year: list[int | None] | None = None
             if result.source == "catholic" and cat_feasts_today:
                 cat_feast_hint = next(
                     (f for f in cat_feasts_today if f.name == result.display_name),
                     cat_feasts_today[0],
                 )
-                hint_year = _martyrology_death_year(cat_feast_hint.martyrology)
+                hint_year = _martyrology_death_years(cat_feast_hint.martyrology)
 
-            description, image_url = await self._fetch_wikipedia(
+            map_key: tuple[str, str] | None = None
+            if result.source == "anglican":
+                map_key = ("anglican", result.display_name)
+            elif result.source == "catholic":
+                exact = next((f for f in cat_feasts_today if f.name == result.display_name), None)
+                if exact:
+                    map_key = ("catholic", exact.feast_id)
+
+            description, image_url, description_compact = await self._fetch_wikipedia(
                 names, result.wiki_url, descs,
                 hint_year=hint_year,
                 hint_mmdd=today.strftime("%m-%d"),
+                map_key=map_key,
             )
             if image_url:
                 image_bytes = await self._fetch_image(image_url)
@@ -502,6 +583,7 @@ class SaintsDayProvider(ContentProvider):
             name_font_path,
             calendar_tag,
             palette,
+            description_compact,
         )
 
         filename = f"saints_day_artwork_{size[1]}.png"
@@ -540,12 +622,13 @@ class SaintsDayProvider(ContentProvider):
     async def _render_anglican(
         self, today: date, size: tuple[int, int], palette: str
     ) -> dict[str, Any]:
-        saint_name, saint_role, season, week, wiki_url, ang_type = (
+        saint_name, saint_role, season, week, wiki_url, ang_type, ang_day_name = (
             await self.hass.async_add_executor_job(_fetch_saint_anglican, today)
         )
 
         has_saint = bool(saint_name)
         description = ""
+        description_compact = ""
         image_bytes: bytes | None = None
 
         parsed_ang = None
@@ -554,7 +637,11 @@ class SaintsDayProvider(ContentProvider):
             parsed_ang = parse_saint_name(saint_name)
             names = [s.name for s in parsed_ang.segments] if parsed_ang.segments else [saint_name]
             descs = [s.descriptor for s in parsed_ang.segments] if parsed_ang.segments else []
-            description, image_url = await self._fetch_wikipedia(names, wiki_url or "", descs)
+            description, image_url, description_compact = await self._fetch_wikipedia(
+                names, wiki_url or "", descs,
+                hint_mmdd=today.strftime("%m-%d"),
+                map_key=("anglican", ang_day_name),
+            )
             if image_url:
                 image_bytes = await self._fetch_image(image_url)
 
@@ -578,6 +665,7 @@ class SaintsDayProvider(ContentProvider):
             name_font_path,
             calendar_tag,
             palette,
+            description_compact,
         )
 
         filename = f"saints_day_artwork_{size[1]}.png"
@@ -612,6 +700,7 @@ class SaintsDayProvider(ContentProvider):
         saint_name = ""
         saint_role = ""
         description = ""
+        description_compact = ""
         image_bytes: bytes | None = None
         calendar_tag = ""
         parsed = None
@@ -630,10 +719,11 @@ class SaintsDayProvider(ContentProvider):
 
             names = [s.name for s in parsed.segments] if parsed.segments else [primary.name]
             descs = [s.descriptor for s in parsed.segments] if parsed.segments else []
-            description, image_url = await self._fetch_wikipedia(
+            description, image_url, description_compact = await self._fetch_wikipedia(
                 names, "", descs,
-                hint_year=_martyrology_death_year(primary.martyrology),
+                hint_year=_martyrology_death_years(primary.martyrology),
                 hint_mmdd=today.strftime("%m-%d"),
+                map_key=("catholic", primary.feast_id),
             )
             if image_url:
                 image_bytes = await self._fetch_image(image_url)
@@ -663,6 +753,7 @@ class SaintsDayProvider(ContentProvider):
             name_font_path,
             calendar_tag,
             palette,
+            description_compact,
         )
 
         filename = f"saints_day_artwork_{size[1]}.png"
@@ -707,25 +798,86 @@ class SaintsDayProvider(ContentProvider):
         canonical Wikipedia page title when the result is a disambiguation page,
         and "" otherwise.  extract and image_url are "" on disambiguation.
         """
+        data = await self._fetch_summary(search_term)
+        if not data:
+            return "", "", ""
+        if data.get("type") == "disambiguation":
+            # Return the canonical title so the caller can resolve it.
+            return "", "", data.get("title", search_term)
+        if _NON_SUBJECT_DESC.search(data.get("description") or ""):
+            _LOGGER.debug(
+                "Wikipedia %r → %r rejected (%s)",
+                search_term, data.get("title"), data.get("description"),
+            )
+            return "", "", ""
+        return (
+            data.get("extract", ""),
+            data.get("thumbnail", {}).get("source", ""),
+            "",
+        )
+
+    async def _fetch_summary(self, title: str) -> dict[str, Any] | None:
+        """Return the raw REST summary JSON for *title*, or None on failure."""
         try:
             session = async_get_clientsession(self.hass)
-            headers = {"User-Agent": "HomeAssistantDisplay/1.0 epaper-scribe"}
-            url = WIKIPEDIA_API + quote(search_term)
-            async with session.get(url, headers=headers) as resp:
+            async with session.get(WIKIPEDIA_API + quote(title), headers=_WIKI_HEADERS) as resp:
                 if resp.status != 200:
-                    return "", "", ""
-                data = await resp.json()
-            if data.get("type") == "disambiguation":
-                # Return the canonical title so the caller can resolve it.
-                return "", "", data.get("title", search_term)
-            return (
-                data.get("extract", ""),
-                data.get("thumbnail", {}).get("source", ""),
-                "",
-            )
+                    return None
+                return await resp.json()
         except Exception as exc:
-            _LOGGER.warning("Wikipedia fetch failed for %r: %s", search_term, exc)
-            return "", "", ""
+            _LOGGER.warning("Wikipedia fetch failed for %r: %s", title, exc)
+            return None
+
+    async def _describe_from_map(
+        self, calendar: str, key: str
+    ) -> tuple[str, str, str] | None:
+        """(description, image URL, compact description) for a mapped observance.
+
+        The compact description is set only for multi-person days: one
+        "Label: Wikipedia short description." per person, which the renderer
+        uses when the lead sentences don't all fit on the panel.
+
+        Returns None when the observance isn't mapped, or when a mapped article
+        no longer resolves (renamed or deleted on Wikipedia) — the caller then
+        falls back to searching.
+        """
+        fmap = await self.hass.async_add_executor_job(_load_feast_map)
+        entry = fmap.get(calendar, {}).get(key)
+        if not entry:
+            return None
+        if "text" in entry:
+            image = ""
+            if entry.get("image"):
+                data = await self._fetch_summary(entry["image"]) or {}
+                image = data.get("thumbnail", {}).get("source", "")
+            return entry["text"], image, ""
+
+        summaries: list[dict[str, Any]] = []
+        for title in entry["titles"]:
+            data = await self._fetch_summary(title)
+            if not data or data.get("type") == "disambiguation" or not data.get("extract"):
+                _LOGGER.warning(
+                    "Feast map title %r (%s %r) no longer resolves; falling back to search",
+                    title, calendar, key,
+                )
+                return None
+            summaries.append(data)
+
+        text = " ".join(dict.fromkeys(_first_sentence(d["extract"]) for d in summaries))
+        compact = ""
+        if len(summaries) > 1:
+            labels = entry.get("labels") or [
+                re.sub(r"\s*\(.*?\)$", "", d.get("title", "")) for d in summaries
+            ]
+            parts = []
+            for label, data in zip(labels, summaries):
+                blurb = (data.get("description") or "").strip().rstrip(".")
+                parts.append(f"{label}: {blurb}." if blurb else _first_sentence(data["extract"]))
+            compact = " ".join(parts)
+        image = next(
+            (d["thumbnail"]["source"] for d in summaries if d.get("thumbnail", {}).get("source")), ""
+        )
+        return text, image, compact
 
     async def _resolve_from_disambiguation(
         self,
@@ -763,20 +915,20 @@ class SaintsDayProvider(ContentProvider):
         import re as _re
 
         session = async_get_clientsession(self.hass)
-        headers = {"User-Agent": "HomeAssistantDisplay/1.0 epaper-scribe"}
+        headers = _WIKI_HEADERS
         fn_lower = first_name.lower()
-        year_str = str(hint_year) if hint_year is not None else ""
 
         # ── Build feast-date match patterns ───────────────────────────────────
-        feast_patterns: list[str] = []
+        feast_patterns: list[re.Pattern[str]] = []
         if hint_mmdd:
             try:
                 month_num = int(hint_mmdd.split("-")[0])
                 day_num   = int(hint_mmdd.split("-")[1])
                 month_name = _cal.month_name[month_num].lower()
+                # Word boundaries matter: "july 1" must not match "july 12".
                 feast_patterns = [
-                    f"{month_name} {day_num}",   # "may 12"
-                    f"{day_num} {month_name}",    # "12 may"
+                    re.compile(rf"\b{month_name} {day_num}\b"),   # "may 12"
+                    re.compile(rf"\b{day_num} {month_name}\b"),   # "12 may"
                 ]
             except (ValueError, IndexError):
                 pass
@@ -863,6 +1015,7 @@ class SaintsDayProvider(ContentProvider):
 
         for title in candidates:
             infobox_score = 0
+            year_conflict = False
 
             # 3a. Fetch candidate wikitext for infobox field scoring
             try:
@@ -884,27 +1037,40 @@ class SaintsDayProvider(ContentProvider):
                             )
                             break
                         if art_wikitext:
-                            death_val = _extract_infobox_field(art_wikitext, "death_date")
-                            feast_val = _extract_infobox_field(art_wikitext, "feast_day")
-                            if year_str and death_val and year_str in death_val:
-                                infobox_score += 20
+                            death_val = _infobox_value(art_wikitext, "death_date")
+                            feast_val = _infobox_value(art_wikitext, "feast_day")
+                            if hint_year is not None and death_val:
+                                evidence = _death_evidence(death_val, hint_year)
+                                if evidence == "match":
+                                    infobox_score += 20
+                                elif evidence == "conflict":
+                                    year_conflict = True
                             if feast_patterns and feast_val:
                                 fv_lower = feast_val.lower()
-                                if any(p in fv_lower for p in feast_patterns):
+                                if any(p.search(fv_lower) for p in feast_patterns):
                                     infobox_score += 15
             except Exception as exc:
                 _LOGGER.debug("Wikitext fetch failed for candidate %r: %s", title, exc)
 
             # 3b. Fetch REST summary for extract text + image
-            ex, img, dis = await self._fetch_wikipedia_one_full(title)
-            if not ex or dis:
-                continue   # skip failed fetches and nested disambiguations
+            summary = await self._fetch_summary(title) or {}
+            summary_desc = summary.get("description") or ""
+            ex = summary.get("extract", "")
+            img = summary.get("thumbnail", {}).get("source", "")
+            if not ex or summary.get("type") == "disambiguation" or _NON_SUBJECT_DESC.search(summary_desc):
+                continue   # failed fetch, nested disambiguation, or not a person
 
             text_score = 0
             text_lower = ex.lower()
-            if year_str and year_str in ex:
-                text_score += 5
-            if feast_patterns and any(p in text_lower for p in feast_patterns):
+            if hint_year is not None:
+                # The summary's short description often carries the lifespan
+                # ("Cyprian … (c. 210–258)"); the extract rarely does.
+                evidence = _death_evidence(summary_desc, hint_year)
+                if evidence == "match":
+                    text_score += 5
+                elif evidence == "conflict" and not year_conflict:
+                    year_conflict = True
+            if feast_patterns and any(p.search(text_lower) for p in feast_patterns):
                 text_score += 3
 
             score = infobox_score + text_score
@@ -912,6 +1078,12 @@ class SaintsDayProvider(ContentProvider):
                 "Disambiguation candidate %r: infobox=%d text=%d total=%d",
                 title, infobox_score, text_score, score,
             )
+
+            # A known death year that contradicts the candidate rules it out, even
+            # when the feast date matches: namesakes share feast days (Cyprian of
+            # Carthage and Cyprian of Kiev are both commemorated on 16 September).
+            if year_conflict:
+                continue
 
             if score > best_score:
                 best_score = score
@@ -938,10 +1110,35 @@ class SaintsDayProvider(ContentProvider):
         names: list[str],
         wiki_url: str = "",
         descriptors: list[str] | None = None,
-        hint_year: int | None = None,
+        hint_year: int | list[int | None] | None = None,
+        hint_mmdd: str = "",
+        map_key: tuple[str, str] | None = None,
+    ) -> tuple[str, str, str]:
+        """Return (description, image URL, compact description) for a feast.
+
+        *map_key* ("catholic", romcal feast id) or ("anglican", day name) is
+        looked up in the verified feast map first; Wikipedia search runs only
+        for unmapped observances or when a mapped article stops resolving.
+        The compact description is "" unless the map supplies one.
+        """
+        if map_key:
+            mapped = await self._describe_from_map(*map_key)
+            if mapped:
+                return mapped
+        description, image = await self._search_wikipedia(
+            names, wiki_url, descriptors, hint_year, hint_mmdd
+        )
+        return description, image, ""
+
+    async def _search_wikipedia(
+        self,
+        names: list[str],
+        wiki_url: str = "",
+        descriptors: list[str] | None = None,
+        hint_year: int | list[int | None] | None = None,
         hint_mmdd: str = "",
     ) -> tuple[str, str]:
-        """Fetch a Wikipedia description for one or more saints.
+        """Search Wikipedia for a description of one or more saints.
 
         *names* may include compound entries like "Philip and James"; these are
         expanded into individual people.  *descriptors* are the corresponding
@@ -992,15 +1189,13 @@ class SaintsDayProvider(ContentProvider):
                 for q in title_terms:
                     ex, img = await self._fetch_wikipedia_one(q)
                     if ex:
-                        first = ex.split(". ")[0].strip()
-                        if not first.endswith("."):
-                            first += "."
+                        first = _first_sentence(ex)
                         return first, img
                 return "", ""
 
         def _singularize(word: str) -> str:
             """'Apostles' → 'Apostle', 'Bishops' → 'Bishop', etc."""
-            skip = {"jesus", "lazarus", "thomas", "status"}
+            skip = {"jesus", "lazarus", "thomas", "status", "religious"}
             if word.lower() in skip:
                 return word
             if word.lower().endswith("s") and len(word) > 3:
@@ -1012,11 +1207,15 @@ class SaintsDayProvider(ContentProvider):
         individuals: list[tuple[str, str]] = []
         for i, name in enumerate(names):
             desc = (descriptors[i] if descriptors and i < len(descriptors) else "") or ""
+            if name.strip().lower() == "companions":
+                continue   # a group marker, never a person to look up
             if _re.search(r"\band\b", name, _re.IGNORECASE):
+                # "Mary, Martha and Lazarus" → three people; lowercase fragments
+                # ("his sister Macrina") aren't names on their own.
                 parts = [
                     p.strip()
-                    for p in _re.split(r"\s+and\s+", name, flags=_re.IGNORECASE)
-                    if p.strip()
+                    for p in _re.split(r"\s*,\s*(?:and\s+)?|\s+and\s+", name, flags=_re.IGNORECASE)
+                    if p.strip() and p.strip()[0].isupper()
                 ]
                 for p in parts:
                     individuals.append((p, desc))
@@ -1050,9 +1249,15 @@ class SaintsDayProvider(ContentProvider):
             joint_queries.append(joint_base)
 
             for q in joint_queries:
-                ex, img = await self._fetch_wikipedia_one(q)
+                data = await self._fetch_summary(q)
+                if not data or data.get("type") == "disambiguation":
+                    continue
+                desc = data.get("description") or ""
+                if _NON_SUBJECT_DESC.search(desc) or _NOT_PEOPLE_DESC.search(desc):
+                    continue   # e.g. "Timothy and Titus" redirects to Pastoral epistles
+                ex = data.get("extract", "")
                 if ex and _covers_all(ex):
-                    return ex, img
+                    return ex, data.get("thumbnail", {}).get("source", "")
 
         # ── 2. Individual cascade ──────────────────────────────────────────
         sentences: list[str] = []
@@ -1066,7 +1271,14 @@ class SaintsDayProvider(ContentProvider):
             fetched_queries.append(wiki_url.split("/wiki/")[-1])
         pending: list[tuple[str, str]] = []  # (name, desc) for which direct search failed
 
-        for name, desc in individuals:
+        for idx, (name, desc) in enumerate(individuals):
+            # Death year for this person: a per-person list from the martyrology
+            # when it lines up with the individuals; a single year only when
+            # there is a single person (a group's earliest year misleads).
+            if isinstance(hint_year, list):
+                person_year = hint_year[idx] if len(hint_year) == len(individuals) else None
+            else:
+                person_year = hint_year if len(individuals) == 1 else None
             desc_word = _singularize(desc.split()[0]) if desc else ""
             candidates: list[str] = []
             if desc_word:
@@ -1075,6 +1287,9 @@ class SaintsDayProvider(ContentProvider):
                 candidates.append(name + " the " + desc_word)
             candidates.append("Saint " + name)
             candidates.append(name)
+            for variant in _name_variants(name):
+                candidates.append("Saint " + variant)
+                candidates.append(variant)
 
             ex = im = ""
             successful_q = ""
@@ -1084,22 +1299,23 @@ class SaintsDayProvider(ContentProvider):
                 if ex:
                     successful_q = q
                     break
-                if dis_title and not first_dis_title:
+                if dis_title:
+                    # Stop here: the next candidates are shorter forms of the
+                    # same name ("Isidore"), which land on given-name lists.
                     first_dis_title = dis_title
+                    break
 
             # Disambiguation fallback: all direct queries failed; if any hit a
             # disambiguation page, try to resolve using death year / feast date.
-            if not ex and first_dis_title and (hint_year is not None or hint_mmdd):
+            if not ex and first_dis_title and (person_year is not None or hint_mmdd):
                 ex, im = await self._resolve_from_disambiguation(
-                    first_dis_title, name.split()[0], hint_year, hint_mmdd
+                    first_dis_title, name.split()[0], person_year, hint_mmdd
                 )
                 if ex:
                     successful_q = first_dis_title
 
             if ex:
-                first = ex.split(". ")[0].strip()
-                if not first.endswith("."):
-                    first += "."
+                first = _first_sentence(ex)
                 sentences.append(first)
                 fetched_queries.append(successful_q)
             else:
@@ -1124,9 +1340,7 @@ class SaintsDayProvider(ContentProvider):
                 if ex:
                     break
             if ex:
-                first = ex.split(". ")[0].strip()
-                if not first.endswith("."):
-                    first += "."
+                first = _first_sentence(ex)
                 sentences.append(first)
             if im and not image_url:
                 image_url = im
@@ -1153,7 +1367,7 @@ class SaintsDayProvider(ContentProvider):
 
         try:
             session = async_get_clientsession(self.hass)
-            headers = {"User-Agent": "HomeAssistantDisplay/1.0 epaper-scribe"}
+            headers = _WIKI_HEADERS
             url = (
                 WIKIPEDIA_MW_API
                 + "?action=query&prop=extracts&exsentences=15&format=json"
@@ -1194,7 +1408,7 @@ class SaintsDayProvider(ContentProvider):
     async def _fetch_image(self, image_url: str) -> bytes | None:
         try:
             session = async_get_clientsession(self.hass)
-            headers = {"User-Agent": "HomeAssistantDisplay/1.0 epaper-scribe"}
+            headers = _WIKI_HEADERS
             async with session.get(image_url, headers=headers) as resp:
                 if resp.status == 200:
                     return await resp.read()
@@ -1234,10 +1448,12 @@ def _fetch_anglican_year(year: int) -> dict[str, AnglicanDay]:
 
 def _fetch_saint_anglican(
     today: date,
-) -> tuple[str | None, str | None, str | None, str | None, str | None, str]:
+) -> tuple[str | None, str | None, str | None, str | None, str | None, str, str]:
     """Fetch today's Anglican saint. Runs synchronously.
 
-    Returns (name, role, season, week, wiki_url, type_).
+    Returns (name, role, season, week, wiki_url, type_, day_name) where
+    day_name is the calendar's own name with any "(transferred)" suffix removed
+    (the feast-map key).
     """
     try:
         from liturgical_calendar.liturgical import liturgical_calendar
@@ -1251,16 +1467,17 @@ def _fetch_saint_anglican(
         type_: str = day.get("type", "")
 
         if not raw_name:
-            return None, None, season, week, wiki_url, type_
+            return None, None, season, week, wiki_url, type_, ""
 
         parsed = parse_saint_name(raw_name)
         name = " · ".join(s.name for s in parsed.segments) if parsed.segments else raw_name
         role = " · ".join(s.descriptor for s in parsed.segments if s.descriptor)
-        return name, role, season, week, wiki_url, type_
+        day_name = raw_name[: -len("(transferred)")].rstrip() if raw_name.endswith("(transferred)") else raw_name
+        return name, role, season, week, wiki_url, type_, day_name
 
     except Exception as exc:
         _LOGGER.warning("Anglican calendar lookup failed: %s", exc)
-        return None, None, None, None, None, ""
+        return None, None, None, None, None, "", ""
 
 
 # ---------------------------------------------------------------------------
@@ -1278,6 +1495,7 @@ def _compose_image(
     name_font_path: str | None,
     calendar_tag: str = "",
     palette: str | None = None,
+    description_fallback: str = "",
 ) -> bytes:
     from ..saint_name import render_saints_day_image
     return render_saints_day_image(
@@ -1291,6 +1509,7 @@ def _compose_image(
         name_font_path=name_font_path,
         calendar_tag=calendar_tag,
         palette=palette,
+        description_fallback=description_fallback,
     )
 
 
@@ -1397,6 +1616,10 @@ _TITLE_FEAST_KEYWORDS: tuple[str, ...] = (
     "annunciation", "assumption", "visitation", "immaculate conception",
     "queenship", "nativity of", "dedication of", "baptism of the lord",
     "divine mercy", "christ the king", "king of the universe",
+    "epiphany", "ascension", "conversion of", "chair of", "passion of",
+    "beheading of", "octave of", "resurrection of", "pentecost",
+    "guardian angels", "all saints", "all souls", "faithful departed",
+    "holy innocents", "first martyrs", "mother of god", "mother of the church",
 )
 
 # Normalized (lowercased) title → explicit Wikipedia article when the
@@ -1404,6 +1627,9 @@ _TITLE_FEAST_KEYWORDS: tuple[str, ...] = (
 _TITLE_FEAST_ALIASES: dict[str, str] = {
     "holy body and blood of christ": "Corpus Christi (feast)",
     "body and blood of christ": "Corpus Christi (feast)",
+    "all saints": "All Saints' Day",
+    "commemoration of all the faithful departed": "All Souls' Day",
+    "our lord jesus christ, king of the universe": "Feast of Christ the King",
 }
 
 
@@ -1431,51 +1657,68 @@ def _title_feast_search_terms(name: str) -> list[str]:
     if not (low.startswith("our lady") or any(k in low for k in _TITLE_FEAST_KEYWORDS)):
         return []
     norm = _normalize_title_feast(name)
+    forms = [norm]
+    paren = re.search(r"\((.*?)\)", norm)
+    if paren:                                    # "Nativity of the Lord (Christmas)"
+        forms.append(re.sub(r"\s*\(.*?\)", "", norm).strip())
+        forms.append(paren.group(1).replace("’", "'"))
+    if ":" in norm:                              # "Octave Day …: Solemnity of Mary, …"
+        forms.append(_normalize_title_feast(norm.split(":", 1)[1]))
+    if " within the " in norm:                   # "Monday within the Octave of Easter"
+        forms.append(norm.split(" within the ", 1)[1])
+    for form in list(forms):                     # "Ascension of the Lord" → "Ascension"
+        bare = re.sub(r"\s+of (the|our) Lord$", "", form, flags=re.IGNORECASE)
+        if bare != form:
+            forms += [bare, "Feast of the " + bare]
     terms: list[str] = []
-    alias = _TITLE_FEAST_ALIASES.get(norm.lower())
-    if alias:
-        terms.append(alias)
-    if norm and norm not in terms:
-        terms.append(norm)
+    for form in forms:
+        alias = _TITLE_FEAST_ALIASES.get(form.lower())
+        for term in (alias, form):
+            if term and term not in terms:
+                terms.append(term)
     if name not in terms:
         terms.append(name)
     return terms
 
 
-# ---------------------------------------------------------------------------
-# Wikipedia wikitext helpers
-# ---------------------------------------------------------------------------
+def _load_feast_map() -> dict[str, Any]:
+    """Load the bundled feast→Wikipedia map once (blocking; run in an executor)."""
+    global _feast_map
+    if _feast_map is None:
+        try:
+            _feast_map = json.loads(_FEAST_MAP_PATH.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            _LOGGER.warning("Feast map unavailable (%s); using Wikipedia search only", exc)
+            _feast_map = {}
+    return _feast_map
 
-def _extract_infobox_field(wikitext: str, field_name: str) -> str:
-    """Extract a named field's raw value from a Wikipedia infobox.
 
-    Handles both single-line values and multi-line values produced by
-    templates such as ``{{indented plainlist}}``.  Returns a string
-    containing the field declaration line plus up to four following lines,
-    which is sufficient for the date patterns we check.
+def _first_sentence(text: str) -> str:
+    """First sentence of a Wikipedia extract, ignoring "St." and initials."""
+    text = text.strip()
+    match = _SENTENCE_END.search(text)
+    first = text[: match.start() + 1] if match else text
+    return first if first.endswith(".") else first + "."
 
-    Example inputs handled:
-      ``| death_date = 12 May 303 or 304``          → one-line
-      ``| feast_day = {{indented plainlist           → multi-line
-           | 23 April
-           | 3 November (Eastern)
-        }}``
+
+def _name_variants(name: str) -> list[str]:
+    """Spelling variants of a romcal saint name that Wikipedia titles use.
+
+    Straight apostrophes ("de’ Pazzi" → "de' Pazzi"), no diacritics
+    ("Makhlūf" → "Makhluf"), without romcal's religious middle name
+    ("Alphonsus Mary Liguori" → "Alphonsus Liguori"), and without an appended
+    surname ("Teresa Benedicta of the Cross Stein" → "… of the Cross").
     """
-    import re as _re
-
-    pattern = _re.compile(
-        r'^\|\s*' + _re.escape(field_name) + r'\s*=',
-        _re.IGNORECASE | _re.MULTILINE,
+    variants = [name.replace("’", "'")]
+    variants.append(
+        "".join(c for c in unicodedata.normalize("NFKD", variants[0]) if not unicodedata.combining(c))
     )
-    m = pattern.search(wikitext)
-    if not m:
-        return ""
-    # Return the field declaration line plus up to 4 subsequent lines so
-    # that multi-line template bodies are included in the search window.
-    start = wikitext.rfind("\n", 0, m.start()) + 1   # start of that line
-    segment = wikitext[start:]
-    lines = segment.split("\n", 5)[:5]               # field line + 4 more
-    return "\n".join(lines)
+    words = name.split()
+    if len(words) >= 3 and "Mary" in words[1:-1]:
+        variants.append(" ".join(w for i, w in enumerate(words) if not (w == "Mary" and 0 < i < len(words) - 1)))
+    if " of the " in name and len(words) >= 5 and words[-2][:1].isupper():
+        variants.append(" ".join(words[:-1]))
+    return [v for v in dict.fromkeys(variants) if v != name]
 
 
 # ---------------------------------------------------------------------------
