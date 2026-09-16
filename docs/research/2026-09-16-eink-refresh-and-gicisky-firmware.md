@@ -305,8 +305,15 @@ Page numbers refer to the datasheets' own numbering.
 - **DC balance.** Imbalance leaves remnant voltage, causes timing-dependent
   ghosting and possibly "slow lifetime degradation" (US10475396). Factory
   waveforms add pre-pulses so each transition integrates to zero. Pervasive
-  Displays suspended partial updates because unchanged pixels "degrade faster
-  over time." For the phased scheme: each changed pixel's combined path across
+  Displays suspended its *windowed* partial update (only a rectangle's data
+  sent) because pixels outside the window "degrade faster over time" and are
+  "in an unbalanced/unstable state." Its *fast* update, which sends the full
+  image and lets the controller compare old and new so only changed pixels are
+  driven, is listed as having no lifespan impact and is what they recommend —
+  but for monochrome only; their color panels support only full updates. So the
+  warning is about windowed updates, not about leaving unchanged pixels undriven
+  in a well-designed differential waveform. Pervasive doesn't explain the
+  mechanism. For the phased scheme: each changed pixel's combined path across
   both phases must integrate to zero; a pixel conditioned but not given its red
   step is unbalanced. Keep VCOM at DC throughout.
 - **Edge effects.** On an E Ink black/white panel, a driven pixel next to a
@@ -325,7 +332,10 @@ Page numbers refer to the datasheets' own numbering.
   between updates; full refresh after every 5 partial updates; refresh
   three-color panels at least every 24 h; store showing white. Waveshare gives
   the same 180 s / 24 h guidance and warns against leaving panels powered.
-- Pervasive Displays: no fast or partial update on red (Spectra) panels.
+- Pervasive Displays: fast update (full image, controller compares old/new,
+  "Possible ghosting", no lifespan impact) is monochrome only; windowed partial
+  update is "suspended indefinitely" for lifespan reasons; color panels get
+  normal (full) updates only.
 - GxEPD2: every three-color driver sets `hasFastPartialUpdate = false`.
 
 Note for current use: the 180 s minimum interval is a precaution that Now
