@@ -2,9 +2,12 @@
 
 **Research date:** 2026-09-16
 **Status:** Deferred. No firmware changes made. The red-buffer limitation (see
-[Region-only refresh](#region-only-refresh)) means custom firmware could not
-deliver blink-free updates for red content, which is a large part of the goal,
-so the risk of flashing is not currently justified.
+[Region-only refresh](#region-only-refresh)) means custom firmware using
+conventional waveforms could not deliver blink-free updates for red content,
+which is a large part of the goal, so the risk of flashing is not currently
+justified. The [phased-update addendum](#addendum-phased-updates) describes an
+untested way the limitation might be avoided, which would change the payoff
+(not the risk) of experimenting.
 
 Versions at the time: epaper_scribe 2.4.1, Home Assistant Core 2026.1.3,
 OpenEPaperLink HA integration 2.8.0, OpenEPaperLink AP firmware (master as of
@@ -92,18 +95,105 @@ red layer. It can't also hold the previous image. So:
   red is not driven during that update. This is the "fast no-reds" mode.
   atc1441's open-source ATC_TLSR_Paper drivers do exactly this: load a short
   LUT into 0x32, zero the red RAM, update with 0xC7.
-- **Any change to red content requires a full-panel refresh**, which flashes
-  the entire screen. In Now Playing the artist name is white text on the red
+- **With conventional waveforms, any change to red content requires a
+  full-panel refresh**, which flashes the entire screen. In Now Playing the artist name is white text on the red
   header bar, so an artist change would always blink the whole panel.
 - Repeated partial updates build up ghosting, and unchanged red areas may fade;
   a periodic full refresh is needed regardless.
 - Custom waveforms are fixed, while factory waveforms compensate for
   temperature, so partial-update quality varies with room temperature.
 
-Consequence for the goal: even with ideal custom firmware, the best achievable
-is "black/white changes don't blink; anything touching red blinks the whole
+Consequence for the goal: with conventional waveforms, the best achievable is
+"black/white changes don't blink; anything touching red blinks the whole
 screen." For layouts that put changing content on red, that is a large part of
-the problem left unsolved.
+the problem left unsolved. The addendum below describes a possible way around
+this.
+
+### Addendum: phased updates
+
+Added later on 2026-09-16, from follow-up discussion. Reasoning from how the
+controller works and from atc1441's driver code; not tested, and no existing
+implementation was found.
+
+**The controller doesn't know what "red" is.** For each pixel it reads one bit
+from 0x24 and one from 0x26; the 2-bit value selects one of four waveform groups
+in the LUT (register 0x32). "0x26 means red" is only how the factory waveform is
+written. atc1441's fast no-red LUT is consistent with this: groups 0 and 2 get
+the same drive, and groups 1 and 3 the same, so the 0x26 bit has no effect.
+Custom firmware can assign the two bits any meaning, per update.
+
+**Update in phases.** Load different buffer contents and a different LUT for
+each phase:
+
+1. **Black/white phase.** 0x26 holds the previous image. Unchanged pixels get
+   no voltage (VSS); changed pixels are driven to black or white, including
+   pixels leaving red.
+2. **Red phase.** 0x26 holds the red layer. The two not-red groups get no
+   voltage, so black and white pixels don't move. The 0x24 bit of red pixels is
+   repurposed as a "changed" flag: newly red pixels get the red waveform,
+   unchanged red pixels get nothing.
+
+Only pixels that change move. In Now Playing, an artist change would flicker
+only the letter shapes on the red header bar, not the whole panel. Every
+transition decomposes into these phases, so black/white/red changes together
+need no special case.
+
+**Why phases rather than one pass.** A single pass could use the four groups as
+transition codes (unchanged, to black, to white, to red). But leaving red likely
+needs a different drive than leaving black or white (a quick push to white may
+leave a pink tint; red pixels probably need a reset through black), and four
+groups can't give each transition its own waveform. Each added phase adds four
+groups.
+
+**Refinement: prepare red pixels in phase 1.** The factory red waveform first
+conditions a pixel (resets it through black and/or white), then runs the slow
+red step. Split it at that boundary:
+
+- Phase 1 runs the conditioning part on newly red pixels, in parallel with the
+  black/white changes, leaving them in whatever state the factory waveform has
+  at the split point. That may be black rather than white; the factory LUT, not
+  a guess, should decide.
+- Phase 2 runs only the red step on those pixels.
+
+Benefits:
+- Phase 2 is shorter, since conditioning runs concurrently with the black/white
+  work instead of after it. The flicker is the same; it just happens earlier.
+- Red pixels receive exactly the factory sequence, only split in time, so its
+  charge balance and temperature-tuned timing are preserved.
+- The group budget fits: phase 1 uses unchanged / to black / to white /
+  prepare-for-red; phase 2 uses no-drive / red step.
+
+Constraint: in the SSD16xx LUT, phase durations and repeat counts are shared by
+all groups; only per-group voltages differ. The black/white drive and the red
+conditioning must therefore fit one timing grid in phase 1, with groups idle
+(VSS) in slots they don't use.
+
+**Full-panel fallback** still makes sense when a large share of the screen
+changes (a full refresh looks cleaner and blinks no worse), after N phased
+updates to clear ghosting, and on a schedule such as the midnight redraw.
+
+**Risks and unknowns:**
+
+- **Edge halos.** Fields from driven pixels spill onto undriven neighbours. Red
+  particles are slow and sensitive, so red text on a red bar is where tinting
+  would show.
+- **Red pixels still flicker** during conditioning, but only those pixels.
+- **Charge balance.** Factory waveforms keep each pixel's net charge balanced;
+  custom sequences for black/white pixels must too, or the panel risks image
+  retention. Splitting the factory red waveform helps for red pixels.
+- **Relaxation between phases.** Swapping buffers and LUTs between phases takes
+  time; whether a conditioned pixel still takes the red step correctly after
+  that gap is unknown.
+- **Temperature.** Red timing depends heavily on temperature. A possible
+  shortcut: have the controller load its factory LUT for the current
+  temperature from OTP (0x22 with 0xB1), read it back from register 0x33, and
+  derive the phase LUTs from it. atc1441's driver writes 0x32 and reads it back
+  via 0x33, but whether the OTP-loaded waveform can be read this way is not
+  confirmed.
+- **Speed.** Updates touching red stay slow; the red step is the slow part of
+  any refresh. The gain is less blinking, not faster updates.
+- Still requires custom firmware, so the flashing risks and the
+  red-through-Home Assistant bug below are unchanged.
 
 ### Chips and flashing
 
@@ -199,7 +289,10 @@ Work involved:
 6. **Safety.** Always preserve OTA; solder SWS wires before experimenting.
 
 Estimate: several weekends for the 2.9" for someone comfortable with embedded
-C; the 4.2" adds memory work. And the red-buffer limitation still applies.
+C; the 4.2" adds memory work. With conventional waveforms the red-buffer
+limitation still applies. The phased approach in the addendum would add
+per-phase LUT design (ideally derived from the factory LUT) and its own
+experimentation, but no extra memory beyond the previous-frame copy.
 
 ## Options that don't need firmware
 
