@@ -18,7 +18,24 @@ class NowPlaying(ad.ADBase):
         self.adapi = self.get_ad_api()
         self.hass = self.get_plugin_api("HASS")
         self.hass.listen_event(self.on_display_mode, "display_mode")
+        self.hass.listen_state(self.on_artwork_change, "sensor.now_playing_artwork_url")
         self.adapi.log("NowPlaying app initialized")
+
+    def on_artwork_change(self, entity, attribute, old, new, kwargs):
+        if new == old:
+            return
+        state = self.hass.get_state("sensor.now_playing_state")
+        if state in ("unavailable", "unknown", "off", "idle", ""):
+            return
+        self.adapi.log("Artwork URL updated — re-fetching artwork")
+        creator = self.hass.get_state("sensor.now_playing_creator")
+        title = self.hass.get_state("sensor.now_playing_title")
+        container = self.hass.get_state("sensor.now_playing_container")
+        if new:
+            self.generate_artwork(HA_BASE + new)
+        else:
+            self.save_placeholder()
+        self.update_display(creator, title, container)
 
     def on_display_mode(self, event_name, data, kwargs):
         if data.get("mode") != "now_playing":

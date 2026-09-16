@@ -134,8 +134,17 @@ system_packages: []
 Save and restart AppDaemon to install packages.
 
 ### 4b. Deploy app files
-Copy the three Python files and apps.yaml from `appdaemon-apps/` to your
-AppDaemon apps directory. The path from the HA terminal is:
+
+From your local machine (requires SSH access to HA):
+```bash
+make deploy HA_HOST=homeassistant.local
+```
+
+This copies the AppDaemon apps and HA config files in one step. If your HA
+hostname or IP differs, pass `HA_HOST=<your-host>`. Run `make` with no
+arguments to see available targets.
+
+Alternatively, copy manually:
 ```
 /addon_configs/a0d7b954_appdaemon/apps/
 ```

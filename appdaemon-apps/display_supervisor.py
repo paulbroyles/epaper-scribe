@@ -16,6 +16,10 @@ class DisplaySupervisor(ad.ADBase):
             self.on_state_change,
             "sensor.now_playing_state"
         )
+        self.hass.listen_state(
+            self.on_title_change,
+            "sensor.now_playing_title"
+        )
 
         self.adapi.run_daily(self.on_midnight, "00:00:01")
         self.adapi.run_in(self.on_startup, 5)
@@ -90,6 +94,21 @@ class DisplaySupervisor(ad.ADBase):
                 self._mode_handle = self.adapi.run_in(self.do_mode_change, 2)
             else:
                 self.do_mode_change({})
+
+    def on_title_change(self, entity, attribute, old, new, kwargs):
+        if not new or new in ("unavailable", "unknown"):
+            return
+        state = self.hass.get_state("sensor.now_playing_state")
+        if state != "playing":
+            return
+        self.adapi.log(f"Title changed to '{new}' — refreshing now_playing display")
+        if self._mode_handle is not None:
+            try:
+                self.adapi.cancel_timer(self._mode_handle)
+            except:
+                pass
+            self._mode_handle = None
+        self.activate_now_playing()
 
     def on_paused_timeout(self, kwargs):
         self._paused_handle = None
