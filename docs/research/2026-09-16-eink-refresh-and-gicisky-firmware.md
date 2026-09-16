@@ -113,7 +113,9 @@ this.
 
 Added later on 2026-09-16, from follow-up discussion. Reasoning from how the
 controller works and from atc1441's driver code; not tested, and no existing
-implementation was found.
+implementation was found. Several points are confirmed or corrected by the
+[hardware documentation addendum](#addendum-hardware-documentation) below;
+corrections are marked inline.
 
 **The controller doesn't know what "red" is.** For each pixel it reads one bit
 from 0x24 and one from 0x26; the 2-bit value selects one of four waveform groups
@@ -131,7 +133,11 @@ each phase:
 2. **Red phase.** 0x26 holds the red layer. The two not-red groups get no
    voltage, so black and white pixels don't move. The 0x24 bit of red pixels is
    repurposed as a "changed" flag: newly red pixels get the red waveform,
-   unchanged red pixels get nothing.
+   unchanged red pixels get nothing. *(Corrected: no flag is needed. Write only
+   newly red pixels as red in this phase; unchanged red pixels are written as
+   not-red and get no voltage. This matters because the SSD1683 has no usable
+   fourth group in three-color mode, and the SSD1680's handling of the fourth
+   code is ambiguous.)*
 
 Only pixels that change move. In Now Playing, an artist change would flicker
 only the letter shapes on the red header bar, not the whole panel. Every
@@ -152,7 +158,8 @@ red step. Split it at that boundary:
 - Phase 1 runs the conditioning part on newly red pixels, in parallel with the
   black/white changes, leaving them in whatever state the factory waveform has
   at the split point. That may be black rather than white; the factory LUT, not
-  a guess, should decide.
+  a guess, should decide. *(Documentation: in E Ink's three-particle waveforms
+  the pixel is freshly driven white just before the red step, so white.)*
 - Phase 2 runs only the red step on those pixels.
 
 Benefits:
@@ -164,7 +171,8 @@ Benefits:
   prepare-for-red; phase 2 uses no-drive / red step.
 
 Constraint: in the SSD16xx LUT, phase durations and repeat counts are shared by
-all groups; only per-group voltages differ. The black/white drive and the red
+all groups; only per-group voltages differ. *(Confirmed for the SSD1680 (2.9");
+the SSD1683 (4.2") gives each group its own timing.)* The black/white drive and the red
 conditioning must therefore fit one timing grid in phase 1, with groups idle
 (VSS) in slots they don't use.
 
@@ -194,6 +202,163 @@ updates to clear ghosting, and on a schedule such as the midnight redraw.
   any refresh. The gain is less blinking, not faster updates.
 - Still requires custom firmware, so the flashing risks and the
   red-through-Home Assistant bug below are unchanged.
+
+### Addendum: hardware documentation
+
+Added later on 2026-09-16. Sources: Solomon Systech datasheets (SSD1680 Rev 0.14,
+SSD1683 Rev 1.0, SSD1681 Rev 0.13, SSD1675B Rev 1.4), E Ink/SiPix patents,
+peer-reviewed papers on three-color electrophoretic waveforms, Good Display,
+Waveshare and Pervasive Displays documentation, driver source (GxEPD2,
+OpenEPaperLink, atc1441), and a decode of the current `ATC_BLE_OEPL.bin`.
+Page numbers refer to the datasheets' own numbering.
+
+#### What's in the tags
+
+- **2.9": Telink SoC, SSD16xx controller.** High confidence on Telink (users
+  flashed the Telink image onto tags reporting firmware 0x8101). The firmware's
+  preset 12 uses SSD16xx commands; 296×128 fits the SSD1680. Exact panel and
+  chip part numbers are not published.
+- **4.2": probably the newer Telink generation, SSD16xx.** An older 4.2" Gicisky
+  (atc1441 teardown, 2022) used a TI CC2640R2F with 2 MB SPI flash and reported
+  hardware ID 0x004B / firmware 0x101. Ours reports 0x404B / 0x8101, matching the
+  Telink pattern. 400×300 fits the SSD1683 (or SSD1619A). Medium confidence.
+- **Pin maps** decoded from `ATC_BLE_OEPL.bin` (build Sep 7 2026; decode
+  cross-checked against a Hanshow user's known-good config):
+  2.9" preset 12: RST PB5, DC PB6, BUSY PC4, CS PD2, CLK PD7, MOSI PB7,
+  panel enable PA0. 4.2" preset 22: same except BUSY PC0. No external flash
+  defined for either.
+- **Memory** (Telink TLSR8359 product brief, assuming that part): 48 KB SRAM
+  (32 KB retained in sleep), 512 KB flash. A previous-frame copy fits in RAM for
+  the 2.9"; for the 4.2" it would have to live in flash.
+- **Candidate panel specs** (Good Display; not confirmed to be our panels):
+  GDEY029Z95 (2.9", SSD1680): full 16 s, fast 11 s, partial 1.5 s, 0–40 °C,
+  "Partial update only supports black and white display, not red."
+  GDEY042Z98 (4.2", SSD1683): full 22 s, fast 16 s, partial 1.3 s, 0–40 °C.
+  GxEPD2 measured full refreshes of ~26 s (2.9" C90c) and ~23 s (GDEY042Z98).
+
+#### Controller facts (resolves several unknowns)
+
+- **Waveform group is chosen purely by the two RAM bits.** SSD1680 Table 6-4
+  (p13): RED 0/BW 0 → LUT0 (black), 0/1 → LUT1 (white), 1/0 → LUT2 (red),
+  1/1 → "LUT 3 = LUT2" (the LUT layout still gives LUT3 its own bytes; which
+  applies is unstated). LUT4 is VCOM. Voltage codes (Table 6-6): 00 VSS,
+  01 VSH1, 10 VSL, 11 VSH2. The repurposing idea is sound.
+- **SSD1683 differs.** Three-color mode has only three pixel LUTs (red, white,
+  black); RED 1/BW 1 has no row, so treat it as undefined. Its black/white mode
+  has true old→new transition LUTs (WW, BW, WB, BB) — a natural fit for the
+  black/white phase.
+- **Timing.** SSD1680: "Common setting of 5 LUT – 48 phases" (12 groups × 4
+  phases; only voltages are per-LUT). SSD1683: "VS, TP, SR, RP are individual
+  set for different LUT" (p13), one frame rate for the whole update. Also note
+  SSD1683 repeat counts treat 0 as "skip"; SSD1680 treats 0 as "once."
+- **Every update scans the whole panel.** No window-limited drive; the RAM
+  window (0x44/0x45) only limits writes. Unchanged pixels step through the
+  frames too, so their LUT must be VSS.
+- **Custom LUTs survive only certain update commands.** 0x22 = 0xC7/0xCF
+  display with the LUT register as written; 0xF7/0xFF reload from OTP and
+  overwrite it. 0x21 can make the controller treat the red RAM as all 0
+  ("Bypass RAM content as 0") without rewriting it.
+- **Reading back the factory LUT (0x33) is undocumented** in all four
+  datasheets, but works in practice: OpenEPaperLink's ZBS243 firmware loads the
+  OTP waveform for the current temperature (0x22 = 0xB1), reads it with 0x33,
+  edits it and writes it back — on SSD1619/1675-class chips. Plausible for
+  SSD1680/1683, not confirmed. On a flashed tag the ATC uploader's
+  "Download RAW LUT" (command `000D`) would settle it.
+- **OTP temperature ranges.** SSD1680 stores 36 waveform sets with temperature
+  bounds; "The last match will be selected," and with no match the "display
+  will not be updated." Temperature can be sensed (0x18 = 0x80) or written
+  (0x1A), which is how drivers force faster waveforms.
+- **Between phases.** Analog power can stay on across consecutive updates
+  (0xC0 on; update without the power-off bits; 0x03 off), keeping the gap short
+  and consistent. End option 0x3F: 0x22 discharges pixels with two scan frames;
+  0x07 keeps the pixel voltage but requires waiting for discharge before the
+  next operation (SSD1683 §6.6).
+- **PingPong / Mode 2 RAM behaviour is undocumented.** GxEPD2 behaviour suggests
+  the controller may update 0x26 itself after a Mode 2 update; rewrite 0x26
+  before a red phase.
+- **Nothing in the datasheets addresses DC balance or limits on custom LUTs.**
+
+#### Red-formation physics
+
+- **Particle model** (E Ink US9360733, US11004409): black and white strongly
+  and oppositely charged; red weakly charged ("about 5% to about 30%" of
+  black/white) with black's polarity. Sequence: optional DC-balance pulse,
+  shaking (e.g. ±15 V × 20 ms × 50), a high voltage driving the pixel fully
+  white, then a low voltage (+3 to +5 V) that brings red forward while black
+  stays behind its threshold. "The better the white state in this period, the
+  better the red state." **The pixel is white before the red step.**
+- **The red voltage window is narrow:** about 0.7 V for near-best red
+  (US11004409); a lab study found 2.5 V the threshold below which red fails to
+  migrate and above which black moves too. Lab red steps run 2–4 s.
+- **Leaving red needs a full reset.** Every patent sequence shakes and fully
+  drives before any color; clean black needs repeated extra pulses for "less red
+  tinting." Leftover red causes "red ghost image"; GxEPD2 saw a "slightly
+  reddish background" after many fast black/white refreshes.
+- **Pauses are compatible with red formation.** E Ink's red-forming variant
+  interleaves waits (under 100 ms and under 1000 ms, repeated ≥4 times; waits of
+  5–5,000 ms depending on dielectric resistance) to dissipate stored charge.
+  Particles are bistable at 0 V. But remnant voltage from the previous drive
+  shifts the effective voltage (a 15 V pulse right after an update acts "closer
+  to 16 V", ~15.2 V a minute later; US10475396), and much of it decays within
+  ~20 ms (US8558783). With a 0.7 V window, **keep the inter-phase gap short and
+  consistent**; its effect will vary with temperature.
+- **DC balance.** Imbalance leaves remnant voltage, causes timing-dependent
+  ghosting and possibly "slow lifetime degradation" (US10475396). Factory
+  waveforms add pre-pulses so each transition integrates to zero. Pervasive
+  Displays suspended partial updates because unchanged pixels "degrade faster
+  over time." For the phased scheme: each changed pixel's combined path across
+  both phases must integrate to zero; a pixel conditioned but not given its red
+  step is unbalanced. Keep VCOM at DC throughout.
+- **Edge effects.** On an E Ink black/white panel, a driven pixel next to a
+  0 V neighbour produces a lateral "diffusion field" leaving contour ghosts of
+  ~25/255 gray levels that are "difficult to restore." GxEPD2's author warns
+  partial windows "may lead to ugly borders," especially on three-color panels.
+  **No measurements exist for red**; weakly charged red near black's threshold
+  is likely more susceptible.
+- **Temperature.** Red panels are rated 0–40 °C and don't operate below 0 °C;
+  E Ink treats below ~10 °C as needing special waveforms. No quantitative data
+  on red timing versus temperature was found.
+
+#### Manufacturer guidance
+
+- Good Display: red areas don't support partial refresh; allow at least 180 s
+  between updates; full refresh after every 5 partial updates; refresh
+  three-color panels at least every 24 h; store showing white. Waveshare gives
+  the same 180 s / 24 h guidance and warns against leaving panels powered.
+- Pervasive Displays: no fast or partial update on red (Spectra) panels.
+- GxEPD2: every three-color driver sets `hasFastPartialUpdate = false`.
+
+Note for current use: the 180 s minimum interval is a precaution that Now
+Playing may already exceed on quick track skips.
+
+#### Prior attempts
+
+- No published differential refresh that forms red while unchanged pixels sit
+  at 0 V, and no split conditioning/red scheme.
+- Closest: jlarnal's custom full-screen LUTs on a UC8151D 2.9" BWR panel, full
+  color in under 4 s, with periodic "deep scrubbing"; pskowronek's modified
+  Waveshare 2.7" LUTs (black ~10×, red 2–3× faster) with artifacts that build up
+  and are cleared by the original LUTs.
+- Nothing published on fast or partial refresh for Gicisky tags on
+  ATC_BLE_OEPL. The firmware logs "AP LUT=… → full/fast refresh," but a
+  dedicated fast routine exists only for TI-controller tags.
+
+#### Assessment
+
+The documentation supports the phased scheme's mechanics: groups are selected
+by the RAM bits, custom LUTs can be loaded and kept, analog power can stay on
+between phases, and the pixel's pre-red state is white. The simplified phase
+plan needs only three codes per phase:
+
+1. Phase 1: unchanged (VSS) / to black (full reset) / to white or
+   prepare-for-red (full reset to white).
+2. Phase 2: no drive (VSS) / red step (newly red pixels only).
+
+Remaining risks are empirical and can't be settled from documents: red-edge
+halos, sensitivity of the narrow red voltage window to the inter-phase gap and
+temperature, designing DC-balanced black/white paths, and whether the SSD1680
+exposes its OTP waveform through 0x33. The 4.2" (SSD1683, per-group timing) is
+the easier controller to experiment on; the 2.9" is the easier memory budget.
 
 ### Chips and flashing
 
@@ -343,3 +508,53 @@ Accessed 2026-09-16.
 - Gadgetbridge, ATC_BLE_OEPL: https://gadgetbridge.org/gadgets/displays/atc_ble_oepl/
 - eigger/hass-gicisky: https://github.com/eigger/hass-gicisky
 - OpenDisplay: https://github.com/OpenDisplay, https://opendisplay.org
+
+Added for the hardware documentation addendum (accessed 2026-09-16):
+
+- SSD1680 datasheet Rev 0.14:
+  https://cdn-learn.adafruit.com/assets/assets/000/097/631/original/SSD1680_Datasheet.pdf
+- SSD1683 datasheet Rev 1.0: https://archive.org/details/ssd1683
+  (also https://www.buydisplay.com/download/ic/SSD1683.pdf)
+- SSD1681 datasheet Rev 0.13:
+  https://cdn-learn.adafruit.com/assets/assets/000/099/573/original/SSD1681.pdf
+- SSD1675B datasheet Rev 1.4:
+  https://github.com/CursedHardware/epd-driver-ic/blob/master/SSD1675B.pdf
+- OpenEPaperLink Tag_FW_ZBS243 `ssd-var.c` / `lut.h`:
+  https://github.com/OpenEPaperLink/Tag_FW_ZBS243
+- GxEPD2 (drivers `GxEPD2_290_C90c`, `GxEPD2_420c_GDEY042Z98`, README):
+  https://github.com/ZinggJM/GxEPD2
+- atc1441 ATC_BLE_OEPL_CH573 (`epd_ssd.c`): https://github.com/atc1441/ATC_BLE_OEPL_CH573
+- ATC_BLE_OEPL firmware image: https://atc1441.github.io/ATC_BLE_OEPL.bin
+- atc1441 4.2" Gicisky teardown (2022): https://x.com/atc1441/status/1489590921016619016
+- Telink TLSR8359 product brief:
+  https://w2.electrodragon.com/Chip-cn-dat/TELINK-dat/PB_TLSR8359-E_Product%20Brief%20for%20Telink%20ULP%202.4GHz%20RF%20SoC%20TLSR8359.pdf
+- Good Display GDEY029Z95: https://www.good-display.com/product/527.html
+  (datasheet https://v4.cecdn.yun300.cn/100001_1909185148/GDEY029Z95.pdf)
+- Good Display GDEY042Z98: https://www.good-display.com/product/387.html
+- Good Display precautions: https://www.good-display.com/news/80.html,
+  https://www.good-display.com/news/170.html
+- Waveshare color e-paper precautions:
+  https://www.waveshare.com/wiki/Template:E-paper-precautions-color
+- Pervasive Displays, updating the display:
+  https://docs.pervasivedisplays.com/knowledge/Technology/updating-the-display.html
+- Pervasive Displays product selection:
+  https://www.pervasivedisplays.com/product/epd-product-selection/
+- E Ink Spectra 3100 notes: https://alcom.eu/uploads/E-Ink-SpectraTM-3100.pdf
+- Patents: US9360733 https://patents.google.com/patent/US9360733B2/en,
+  US11004409 https://patents.google.com/patent/US11004409B2/en,
+  US9640119 https://patents.google.com/patent/US9640119B2/en,
+  US10475396 https://patents.google.com/patent/US10475396B2/en,
+  US8558783 https://patents.google.com/patent/US8558783B2/en,
+  US11404012 https://patents.google.com/patent/US11404012B2/en
+- Papers: https://pmc.ncbi.nlm.nih.gov/articles/PMC12901054/,
+  https://pmc.ncbi.nlm.nih.gov/articles/PMC9000271/,
+  https://pmc.ncbi.nlm.nih.gov/articles/PMC7915761/,
+  https://pmc.ncbi.nlm.nih.gov/articles/PMC11509696/,
+  https://pmc.ncbi.nlm.nih.gov/articles/PMC6187556/
+- jlarnal fast three-color LUTs (u8g2 issue #1393):
+  https://github.com/olikraus/u8g2/issues/1393
+- pskowronek epaper-clock-and-more: https://github.com/pskowronek/epaper-clock-and-more
+- Arduino forum, 3-color SSD1680:
+  https://forum.arduino.cc/t/help-with-3-color-ssd1680-controller/944410
+- OEPL HA integration issue #326:
+  https://github.com/OpenEPaperLink/Home_Assistant_Integration/issues/326
