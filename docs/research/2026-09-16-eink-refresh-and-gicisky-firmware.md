@@ -313,7 +313,14 @@ Page numbers refer to the datasheets' own numbering.
   but for monochrome only; their color panels support only full updates. So the
   warning is about windowed updates, not about leaving unchanged pixels undriven
   in a well-designed differential waveform. Pervasive doesn't explain the
-  mechanism. For the phased scheme: each changed pixel's combined path across
+  mechanism. A plausible explanation (inference, not documented): during a
+  windowed update the rest of the panel isn't truly idle — the shared front
+  electrode (VCOM), and the gate rows and source columns crossing the window,
+  still carry voltages balanced for pixels inside the window, so pixels outside
+  it accumulate net charge over many updates; a fast update sees the whole frame
+  and can keep every pixel balanced. Their fast update is also a factory-tuned
+  waveform; a custom phased waveform would have to achieve the same balance
+  without documentation. For the phased scheme: each changed pixel's combined path across
   both phases must integrate to zero; a pixel conditioned but not given its red
   step is unbalanced. Keep VCOM at DC throughout.
 - **Edge effects.** On an E Ink black/white panel, a driven pixel next to a
@@ -363,6 +370,12 @@ plan needs only three codes per phase:
 1. Phase 1: unchanged (VSS) / to black (full reset) / to white or
    prepare-for-red (full reset to white).
 2. Phase 2: no drive (VSS) / red step (newly red pixels only).
+
+The Pervasive Displays finding, read closely, supports the full-frame
+differential pattern the phased scheme uses (their fast update: whole image
+sent, only changed pixels driven, no lifespan impact) rather than windowed
+updates, which they suspended. It does not validate custom waveforms, and they
+offer fast updates only on black/white panels.
 
 Remaining risks are empirical and can't be settled from documents: red-edge
 halos, sensitivity of the narrow red voltage window to the inter-phase gap and
